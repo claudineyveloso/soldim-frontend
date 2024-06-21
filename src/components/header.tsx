@@ -14,7 +14,7 @@ export default function Header() {
                 height={123}
               />
             </a>
-            <div className="brand-title">Nifty</div>
+            <div className="brand-title">Soldim</div>
           </div>
         </div>
         <div className="header__content">
@@ -24,33 +24,16 @@ export default function Header() {
               className="nav-toggler header__btn btn btn-icon btn-sm"
               aria-label="Nav Toggler"
             >
-              <i className="demo-psi-list-view"></i>
+              <i className="demo-psi-list-view" />
             </button>
-            <div className="vr mx-1 d-none d-md-block"></div>
+            <div className="vr mx-1 d-none d-md-block" />
             <div className="header-searchbox">
               <label
                 htmlFor="header-search-input"
                 className="header__btn d-md-none btn btn-icon rounded-pill shadow-none border-0 btn-sm"
               >
-                <i className="demo-psi-magnifi-glass"></i>
+                <i className="demo-psi-magnifi-glass" />
               </label>
-              <form className="searchbox searchbox--auto-expand searchbox--hide-btn input-group">
-                <input
-                  id="header-search-input"
-                  className="searchbox__input form-control bg-transparent"
-                  type="search"
-                  placeholder="Type for search . . ."
-                  aria-label="Search"
-                />
-                <div className="searchbox__backdrop">
-                  <button
-                    className="searchbox__btn header__btn btn btn-icon rounded shadow-none border-0 btn-sm"
-                    type="button"
-                  >
-                    <i className="demo-pli-magnifi-glass"></i>
-                  </button>
-                </div>
-              </form>
             </div>
           </div>
           <div className="header__content-end">
@@ -63,7 +46,7 @@ export default function Header() {
                 aria-label="Megamenu dropdown"
                 aria-expanded="false"
               >
-                <i className="demo-psi-layout-grid"></i>
+                <i className="demo-psi-layout-grid" />
               </button>
               <div className="dropdown-menu dropdown-menu-end p-3 mega-dropdown">
                 <div className="row">
@@ -71,48 +54,48 @@ export default function Header() {
                     <div className="list-group list-group-borderless">
                       <div className="list-group-item d-flex align-items-center border-bottom mb-2">
                         <div className="flex-shrink-0 me-2">
-                          <i className="demo-pli-file fs-4"></i>
+                          <i className="demo-pli-file fs-4" />
                         </div>
                         <h5 className="flex-grow-1 m-0">Pages</h5>
                       </div>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
                         Profile
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
                         Search Result
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
                         FAQ
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
                         Screen Lock
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
                         Maintenance
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
                         Invoices
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action disabled"
                         tabIndex={-1}
                         aria-disabled="true"
@@ -125,31 +108,31 @@ export default function Header() {
                     <div className="list-group list-group-borderless mb-3">
                       <div className="list-group-item d-flex align-items-center border-bottom mb-2">
                         <div className="flex-shrink-0 me-2">
-                          <i className="demo-pli-mail fs-4"></i>
+                          <i className="demo-pli-mail fs-4" />
                         </div>
                         <h5 className="flex-grow-1 m-0">Mailbox</h5>
                       </div>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
                       >
                         Inbox{" "}
                         <span className="badge bg-danger rounded-pill">14</span>
                       </a>
                       <a
-                        href="#"
+                        href="#roo"
                         className="list-group-item list-group-item-action"
                       >
                         Read Messages
                       </a>
                       <a
-                        href="#"
+                        href="#roo"
                         className="list-group-item list-group-item-action"
                       >
                         Compose
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
                         Template
@@ -158,7 +141,7 @@ export default function Header() {
                     <div className="list-group list-group-borderless bg-warning-subtle py-2">
                       <div className="list-group-item d-flex align-items-center border-bottom text-warning-emphasis">
                         <div className="flex-shrink-0 me-2">
-                          <i className="demo-pli-calendar-4 fs-4"></i>
+                          <i className="demo-pli-calendar-4 fs-4" />
                         </div>
                         <h5 className="flex-grow-1 m-0 text-reset">News</h5>
                       </div>
@@ -173,12 +156,12 @@ export default function Header() {
                     <div className="list-group list-group-borderless">
                       <div className="list-group-item list-group-item-action d-flex align-items-start mb-3">
                         <div className="flex-shrink-0 me-3">
-                          <i className="demo-pli-data-settings fs-1"></i>
+                          <i className="demo-pli-data-settings fs-1" />
                         </div>
                         <div className="flex-grow-1">
                           <div className="d-flex justify-content-between align-items-start">
                             <a
-                              href="#"
+                              href="#root"
                               className="h5 d-block mb-0 stretched-link text-decoration-none"
                             >
                               Data Backup
@@ -194,11 +177,11 @@ export default function Header() {
                       </div>
                       <div className="list-group-item list-group-item-action d-flex align-items-start mb-3">
                         <div className="flex-shrink-0 me-3">
-                          <i className="demo-pli-support fs-1"></i>
+                          <i className="demo-pli-support fs-1" />
                         </div>
                         <div className="flex-grow-1">
                           <a
-                            href="#"
+                            href="#root"
                             className="h5 d-block mb-0 stretched-link text-decoration-none"
                           >
                             Support
@@ -210,11 +193,11 @@ export default function Header() {
                       </div>
                       <div className="list-group-item list-group-item-action d-flex align-items-start mb-3">
                         <div className="flex-shrink-0 me-3">
-                          <i className="demo-pli-computer-secure fs-1"></i>
+                          <i className="demo-pli-computer-secure fs-1" />
                         </div>
                         <div className="flex-grow-1">
                           <a
-                            href="#"
+                            href="#root"
                             className="h5 d-block mb-0 stretched-link text-decoration-none"
                           >
                             Security
@@ -226,11 +209,11 @@ export default function Header() {
                       </div>
                       <div className="list-group-item list-group-item-action d-flex align-items-start">
                         <div className="flex-shrink-0 me-3">
-                          <i className="demo-pli-map-2 fs-1"></i>
+                          <i className="demo-pli-map-2 fs-1" />
                         </div>
                         <div className="flex-grow-1">
                           <a
-                            href="#"
+                            href="#root"
                             className="h5 d-block mb-0 stretched-link text-decoration-none"
                           >
                             Location
@@ -282,7 +265,7 @@ export default function Header() {
                           />
                         </div>
                       </div>
-                      <a href="#" className="btn btn-primary">
+                      <a href="#root" className="btn btn-primary">
                         Browse Gallery
                       </a>
                     </div>
@@ -299,7 +282,7 @@ export default function Header() {
                 aria-expanded="false"
               >
                 <span className="d-block position-relative">
-                  <i className="demo-psi-bell"></i>
+                  <i className="demo-psi-bell" />
                   <span className="badge badge-super rounded-pill bg-danger p-1">
                     <span className="visually-hidden">unread messages</span>
                   </span>
@@ -307,16 +290,16 @@ export default function Header() {
               </button>
               <div className="dropdown-menu dropdown-menu-end w-md-300px">
                 <div className="border-bottom px-3 py-2 mb-3">
-                  <h5>Notifications</h5>
+                  <h5>Notificações</h5>
                 </div>
                 <div className="list-group list-group-borderless">
                   <div className="list-group-item list-group-item-action d-flex align-items-center mb-3">
                     <div className="flex-shrink-0 me-3">
-                      <i className="demo-psi-data-settings text-danger fs-2"></i>
+                      <i className="demo-psi-data-settings text-danger fs-2" />
                     </div>
                     <div className="flex-grow-1">
                       <a
-                        href="#"
+                        href="#root"
                         className="h6 fw-normal d-block mb-0 stretched-link text-decoration-none"
                       >
                         Your storage is full
@@ -328,11 +311,11 @@ export default function Header() {
                   </div>
                   <div className="list-group-item list-group-item-action d-flex align-items-center mb-3">
                     <div className="flex-shrink-0 me-3">
-                      <i className="demo-psi-pen-5 text-info fs-2"></i>
+                      <i className="demo-psi-pen-5 text-info fs-2" />
                     </div>
                     <div className="flex-grow-1">
                       <a
-                        href="#"
+                        href="#root"
                         className="h6 fw-normal d-block mb-0 stretched-link text-decoration-none"
                       >
                         Writing a New Article
@@ -344,12 +327,12 @@ export default function Header() {
                   </div>
                   <div className="list-group-item list-group-item-action d-flex align-items-start mb-3">
                     <div className="flex-shrink-0 me-3">
-                      <i className="demo-psi-speech-bubble-3 text-success fs-2"></i>
+                      <i className="demo-psi-speech-bubble-3 text-success fs-2" />
                     </div>
                     <div className="flex-grow-1">
                       <div className="d-flex justify-content-between align-items-start">
                         <a
-                          href="#"
+                          href="#root"
                           className="h6 fw-normal mb-0 stretched-link text-decoration-none"
                         >
                           Comment sorting
@@ -367,7 +350,7 @@ export default function Header() {
                     <div className="flex-shrink-0 me-3">
                       <Image
                         className="img-xs rounded-circle"
-                        src="/assets/img/profile-photos/7.jpg"
+                        src="/assets/img/profile-photos/7.png"
                         alt="Profile Pictures"
                         loading="lazy"
                         width={128}
@@ -376,7 +359,7 @@ export default function Header() {
                     </div>
                     <div className="flex-grow-1">
                       <a
-                        href="#"
+                        href="#root"
                         className="h6 fw-normal d-block mb-0 stretched-link text-decoration-none"
                       >
                         Lucy Sent you a message
@@ -390,7 +373,7 @@ export default function Header() {
                     <div className="flex-shrink-0 me-3">
                       <Image
                         className="img-xs rounded-circle"
-                        src="/assets/img/profile-photos/3.jpg"
+                        src="/assets/img/profile-photos/3.png"
                         alt="Profile Pictures"
                         loading="lazy"
                         width={128}
@@ -399,7 +382,7 @@ export default function Header() {
                     </div>
                     <div className="flex-grow-1">
                       <a
-                        href="#"
+                        href="#root"
                         className="h6 fw-normal d-block mb-0 stretched-link text-decoration-none"
                       >
                         Jackson Sent you a message
@@ -409,11 +392,11 @@ export default function Header() {
                   </div>
                   <div className="text-center mb-2">
                     <a
-                      href="#"
+                      href="#root"
                       className="btn-link text-primary icon-link icon-link-hover"
                     >
                       Show all Notifications
-                      <i className="bi demo-psi-arrow-out-right"></i>
+                      <i className="bi demo-psi-arrow-out-right" />
                     </a>
                   </div>
                 </div>
@@ -427,14 +410,14 @@ export default function Header() {
                 aria-label="User dropdown"
                 aria-expanded="false"
               >
-                <i className="demo-psi-male"></i>
+                <i className="demo-psi-male" />
               </button>
               <div className="dropdown-menu dropdown-menu-end w-md-450px">
                 <div className="d-flex align-items-center border-bottom px-3 py-2">
                   <div className="flex-shrink-0">
                     <Image
                       className="img-sm rounded-circle"
-                      src="/assets/img/profile-photos/4.jpg"
+                      src="/assets/img/claudiney.jpg"
                       alt="Profile Pictures"
                       loading="lazy"
                       width={128}
@@ -442,9 +425,9 @@ export default function Header() {
                     />
                   </div>
                   <div className="flex-grow-1 ms-3">
-                    <h5 className="mb-0">Aaron Chavez</h5>
+                    <h5 className="mb-0">Claudiney Veloso</h5>
                     <span className="text-body-secondary fst-italic">
-                      aaron_chavez@example.com
+                      claudineyveloso@example.com
                     </span>
                   </div>
                 </div>
@@ -456,25 +439,27 @@ export default function Header() {
                           17
                         </p>
                         <p className="h6 mb-0">
-                          <i className="demo-pli-basket-coins fs-3 me-2"></i>{" "}
-                          New orders
+                          <i className="demo-pli-basket-coins fs-3 me-2" />{" "}
+                          Novas pesquisas
                         </p>
                         <small className="text-body-secondary">
-                          You have new orders
+                          Você realizou 17 novas pesquisas
                         </small>
                       </div>
                       <div className="list-group-item py-0 d-flex justify-content-between align-items-center">
-                        Today Earning
-                        <small className="fw-bolder">$578</small>
+                        Ganhos de hoje
+                        <small className="fw-bolder">R$ 578,00</small>
                       </div>
                       <div className="list-group-item py-0 d-flex justify-content-between align-items-center">
-                        Tax
-                        <small className="fw-bolder text-danger">- $28</small>
+                        Taxas
+                        <small className="fw-bolder text-danger">
+                          - R$ 28,00
+                        </small>
                       </div>
                       <div className="list-group-item py-0 d-flex justify-content-between align-items-center">
-                        Total Earning
+                        Total liquido
                         <span className="fw-bolder text-body-emphasis">
-                          $6,578
+                          R$ 6.578,00
                         </span>
                       </div>
                     </div>
@@ -482,45 +467,45 @@ export default function Header() {
                   <div className="col-md-5">
                     <div className="list-group list-group-borderless h-100 py-3">
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
                       >
                         <span>
-                          <i className="demo-pli-mail fs-5 me-2"></i> Messages
+                          <i className="demo-pli-mail fs-5 me-2" /> Mensagens
                         </span>
                         <span className="badge bg-danger rounded-pill">14</span>
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
-                        <i className="demo-pli-male fs-5 me-2"></i> Profile
+                        <i className="demo-pli-male fs-5 me-2" /> Perfil
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
-                        <i className="demo-pli-gear fs-5 me-2"></i> Settings
+                        <i className="demo-pli-gear fs-5 me-2" /> Configurações
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action mt-auto"
                       >
-                        <i className="demo-pli-computer-secure fs-5 me-2"></i>{" "}
-                        Lock screen
+                        <i className="demo-pli-computer-secure fs-5 me-2" />{" "}
+                        Bloqueio de tela
                       </a>
                       <a
-                        href="#"
+                        href="#root"
                         className="list-group-item list-group-item-action"
                       >
-                        <i className="demo-pli-unlock fs-5 me-2"></i> Logout
+                        <i className="demo-pli-unlock fs-5 me-2" /> Sair
                       </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="vr mx-1 d-none d-md-block"></div>
+            <div className="vr mx-1 d-none d-md-block" />
             <div className="form-check form-check-alt form-switch mx-md-2">
               <input
                 id="headerThemeToggler"
@@ -532,17 +517,17 @@ export default function Header() {
                 className="form-check-label ps-1 fw-bold d-none d-md-flex align-items-center "
                 htmlFor="headerThemeToggler"
               >
-                <i className="mode-switcher-icon icon-light demo-psi-sun fs-5"></i>
-                <i className="mode-switcher-icon icon-dark d-none demo-psi-half-moon"></i>
+                <i className="mode-switcher-icon icon-light demo-psi-sun fs-5" />
+                <i className="mode-switcher-icon icon-dark d-none demo-psi-half-moon" />
               </label>
             </div>
-            <div className="vr mx-1 d-none d-md-block"></div>
+            <div className="vr mx-1 d-none d-md-block" />
             <button
               className="sidebar-toggler header__btn btn btn-icon btn-sm"
               type="button"
               aria-label="Sidebar button"
             >
-              <i className="demo-psi-dot-vertical"></i>
+              <i className="demo-psi-dot-vertical" />
             </button>
           </div>
         </div>

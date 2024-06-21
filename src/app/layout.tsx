@@ -6,13 +6,14 @@ import "../../assets/css/demo-purpose/demo-settings.min.css";
 import Header from "@/components/header";
 import NavBar from "@/components/navbar";
 import SideBar from "@/components/sidebar";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-bs-theme="light" data-scheme="gray">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -32,6 +33,15 @@ export default function RootLayout({
           <NavBar />
           <SideBar />
         </div>
+        <div className="scroll-container">
+          <a
+            href="#root"
+            className="scroll-page ratio ratio-1x1"
+            aria-label="Scroll button"
+          >
+            <span className="visually-hidden">Scroll to top</span>
+          </a>
+        </div>
         <div id="_dm-offcanvas" className="offcanvas" tabIndex={-1}>
           <div className="offcanvas-header">
             <h5 className="offcanvas-title">Offcanvas Header</h5>
@@ -40,7 +50,7 @@ export default function RootLayout({
               className="btn-close btn-lg text-reset"
               data-bs-dismiss="offcanvas"
               aria-label="Close"
-            ></button>
+            />
           </div>
         </div>
         <Script

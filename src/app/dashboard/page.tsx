@@ -29,44 +29,43 @@ const Dashboard = () => {
                       className="btn btn-icon btn-sm btn-hover btn-light"
                       aria-label="Refresh Network Chart"
                     >
-                      <i className="demo-pli-repeat-2 fs-5"></i>
+                      <i className="demo-pli-repeat-2 fs-5" />
                     </button>
                     <div className="dropdown">
                       <button
+                        type="button"
                         className="btn btn-icon btn-sm btn-hover btn-light"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                         aria-label="Network dropdown"
                       >
-                        <i className="demo-pli-dot-horizontal fs-4"></i>
+                        <i className="demo-pli-dot-horizontal fs-4" />
                         <span className="visually-hidden">Toggle Dropdown</span>
                       </button>
                       <ul className="dropdown-menu dropdown-menu-end">
                         <li>
-                          <a href="#" className="dropdown-item">
-                            <i className="demo-pli-pen-5 fs-5 me-2"></i> Edit
-                            Date
+                          <a href="#root" className="dropdown-item">
+                            <i className="demo-pli-pen-5 fs-5 me-2" /> Edit Date
                           </a>
                         </li>
                         <li>
-                          <a href="#" className="dropdown-item">
-                            <i className="demo-pli-refresh fs-5 me-2"></i>{" "}
-                            Refresh
+                          <a href="#root" className="dropdown-item">
+                            <i className="demo-pli-refresh fs-5 me-2" /> Refresh
                           </a>
                         </li>
                         <li>
                           <hr className="dropdown-divider" />
                         </li>
                         <li>
-                          <a href="#" className="dropdown-item">
-                            <i className="demo-pli-file-csv fs-5 me-2"></i> Save
+                          <a href="#root" className="dropdown-item">
+                            <i className="demo-pli-file-csv fs-5 me-2" /> Save
                             as CSV
                           </a>
                         </li>
                         <li>
-                          <a href="#" className="dropdown-item">
-                            <i className="demo-pli-calendar-4 fs-5 me-2"></i>{" "}
-                            View Details
+                          <a href="#root" className="dropdown-item">
+                            <i className="demo-pli-calendar-4 fs-5 me-2" /> Ver
+                            Detalhes
                           </a>
                         </li>
                       </ul>
@@ -79,7 +78,7 @@ const Dashboard = () => {
                   className="card-body py-0"
                   style={{ height: "250px", maxHeight: "275px" }}
                 >
-                  <canvas id="_dm-networkChart"></canvas>
+                  <canvas id="_dm-networkChart" />
                 </div>
                 {/* END : Network - Area Chart */}
 
@@ -137,14 +136,12 @@ const Dashboard = () => {
                         <div
                           className="progress-bar bg-success"
                           role="progressbar"
-                          style={{
-                            width: "70%",
-                            ariaLabel: "Incoming Progress",
-                            ariaValuenow: "70",
-                            ariaValuemin: "0",
-                            ariaValuemax: "100",
-                          }}
-                        ></div>
+                          style={{ width: "70%" }}
+                          aria-label="Incoming Progress"
+                          aria-valuenow="70"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        />
                       </div>
 
                       <div className="mt-4 mb-2 d-flex justify-content-between">
@@ -155,13 +152,11 @@ const Dashboard = () => {
                         <div
                           className="progress-bar bg-info"
                           role="progressbar"
-                          style={{
-                            width: "10%",
-                            ariaValuenow: "10",
-                            ariaValuemin: "0",
-                            ariaValuemax: "100",
-                          }}
-                        ></div>
+                          style={{ width: "10%" }}
+                          aria-valuenow="10"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        />
                       </div>
                       {/* END : Bandwidth usage and progress bars */}
                     </div>
@@ -176,7 +171,7 @@ const Dashboard = () => {
                   <div className="card bg-success text-white overflow-hidden mb-3">
                     <div className="p-3 pb-2">
                       <h5 className="mb-3">
-                        <i className="demo-psi-data-storage text-reset text-opacity-75 fs-3 me-2"></i>{" "}
+                        <i className="demo-psi-data-storage text-reset text-opacity-75 fs-3 me-2" />{" "}
                         HDD Usage
                       </h5>
                       <ul className="list-group list-group-borderless">
@@ -196,7 +191,7 @@ const Dashboard = () => {
                       className="py-0"
                       style={{ height: "70px", margin: "0 -5px -5px;" }}
                     >
-                      <canvas id="_dm-hddChart"></canvas>
+                      <canvas id="_dm-hddChart" />
                     </div>
                     {/* END : Area Chart */}
                   </div>
@@ -207,17 +202,17 @@ const Dashboard = () => {
                   <div className="card bg-info text-white overflow-hidden mb-3">
                     <div className="p-3 pb-2">
                       <h5 className="mb-3">
-                        <i className="demo-psi-coin text-reset text-opacity-75 fs-2 me-2"></i>{" "}
+                        <i className="demo-psi-coin text-reset text-opacity-75 fs-2 me-2" />{" "}
                         Ganho
                       </h5>
                       <ul className="list-group list-group-borderless">
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Hoje</div>
-                          <span className="fw-bold">$764</span>
+                          <span className="fw-bold">R$ 764,00</span>
                         </li>
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Últimos 7 Dias</div>
-                          <span className="fw-bold">$1,332</span>
+                          <span className="fw-bold">R$ 1.332,00</span>
                         </li>
                       </ul>
                     </div>
@@ -227,7 +222,7 @@ const Dashboard = () => {
                       className="py-0"
                       style={{ height: "70px", margin: "0 -5px -5px;" }}
                     >
-                      <canvas id="_dm-earningChart"></canvas>
+                      <canvas id="_dm-earningChart" />
                     </div>
                     {/* END : Line Chart */}
                   </div>
@@ -240,24 +235,24 @@ const Dashboard = () => {
                   <div className="card bg-purple text-white overflow-hidden mb-3">
                     <div className="p-3 pb-2">
                       <h5 className="mb-3">
-                        <i className="demo-psi-basket-coins text-reset text-opacity-75 fs-2 me-2"></i>{" "}
+                        <i className="demo-psi-basket-coins text-reset text-opacity-75 fs-2 me-2" />{" "}
                         Vendas
                       </h5>
                       <ul className="list-group list-group-borderless">
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Hoje</div>
-                          <span className="fw-bold">$764</span>
+                          <span className="fw-bold">R$ 764,00</span>
                         </li>
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Últimos 7 Dias</div>
-                          <span className="fw-bold">$1,332</span>
+                          <span className="fw-bold">R$ 1.332,00</span>
                         </li>
                       </ul>
                     </div>
 
                     {/* Bar Chart */}
                     <div className="py-0" style={{ height: "70px" }}>
-                      <canvas id="_dm-salesChart"></canvas>
+                      <canvas id="_dm-salesChart" />
                     </div>
                     {/* END : Bar Chart */}
                   </div>
@@ -268,12 +263,12 @@ const Dashboard = () => {
                   <div className="card bg-warning text-white overflow-hidden mb-3">
                     <div className="p-3 pb-2">
                       <h5 className="mb-3">
-                        <i className="demo-psi-basket-coins text-reset text-opacity-75 fs-2 me-2"></i>{" "}
-                        Progress
+                        <i className="demo-psi-basket-coins text-reset text-opacity-75 fs-2 me-2" />{" "}
+                        Progresso
                       </h5>
                       <ul className="list-group list-group-borderless">
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
-                          <div className="me-auto">Completed</div>
+                          <div className="me-auto">Completo</div>
                           <span className="fw-bold">34</span>
                         </li>
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
@@ -285,7 +280,7 @@ const Dashboard = () => {
 
                     {/* Horizontal Bar Chart */}
                     <div className="py-0 pb-2" style={{ height: "70px" }}>
-                      <canvas id="_dm-taskChart"></canvas>
+                      <canvas id="_dm-taskChart" />
                     </div>
                     {/* END : Horizontal Bar Chart */}
                   </div>
@@ -306,7 +301,7 @@ const Dashboard = () => {
                         Lorem ipsum dolor sit amet, consectetuer adipiscing
                         elit.
                       </p>
-                      <button className="btn btn-sm btn-danger">
+                      <button type="button" className="btn btn-sm btn-danger">
                         Ver Detahes
                       </button>
 

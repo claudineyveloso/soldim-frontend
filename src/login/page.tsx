@@ -74,28 +74,28 @@ const LoginPage = () => {
 
                 <div className="ms-3">
                   <a
-                    href="#"
+                    href="#root"
                     className="btn btn-sm btn-icon btn-hover btn-primary text-inherit"
                   >
-                    <i className="demo-psi-facebook fs-5"></i>
+                    <i className="demo-psi-facebook fs-5" />
                   </a>
                   <a
-                    href="#"
+                    href="#root"
                     className="btn btn-sm btn-icon btn-hover btn-info text-inherit"
                   >
-                    <i className="demo-psi-twitter fs-5"></i>
+                    <i className="demo-psi-twitter fs-5" />
                   </a>
                   <a
-                    href="#"
+                    href="#root"
                     className="btn btn-sm btn-icon btn-hover btn-danger text-inherit"
                   >
-                    <i className="demo-psi-google-plus fs-5"></i>
+                    <i className="demo-psi-google-plus fs-5" />
                   </a>
                   <a
-                    href="#"
+                    href="#root"
                     className="btn btn-sm btn-icon btn-hover btn-warning text-inherit"
                   >
-                    <i className="demo-psi-instagram fs-5"></i>
+                    <i className="demo-psi-instagram fs-5" />
                   </a>
                 </div>
               </div>

@@ -27,7 +27,7 @@ export default function SideBar() {
                 aria-controls="nav-chat"
                 aria-selected="true"
               >
-                <i className="d-block demo-pli-speech-bubble-5 fs-3 mb-2"></i>
+                <i className="d-block demo-pli-speech-bubble-5 fs-3 mb-2" />
                 <span>Chat</span>
               </button>
               <button
@@ -39,8 +39,8 @@ export default function SideBar() {
                 aria-controls="nav-reports"
                 aria-selected="false"
               >
-                <i className="d-block demo-pli-information fs-3 mb-2"></i>
-                <span>Reports</span>
+                <i className="d-block demo-pli-information fs-3 mb-2" />
+                <span>Relátorios</span>
               </button>
               <button
                 className="nav-link"
@@ -51,8 +51,8 @@ export default function SideBar() {
                 aria-controls="nav-settings"
                 aria-selected="false"
               >
-                <i className="d-block demo-pli-wrench fs-3 mb-2"></i>
-                <span>Settings</span>
+                <i className="d-block demo-pli-wrench fs-3 mb-2" />
+                <span>Configurações</span>
               </button>
             </div>
           </nav>
@@ -187,18 +187,18 @@ export default function SideBar() {
             aria-labelledby="nav-reports-tab"
           >
             <div className="px-3">
-              <h5 className="mb-3">Billing &amp; Reports</h5>
+              <h5 className="mb-3">Faturamento &amp; Relatórios</h5>
               <p>
-                Get <span className="badge bg-danger">$15.00 off</span> your
-                next bill by making sure your full payment reaches us before
-                August 5th.
+                Ganhe <span className="badge bg-danger">R$ 15,00 de</span>{" "}
+                desconto em sua próxima fatura, certificando-se de que o
+                pagamento integral chegue até nós antes de 5 de agosto.
               </p>
-              <h5 className="mt-5 mb-0">Amount Due On</h5>
-              <p>August 17, 2028</p>
-              <p className="h1">$83.09</p>
+              <h5 className="mt-5 mb-0">Valor devido em:</h5>
+              <p>19 de Junho de 2024</p>
+              <p className="h1">R$ 83,09</p>
               <div className="d-grid">
                 <button className="btn btn-success" type="button">
-                  Pay now
+                  Receber agora
                 </button>
               </div>
             </div>
@@ -225,10 +225,10 @@ export default function SideBar() {
               <div className="mb-3">
                 <i className="demo-pli-old-telephone display-4 text-primary"></i>
               </div>
-              <p>Have a question ?</p>
+              <p>Tem alguma dúvida ?</p>
               <p className="h5 mb-0"> (415) 234-53454 </p>
               <small>
-                <em>We are here 24/7</em>
+                <em>Estamos aqui 24 horas por dia, 7 dias por semana</em>
               </small>
             </div>
           </div>
