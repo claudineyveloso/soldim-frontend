@@ -17,6 +17,7 @@ interface LoginUserPayload {
 }
 
 const handler = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/", // Redireciona para a página inicial ao invés de "/signIn"
   },
@@ -40,6 +41,7 @@ const handler = NextAuth({
               password: credentials.password,
             },
           );
+          console.log(response.data);
           if (response.status === 200 && response.data.token) {
             return {
               id: response.data.id,

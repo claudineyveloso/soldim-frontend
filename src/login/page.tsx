@@ -1,12 +1,22 @@
 "use client";
-import { useRouter } from "next/navigation";
+import React from "react";
+import { signIn } from "next-auth/react";
 
 const LoginPage = () => {
-  const router = useRouter();
-  const handleSubmit = (e: React.FormEvent) => {
+  async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    router.push("/dashboard");
-  };
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+
+    signIn("credentials", {
+      ...data,
+      callbackUrl: "/dashboard",
+    });
+  }
+
   return (
     <section id="content" className="content">
       <div className="content__boxed w-100 min-vh-100 d-flex flex-column align-items-center justify-content-center">
@@ -18,9 +28,10 @@ const LoginPage = () => {
                 <p>Faça login em sua conta</p>
               </div>
 
-              <form className="mt-4" onSubmit={handleSubmit}>
+              <form className="mt-4" onSubmit={login}>
                 <div className="mb-3">
                   <input
+                    name="email"
                     type="text"
                     className="form-control"
                     placeholder="Usuário"
@@ -30,6 +41,7 @@ const LoginPage = () => {
 
                 <div className="mb-3">
                   <input
+                    name="password"
                     type="password"
                     className="form-control"
                     placeholder="Senha"
@@ -106,4 +118,5 @@ const LoginPage = () => {
     </section>
   );
 };
+
 export default LoginPage;

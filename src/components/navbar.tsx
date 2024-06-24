@@ -1,5 +1,7 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 export default function NavBar() {
   return (
@@ -58,25 +60,71 @@ export default function NavBar() {
                     <i className="demo-pli-computer-secure fs-5 me-2" />
                     <span className="ms-1">Bloqueio de tela</span>
                   </a>
-                  <a href="#root" className="nav-link">
+                  <Link href="#" className="nav-link" onClick={() => signOut()}>
                     <i className="demo-pli-unlock fs-5 me-2" />
                     <span className="ms-1">Sair</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
           <div className="mainnav__categoriy py-3">
-            <h6 className="mainnav__caption mt-0 fw-bold">Dashboard</h6>
+            <h6 className="mainnav__caption mt-0 fw-bold">Navegação</h6>
             <ul className="mainnav__menu nav flex-column">
-              <li className="nav-item">
-                <Link href="/dashboard" className="nav-link mininav-toggle">
-                  <i className="demo-pli-home fs-5 me-2" />
-                  <span className="nav-label mininav-content ms-1">
-                    <span data-popper-arrow className="arrow" />
-                    Painel
-                  </span>
-                </Link>
+              <li className="nav-item has-sub">
+                <a href="#" className="mininav-toggle nav-link active ">
+                  <i className="demo-pli-home fs-5 me-2"></i>
+                  <span className="nav-label ms-1">Dashboard</span>
+                </a>
+                <ul className="mininav-content nav collapse">
+                  <li data-popper-arrow className="arrow"></li>
+                  <li className="nav-item">
+                    <a href="/dashboard" className="nav-link active">
+                      Diária
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="/dashboard" className="nav-link">
+                      Mensal
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div className="mainnav__categoriy py-3">
+            <h6 className="mainnav__caption mt-0 fw-bold">Vendas</h6>
+
+            <ul className="mainnav__menu nav flex-column">
+              <li className="nav-item has-sub">
+                <a href="#" className="mininav-toggle nav-link collapsed">
+                  <i className="demo-pli-home fs-5 me-2"></i>
+                  <span className="nav-label ms-1">Consumo</span>
+                </a>
+                <ul className="mininav-content nav collapse">
+                  <li data-popper-arrow className="arrow"></li>
+                  <li className="nav-item">
+                    <a href="./index.html" className="nav-link">
+                      Pedidos de vendas
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="./dashboard-2.html" className="nav-link">
+                      Vendas por vendedor
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="./dashboard-2.html" className="nav-link">
+                      Vendas por canal
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="./dashboard-2.html" className="nav-link">
+                      Previsão de estoque
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>

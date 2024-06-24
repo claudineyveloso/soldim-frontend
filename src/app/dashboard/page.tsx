@@ -1,5 +1,15 @@
+import SalesChart from "@/components/charts/sales";
+import EarningChart from "@/components/charts/earning";
+import OrdersChart from "@/components/charts/orders";
+import DailyChart from "@/components/charts/daily";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 // src/app/home/page.tsx
-const Dashboard = () => {
+export default async function Dashboard() {
+  const session = await getServerSession();
+  if (!session) {
+    redirect("/");
+  }
   return (
     // PAGE CONTAINER
     <section id="content" className="content">
@@ -21,7 +31,7 @@ const Dashboard = () => {
               <div className="card h-100">
                 <div className="card-header d-flex align-items-center border-0">
                   <div className="me-auto">
-                    <h3 className="h4 m-0">Network</h3>
+                    <h3 className="h4 m-0">Pedidos por dia</h3>
                   </div>
                   <div className="toolbar-end">
                     <button
@@ -78,7 +88,7 @@ const Dashboard = () => {
                   className="card-body py-0"
                   style={{ height: "250px", maxHeight: "275px" }}
                 >
-                  <canvas id="_dm-networkChart" />
+                  <DailyChart />
                 </div>
                 {/* END : Network - Area Chart */}
 
@@ -167,21 +177,20 @@ const Dashboard = () => {
             <div className="col-xl-5">
               <div className="row">
                 <div className="col-sm-6">
-                  {/* Tile - HDD Usage */}
                   <div className="card bg-success text-white overflow-hidden mb-3">
                     <div className="p-3 pb-2">
                       <h5 className="mb-3">
                         <i className="demo-psi-data-storage text-reset text-opacity-75 fs-3 me-2" />{" "}
-                        HDD Usage
+                        Pedidos
                       </h5>
                       <ul className="list-group list-group-borderless">
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
-                          <div className="me-auto">Free Space</div>
-                          <span className="fw-bold">132Gb</span>
+                          <div className="me-auto">Unidades</div>
+                          <span className="fw-bold">300</span>
                         </li>
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Used space</div>
-                          <span className="fw-bold">1,45Gb</span>
+                          <span className="fw-bold">-41%</span>
                         </li>
                       </ul>
                     </div>
@@ -191,24 +200,25 @@ const Dashboard = () => {
                       className="py-0"
                       style={{ height: "70px", margin: "0 -5px -5px;" }}
                     >
-                      <canvas id="_dm-hddChart" />
+                      <OrdersChart />
                     </div>
                     {/* END : Area Chart */}
                   </div>
                   {/* END : Tile - HDD Usage */}
                 </div>
+
                 <div className="col-sm-6">
                   {/* Tile - Earnings */}
                   <div className="card bg-info text-white overflow-hidden mb-3">
                     <div className="p-3 pb-2">
                       <h5 className="mb-3">
                         <i className="demo-psi-coin text-reset text-opacity-75 fs-2 me-2" />{" "}
-                        Ganho
+                        Ganhos
                       </h5>
                       <ul className="list-group list-group-borderless">
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Hoje</div>
-                          <span className="fw-bold">R$ 764,00</span>
+                          <span className="fw-bold">R$ 302.924,68</span>
                         </li>
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Últimos 7 Dias</div>
@@ -222,13 +232,15 @@ const Dashboard = () => {
                       className="py-0"
                       style={{ height: "70px", margin: "0 -5px -5px;" }}
                     >
-                      <canvas id="_dm-earningChart" />
+                      {/* <canvas id="_dm-salesChart" /> */}
+                      <EarningChart />
                     </div>
                     {/* END : Line Chart */}
                   </div>
                   {/* END : Tile - Earnings */}
                 </div>
               </div>
+
               <div className="row">
                 <div className="col-sm-6">
                   {/* Tile - Sales */}
@@ -241,18 +253,18 @@ const Dashboard = () => {
                       <ul className="list-group list-group-borderless">
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Hoje</div>
-                          <span className="fw-bold">R$ 764,00</span>
+                          <span className="fw-bold">196</span>
                         </li>
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
                           <div className="me-auto">Últimos 7 Dias</div>
-                          <span className="fw-bold">R$ 1.332,00</span>
+                          <span className="fw-bold">R$ 307</span>
                         </li>
                       </ul>
                     </div>
 
                     {/* Bar Chart */}
                     <div className="py-0" style={{ height: "70px" }}>
-                      <canvas id="_dm-salesChart" />
+                      <SalesChart />
                     </div>
                     {/* END : Bar Chart */}
                   </div>
@@ -264,7 +276,7 @@ const Dashboard = () => {
                     <div className="p-3 pb-2">
                       <h5 className="mb-3">
                         <i className="demo-psi-basket-coins text-reset text-opacity-75 fs-2 me-2" />{" "}
-                        Progresso
+                        Canais de vendas
                       </h5>
                       <ul className="list-group list-group-borderless">
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
@@ -294,7 +306,7 @@ const Dashboard = () => {
                   <div className="d-flex align-items-center">
                     <div className="flex-shrink-0 p-3">
                       <div className="h3 display-3">95</div>
-                      <span className="h6">New Friends</span>
+                      <span className="h6">Pesquisas</span>
                     </div>
                     <div className="flex-grow-1 text-center ms-3">
                       <p className="text-body-secondary">
@@ -336,6 +348,4 @@ const Dashboard = () => {
       </div>
     </section>
   );
-};
-
-export default Dashboard;
+}

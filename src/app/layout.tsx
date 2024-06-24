@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { getServerSession } from "next-auth";
 import "../../assets/css/bootstrap.min.css";
 import "../../assets/css/nifty.min.css";
 import "../../assets/css/demo-purpose/demo-icons.min.css";
@@ -7,11 +8,14 @@ import Header from "@/components/header";
 import NavBar from "@/components/navbar";
 import SideBar from "@/components/sidebar";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
+  console.log("esse é o valor de session", session);
+
   return (
     <html lang="en" data-bs-theme="light" data-scheme="gray">
       <head>
@@ -29,9 +33,13 @@ export default function RootLayout({
       <body className="out-quart">
         <div id="root" className="root mn--max tm--expanded-hd">
           {children}
-          <Header />
-          <NavBar />
-          <SideBar />
+          {session && (
+            <>
+              <Header />
+              <NavBar />
+              <SideBar />
+            </>
+          )}
         </div>
         <div className="scroll-container">
           <a
