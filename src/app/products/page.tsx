@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
@@ -8,11 +8,13 @@ import { fetchProducts } from "@/services/productService";
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [searchName, setSearchName] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
   const containerRef = useRef<HTMLDivElement>(null);
-  const gridInstanceRef = useRef<Grid | null>(null);
+  const gridInstanceRef = useRef<boolean>(false);
 
-  const getProducts = async (name: string = "") => {
+  const getProducts = useCallback(async (name: string = "") => {
     try {
+      setLoading(true);
       const page = 1;
       const limit = 100;
       console.log(
@@ -23,31 +25,28 @@ const Products = () => {
         "and name:",
         name,
       );
-      const { products, totalPages } = await fetchProducts(page, limit, name);
+      const { products } = await fetchProducts(page, limit, name);
       console.log("Fetched products:", products);
       setProducts(products);
     } catch (error) {
       console.error("Failed to fetch products:", error);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    getProducts();
   }, []);
 
   useEffect(() => {
-    if (containerRef.current && products.length > 0) {
+    getProducts();
+  }, [getProducts]);
+
+  useEffect(() => {
+    if (!loading && containerRef.current && !gridInstanceRef.current) {
       console.log("Rendering grid with products:", products);
 
       const container = containerRef.current;
 
       // Limpar o contêiner antes de renderizar a tabela
       container.innerHTML = "";
-
-      // Destruir a instância existente do Grid.js, se houver
-      if (gridInstanceRef.current) {
-        gridInstanceRef.current.destroy();
-      }
 
       // Criar nova instância do Grid.js
       const grid = new Grid({
@@ -96,15 +95,17 @@ const Products = () => {
       });
 
       grid.render(container);
-      gridInstanceRef.current = grid; // Armazenar a instância atual do Grid.js
+      gridInstanceRef.current = true; // Flag the grid as rendered
     }
-  }, [products]);
+  }, [loading, products]);
 
   const handleSearch = () => {
+    gridInstanceRef.current = false;
     getProducts(searchName);
   };
 
   const handleClear = () => {
+    gridInstanceRef.current = false;
     setSearchName("");
     getProducts();
   };
@@ -182,7 +183,7 @@ const Products = () => {
 
               <hr />
               <h3 className="h4">Listagem</h3>
-              {products.length === 0 ? (
+              {loading ? (
                 <div
                   className="d-flex justify-content-center align-items-center"
                   style={{ height: "200px" }}
