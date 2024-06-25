@@ -7,7 +7,6 @@ import { fetchProducts } from "@/services/productService";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [searchName, setSearchName] = useState<string>("");
   const containerRef = useRef<HTMLDivElement>(null);
   const gridInstanceRef = useRef<Grid | null>(null);
@@ -29,8 +28,6 @@ const Products = () => {
       setProducts(products);
     } catch (error) {
       console.error("Failed to fetch products:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -39,7 +36,7 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && containerRef.current) {
+    if (containerRef.current && products.length > 0) {
       console.log("Rendering grid with products:", products);
 
       const container = containerRef.current;
@@ -64,7 +61,7 @@ const Products = () => {
             width: "50px",
             formatter: (cell: string) =>
               h("img", {
-                src: cell || "/assets/moldura.png", // Caminho da imagem padrão
+                src: cell || "/assets/img/moldura.png", // Caminho da imagem padrão
                 width: 50,
                 height: 50,
               }),
@@ -101,16 +98,14 @@ const Products = () => {
       grid.render(container);
       gridInstanceRef.current = grid; // Armazenar a instância atual do Grid.js
     }
-  }, [loading, products]);
+  }, [products]);
 
   const handleSearch = () => {
-    setLoading(true);
     getProducts(searchName);
   };
 
   const handleClear = () => {
     setSearchName("");
-    setLoading(true);
     getProducts();
   };
 
@@ -167,9 +162,10 @@ const Products = () => {
                     <button className="btn btn-primary" onClick={handleSearch}>
                       Buscar
                     </button>
-                  </div>
-                  <div className="btn-group">
-                    <button className="btn btn-primary" onClick={handleClear}>
+                    <button
+                      className="btn btn-secondary ms-2"
+                      onClick={handleClear}
+                    >
                       Limpar
                     </button>
                   </div>
@@ -186,7 +182,7 @@ const Products = () => {
 
               <hr />
               <h3 className="h4">Listagem</h3>
-              {loading ? (
+              {products.length === 0 ? (
                 <div
                   className="d-flex justify-content-center align-items-center"
                   style={{ height: "200px" }}
