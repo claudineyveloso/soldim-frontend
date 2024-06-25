@@ -94,6 +94,37 @@ export default function NavBar() {
           </div>
 
           <div className="mainnav__categoriy py-3">
+            <h6 className="mainnav__caption mt-0 fw-bold">Produtos</h6>
+
+            <ul className="mainnav__menu nav flex-column">
+              <li className="nav-item has-sub">
+                <a href="#" className="mininav-toggle nav-link collapsed">
+                  <i className="demo-pli-home fs-5 me-2"></i>
+                  <span className="nav-label ms-1">Consumo</span>
+                </a>
+                <ul className="mininav-content nav collapse">
+                  <li data-popper-arrow className="arrow"></li>
+                  <li className="nav-item">
+                    <a href="/products" className="nav-link">
+                      Estoque de produtos
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="/products" className="nav-link">
+                      Sugestão de compras
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="/products" className="nav-link">
+                      Sem movimentação
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div className="mainnav__categoriy py-3">
             <h6 className="mainnav__caption mt-0 fw-bold">Vendas</h6>
 
             <ul className="mainnav__menu nav flex-column">
