@@ -2,6 +2,7 @@ import Script from "next/script";
 import { getServerSession } from "next-auth";
 import "../../assets/css/bootstrap.min.css";
 import "../../assets/css/nifty.min.css";
+import "../../assets/css/custom.css";
 import "../../assets/css/demo-purpose/demo-icons.min.css";
 import "../../assets/css/demo-purpose/demo-settings.min.css";
 import Header from "@/components/header";

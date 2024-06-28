@@ -56,7 +56,7 @@ const Users = () => {
               {
                 className: "btn btn-sm btn-outline-primary me-2",
                 onClick: () => {
-                  console.log("Edit clicked for user:", userId);
+                  console.log("Edit clicked for search:", searchId);
                   editUser(userId);
                 },
               },

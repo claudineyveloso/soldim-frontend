@@ -188,7 +188,10 @@ export default function NavBar() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link href="/users" className="nav-link mininav-toggle">
+                <Link
+                  href="/collect_product"
+                  className="nav-link mininav-toggle"
+                >
                   <i className="demo-pli-shopping-cart fs-5 me-2" />
                   <span className="nav-label mininav-content ms-1">
                     <span data-popper-arrow className="arrow" />

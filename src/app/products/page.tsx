@@ -10,7 +10,7 @@ const Products = () => {
   const [searchName, setSearchName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const containerRef = useRef<HTMLDivElement>(null);
-  const gridInstanceRef = useRef<boolean>(false);
+  const gridInstanceRef = useRef<any>(null);
 
   const getProducts = useCallback(async (name: string = "") => {
     try {
@@ -40,72 +40,92 @@ const Products = () => {
   }, [getProducts]);
 
   useEffect(() => {
-    if (!loading && containerRef.current && !gridInstanceRef.current) {
-      console.log("Rendering grid with products:", products);
+    if (!loading && containerRef.current) {
+      if (gridInstanceRef.current) {
+        gridInstanceRef.current
+          .updateConfig({
+            data: products.map((product) => [
+              product.imagemURL,
+              product.nome,
+              product.codigo
+                ? String(product.codigo)
+                : h(
+                    "span",
+                    { className: "text-danger fw-bolder" },
+                    "Não informado",
+                  ),
+              product.preco,
+            ]),
+          })
+          .forceRender();
+      } else {
+        console.log("Rendering grid with products:", products);
 
-      const container = containerRef.current;
+        const container = containerRef.current;
 
-      // Limpar o contêiner antes de renderizar a tabela
-      container.innerHTML = "";
-
-      // Criar nova instância do Grid.js
-      const grid = new Grid({
-        className: {
-          table: "table table-striped",
-          thead: "thead-dark",
-        },
-        columns: [
-          {
-            name: "Imagem",
-            width: "50px",
-            formatter: (cell: string) =>
-              h("img", {
-                src: cell || "/assets/img/moldura.png", // Caminho da imagem padrão
-                width: 50,
-                height: 50,
-              }),
+        const grid = new Grid({
+          className: {
+            table: "table table-striped",
+            thead: "thead-dark",
           },
-          { name: "Nome", width: "200px" },
-          { name: "Codigo", width: "50px" },
-          {
-            name: "Preço",
-            width: "50px",
-            formatter: (cell: number) =>
-              new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              }).format(cell),
-          },
-          { name: "Tipo", width: "50px" },
-          { name: "Situação", width: "50px" },
-          { name: "Formato", width: "50px" },
-          { name: "Descrição", width: "50px" },
-        ],
-        sort: true,
-        data: products.map((product) => [
-          product.imagemURL,
-          product.nome,
-          product.codigo,
-          product.preco,
-          product.tipo,
-          product.situacao,
-          product.formato,
-          product.descricaoCurta,
-        ]),
-      });
+          columns: [
+            {
+              name: "Imagem",
+              width: "30px",
+              formatter: (cell: string) =>
+                h("img", {
+                  src: cell || "/assets/img/moldura.png", // Caminho da imagem padrão
+                  width: 30,
+                  height: 30,
+                }),
+            },
+            { name: "Nome", width: "200px" },
+            {
+              name: "Codigo",
+              width: "50px",
+              formatter: (cell: string) =>
+                cell
+                  ? cell
+                  : h(
+                      "span",
+                      { className: "text-danger fw-bolder" },
+                      "Código vazio",
+                    ),
+            },
+            {
+              name: "Preço",
+              width: "50px",
+              formatter: (cell: number) =>
+                new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(cell),
+            },
+          ],
+          sort: true,
+          data: products.map((product) => [
+            product.imagemURL,
+            product.nome,
+            product.codigo,
+            product.preco,
+            product.tipo,
+            product.situacao,
+            product.formato,
+            product.descricaoCurta,
+          ]),
+        });
 
-      grid.render(container);
-      gridInstanceRef.current = true; // Flag the grid as rendered
+        grid.render(container);
+        gridInstanceRef.current = grid;
+      }
     }
   }, [loading, products]);
 
   const handleSearch = () => {
-    gridInstanceRef.current = false;
     getProducts(searchName);
   };
 
   const handleClear = () => {
-    gridInstanceRef.current = false;
     setSearchName("");
     getProducts();
   };
@@ -173,11 +193,181 @@ const Products = () => {
                 </div>
 
                 <div className="col-md-6 d-flex gap-1 justify-content-md-end align-items-center mb-3">
-                  <button className="btn btn-primary hstack gap-2 align-self-center">
+                  <button
+                    type="button"
+                    className="btn btn-primary hstack gap-2 align-self-center"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalProduct"
+                  >
                     <i className="demo-psi-add fs-5"></i>
                     <span className="vr"></span>
                     Novo produto
                   </button>
+                </div>
+                <div
+                  className="modal fade"
+                  id="modalProduct"
+                  tabIndex={-1}
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h1 className="modal-title fs-5" id="exampleModalLabel">
+                          Cadastrar novo produto
+                        </h1>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <div className="col-md-12 mb-3">
+                          <div className="card h-100 card-none-box-shadow">
+                            <div className="card-body">
+                              <h5 className="card-title">Dados básicos</h5>
+
+                              <form className="row g-3">
+                                <div className="col-12">
+                                  <label
+                                    htmlFor="_dm-inputAddress"
+                                    className="form-label"
+                                  >
+                                    Nome
+                                  </label>
+                                  <input
+                                    id="_dm-inputAddress"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                  />
+                                </div>
+
+                                <div className="col-md-6">
+                                  <label
+                                    htmlFor="_dm-inputAddress2"
+                                    className="form-label"
+                                  >
+                                    Código (SKU)
+                                  </label>
+                                  <input
+                                    id="_dm-inputAddress2"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                  />
+                                </div>
+
+                                <div className="col-md-6">
+                                  <label
+                                    htmlFor="_dm-inputAddress2"
+                                    className="form-label"
+                                  >
+                                    Preço venda
+                                  </label>
+                                  <input
+                                    id="_dm-inputAddress2"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                  />
+                                </div>
+
+                                <div className="col-md-6">
+                                  <label
+                                    htmlFor="_dm-inputCity"
+                                    className="form-label"
+                                  >
+                                    Unidade
+                                  </label>
+                                  <input
+                                    id="_dm-inputCity"
+                                    type="text"
+                                    className="form-control"
+                                  />
+                                </div>
+
+                                <div className="col-md-6">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Formato
+                                  </label>
+                                  <select
+                                    id="inputState"
+                                    className="form-select"
+                                  >
+                                    <option value="S" selected={true}>
+                                      Simples ou com variação
+                                    </option>
+                                    <option value="E">Com composição</option>
+                                  </select>
+                                </div>
+
+                                <div className="col-md-6">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Tipo
+                                  </label>
+                                  <select
+                                    id="inputState"
+                                    className="form-select"
+                                  >
+                                    <option value="P" selected={true}>
+                                      Produto
+                                    </option>
+                                    <option value="S">Serviço</option>
+                                  </select>
+                                </div>
+
+                                <div className="col-md-6">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Condição
+                                  </label>
+                                  <select
+                                    id="inputState"
+                                    className="form-select"
+                                  >
+                                    <option value="0" selected={true}>
+                                      Não especificado
+                                    </option>
+                                    <option value="1">Novo</option>
+                                    <option value="2">Usado</option>
+                                    <option value="3">Recondicionado</option>
+                                  </select>
+                                </div>
+
+                                <div className="modal-footer">
+                                  <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    data-bs-dismiss="modal"
+                                  >
+                                    Fechar
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                  >
+                                    Salvar
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
