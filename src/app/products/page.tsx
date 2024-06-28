@@ -44,7 +44,7 @@ const Products = () => {
       if (gridInstanceRef.current) {
         gridInstanceRef.current
           .updateConfig({
-            data: products.map((product) => [
+            data: products.map((product, index) => [
               product.imagemURL,
               product.nome,
               product.codigo
@@ -55,6 +55,7 @@ const Products = () => {
                     "Não informado",
                   ),
               product.preco,
+              index,
             ]),
           })
           .forceRender();
@@ -101,17 +102,47 @@ const Products = () => {
                   currency: "BRL",
                 }).format(cell),
             },
+            {
+              name: "Ações",
+              width: "150px",
+              formatter: (_, row) => {
+                const productIndex = row.cells[4].data as number;
+                const productId = products[productIndex].id;
+                console.log("Product ID:", productId); // Log do ID do usuário
+
+                const editButton = h(
+                  "button",
+                  {
+                    className: "btn btn-sm btn-outline-primary me-2",
+                    onClick: () => {
+                      console.log("Edit clicked for search:", productId);
+                      editProduct(productId);
+                    },
+                  },
+                  "Editar",
+                );
+                const deleteButton = h(
+                  "button",
+                  {
+                    className: "btn btn-sm btn-outline-danger",
+                    onClick: () => {
+                      console.log("Delete clicked for product:", productId);
+                      deleteProduct(productId);
+                    },
+                  },
+                  "Deletar",
+                );
+                return h("div", {}, [editButton, deleteButton]);
+              },
+            },
           ],
           sort: true,
-          data: products.map((product) => [
+          data: products.map((product, index) => [
             product.imagemURL,
             product.nome,
             product.codigo,
             product.preco,
-            product.tipo,
-            product.situacao,
-            product.formato,
-            product.descricaoCurta,
+            index,
           ]),
         });
 
@@ -134,6 +165,16 @@ const Products = () => {
     if (event.key === "Enter") {
       handleSearch();
     }
+  };
+
+  const editProduct = (id: number) => {
+    console.log("Edit product with ID:", id);
+    // Implementar lógica para editar usuário
+  };
+
+  const deleteProduct = (id: number) => {
+    console.log("Delete product with ID:", id);
+    // Implementar lógica para excluir usuário
   };
 
   return (
