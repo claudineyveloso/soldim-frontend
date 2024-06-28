@@ -1,8 +1,23 @@
 "use client";
-import React from "react";
-import { signIn } from "next-auth/react";
+import React, { useEffect } from "react";
+import { signIn, getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const router = useRouter();
+  useEffect(() => {
+    // Verifica a sessão do cliente
+    const checkSession = async () => {
+      const session = await getSession();
+      if (session) {
+        // Redireciona para o dashboard se a sessão existir
+        router.push("/dashboard");
+      }
+    };
+
+    checkSession();
+  }, [router]);
+
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
