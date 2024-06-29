@@ -1,9 +1,15 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
 export default function NavBar() {
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+
+  const handleItemClick = (item: string) => {
+    setActiveItem(item);
+  };
   return (
     <nav id="mainnav-container" className="mainnav">
       <div className="mainnav__inner">
@@ -38,7 +44,7 @@ export default function NavBar() {
                   <small className="text-body-secondary">Administrator</small>
                 </button>
                 <div id="usernav" className="nav flex-column collapse">
-                  <a
+                  <Link
                     href="#root"
                     className="nav-link d-flex justify-content-between align-items-center"
                   >
@@ -47,19 +53,19 @@ export default function NavBar() {
                       <span className="ms-1">Mensagens</span>
                     </span>
                     <span className="badge bg-danger rounded-pill">14</span>
-                  </a>
+                  </Link>
                   <Link href="/profile" className="nav-link">
                     <i className="demo-pli-male fs-5 me-2" />
                     <span className="ms-1">Perfil</span>
                   </Link>
-                  <a href="#root" className="nav-link">
+                  <Link href="#root" className="nav-link">
                     <i className="demo-pli-gear fs-5 me-2" />
                     <span className="ms-1">Configurações</span>
-                  </a>
-                  <a href="#root" className="nav-link">
+                  </Link>
+                  <Link href="#root" className="nav-link">
                     <i className="demo-pli-computer-secure fs-5 me-2" />
                     <span className="ms-1">Bloqueio de tela</span>
-                  </a>
+                  </Link>
                   <Link href="#" className="nav-link" onClick={() => signOut()}>
                     <i className="demo-pli-unlock fs-5 me-2" />
                     <span className="ms-1">Sair</span>
@@ -72,21 +78,32 @@ export default function NavBar() {
             <h6 className="mainnav__caption mt-0 fw-bold">Navegação</h6>
             <ul className="mainnav__menu nav flex-column">
               <li className="nav-item has-sub">
-                <a href="#" className="mininav-toggle nav-link active ">
+                <Link
+                  href="#"
+                  className={`mininav-toggle nav-link ${activeItem === "diary" || activeItem === "monthly" ? "active" : ""}`}
+                >
                   <i className="demo-pli-home fs-5 me-2"></i>
                   <span className="nav-label ms-1">Dashboard</span>
-                </a>
+                </Link>
                 <ul className="mininav-content nav collapse">
                   <li data-popper-arrow className="arrow"></li>
                   <li className="nav-item">
-                    <a href="/dashboard" className="nav-link active">
+                    <Link
+                      href="/dashboard"
+                      className={`nav-link ${activeItem === "diary" ? "active" : ""}`}
+                      onClick={() => handleItemClick("diary")}
+                    >
                       Diária
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/dashboard" className="nav-link">
+                    <Link
+                      href="/dashboard"
+                      className={`nav-link ${activeItem === "monthly" ? "active" : ""}`}
+                      onClick={() => handleItemClick("monthly")}
+                    >
                       Mensal
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </li>
@@ -98,26 +115,41 @@ export default function NavBar() {
 
             <ul className="mainnav__menu nav flex-column">
               <li className="nav-item has-sub">
-                <a href="#" className="mininav-toggle nav-link collapsed">
+                <Link
+                  href="#"
+                  className={`mininav-toggle nav-link collapsed ${activeItem === "product-stock" || activeItem === "suggestion" || activeItem === "no-movement" ? "active" : ""}`}
+                >
                   <i className="demo-pli-home fs-5 me-2"></i>
                   <span className="nav-label ms-1">Consumo</span>
-                </a>
+                </Link>
                 <ul className="mininav-content nav collapse">
                   <li data-popper-arrow className="arrow"></li>
                   <li className="nav-item">
-                    <a href="/products" className="nav-link">
+                    <Link
+                      href="/products"
+                      className={`nav-link ${activeItem === "product-stock" ? "active" : ""}`}
+                      onClick={() => handleItemClick("product-stock")}
+                    >
                       Estoque de produtos
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/products" className="nav-link">
+                    <Link
+                      href="/products"
+                      className={`nav-link ${activeItem === "suggestion" ? "active" : ""}`}
+                      onClick={() => handleItemClick("suggestion")}
+                    >
                       Sugestão de compras
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="/products" className="nav-link">
+                    <Link
+                      href="/products"
+                      className={`nav-link ${activeItem === "no-movement" ? "active" : ""}`}
+                      onClick={() => handleItemClick("no-movement")}
+                    >
                       Sem movimentação
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </li>
@@ -129,31 +161,31 @@ export default function NavBar() {
 
             <ul className="mainnav__menu nav flex-column">
               <li className="nav-item has-sub">
-                <a href="#" className="mininav-toggle nav-link collapsed">
+                <Link href="#" className="mininav-toggle nav-link collapsed">
                   <i className="demo-pli-home fs-5 me-2"></i>
                   <span className="nav-label ms-1">Consumo</span>
-                </a>
+                </Link>
                 <ul className="mininav-content nav collapse">
                   <li data-popper-arrow className="arrow"></li>
                   <li className="nav-item">
-                    <a href="./index.html" className="nav-link">
+                    <Link href="./index.html" className="nav-link">
                       Pedidos de vendas
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="./dashboard-2.html" className="nav-link">
+                    <Link href="./dashboard-2.html" className="nav-link">
                       Vendas por vendedor
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="./dashboard-2.html" className="nav-link">
+                    <Link href="./dashboard-2.html" className="nav-link">
                       Vendas por canal
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a href="./dashboard-2.html" className="nav-link">
+                    <Link href="./dashboard-2.html" className="nav-link">
                       Previsão de estoque
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </li>
@@ -235,9 +267,9 @@ export default function NavBar() {
                       role="progressbar"
                       style={{ width: "35%" }}
                       aria-label="CPU Progress"
-                      aria-valuenow="35"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
+                      aria-valuenow={35}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
                     ></div>
                   </div>
                 </li>
@@ -252,17 +284,17 @@ export default function NavBar() {
                       role="progressbar"
                       style={{ width: "73%" }}
                       aria-label="Bandwidth Progress"
-                      aria-valuenow="73"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
+                      aria-valuenow={73}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
                     ></div>
                   </div>
                 </li>
               </ul>
               <div className="d-grid px-3 mt-3">
-                <a href="#root" className="btn btn-sm btn-success">
+                <Link href="#root" className="btn btn-sm btn-success">
                   View Details
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -270,35 +302,35 @@ export default function NavBar() {
         <div className="mainnav__bottom-content border-top pb-2">
           <ul id="mainnav" className="mainnav__menu nav flex-column">
             <li className="nav-item has-sub">
-              <a
+              <Link
                 href="#root"
                 className="nav-link mininav-toggle collapsed"
                 aria-expanded="false"
               >
                 <i className="demo-pli-unlock fs-5 me-2" />
                 <span className="nav-label ms-1">Logout</span>
-              </a>
+              </Link>
               <ul className="mininav-content nav flex-column collapse">
                 <li data-popper-arrow className="arrow" />
                 <li className="nav-item">
-                  <a href="#root" className="nav-link">
+                  <Link href="#root" className="nav-link">
                     This device only
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a href="#root" className="nav-link">
+                  <Link href="#root" className="nav-link">
                     All Devices
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a
+                  <Link
                     className="nav-link disabled"
                     href="#root"
                     tabIndex={-1}
                     aria-disabled="true"
                   >
                     Lock screen
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </li>
