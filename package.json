@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "axios": "^1.7.2",
+    "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
     "gridjs": "^6.2.0",
     "next": "14.2.4",
@@ -19,6 +21,7 @@
     "tabulator-tables": "^6.2.1"
   },
   "devDependencies": {
+    "@types/bootstrap": "^5.2.10",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

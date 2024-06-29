@@ -3,27 +3,41 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
+import axios from "axios";
 import { fetchSearchesResult } from "@/services/searchResultService";
+
+const fetchProductsInWeb = (searchTerm: string) => {
+  // Lógica para buscar produtos
+  console.log("Searching for:", searchTerm);
+};
 
 const CollectProduct = () => {
   const [results, setResults] = useState<any[]>([]);
+  const [description, setDescription] = useState("Resultado");
   const containerRef = useRef<HTMLDivElement>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [requestTime, setRequestTime] = useState<number | null>(null);
+  const [lowestPriceProduct, setLowestPriceProduct] = useState<any>(null);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const getResults = async () => {
+    try {
+      const data = await fetchSearchesResult();
+      console.log("Fetched searches result:", data); // Verifique os dados recebidos
+      if (data && Array.isArray(data)) {
+        setResults(data);
+      } else {
+        console.error("Unexpected data format:", data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch searches result:", error);
+    }
+  };
 
   useEffect(() => {
-    const getResults = async () => {
-      try {
-        const data = await fetchSearchesResult();
-        console.log("Fetched searches result:", data); // Verifique os dados recebidos
-        if (data && Array.isArray(data)) {
-          setResults(data);
-        } else {
-          console.error("Unexpected data format:", data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch searches result:", error);
-      }
-    };
-
     getResults();
   }, []);
 
@@ -44,8 +58,8 @@ const CollectProduct = () => {
       },
       columns: [
         {
-          name: "Imagem",
-          width: "50px",
+          name: "",
+          width: "80px",
           formatter: (cell: string) => {
             const imageUrl = cell ? cell : "/assets/img/moldura.png"; // Usar a URL da imagem ou a imagem padrão
             return h("img", {
@@ -60,7 +74,6 @@ const CollectProduct = () => {
         },
         {
           name: "Descrição",
-          width: "400px",
           formatter: (cell: string, row: any) => {
             console.log("Row data:", row.cells); // Verifique todos os dados da linha
             const source = row.cells[5]
@@ -78,30 +91,45 @@ const CollectProduct = () => {
             ]);
           },
         },
-        { name: "Preço", width: "80px" },
-        { name: "Promoção", width: "80px" },
-        { name: "Criado em:", width: "80px" },
+        { name: "Preço", width: "100px" },
+        { name: "Promoção", width: "120px" },
+        { name: "Criado em:", width: "120px" },
         { name: "Source", hidden: true }, // Coluna oculta para armazenar a fonte
         { name: "Link", hidden: true }, // Coluna oculta para armazenar o link
         { name: "ID", hidden: true }, // Coluna oculta para armazenar o ID
         {
           name: "Ações",
-          width: "150px",
+          width: "100px",
           formatter: (_, row) => {
+            const desc = row.cells[1] ? String(row.cells[1].data) : ""; // Converter descrição para string
             const resultId = row.cells[7] ? String(row.cells[7].data) : ""; // Converter resultId para string
             console.log("Result ID:", resultId); // Log do ID do usuário
-            const deleteButton = h(
-              "button",
+            const searchButton = h(
+              "a",
               {
-                className: "btn btn-sm btn-outline-danger",
+                herf: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-primary",
+                onClick: () => {
+                  console.log("Edit clicked for user:", desc);
+                  newSearch(desc);
+                },
+              },
+              h("i", { className: "demo-pli-magnifi-glass fs-5" }),
+            );
+
+            const deleteButton = h(
+              "a",
+              {
+                href: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for result:", resultId);
                   deleteResult(resultId);
                 },
               },
-              "Deletar",
+              h("i", { className: "demo-pli-trash fs-5" }),
             );
-            return h("div", {}, [deleteButton]);
+            return h("div", {}, [searchButton, deleteButton]);
           },
         },
       ],
@@ -144,9 +172,62 @@ const CollectProduct = () => {
     };
   }, [results]);
 
+  const newSearch = (id: string) => {
+    console.log("search with the description:", description);
+    // Implementar lógica para editar
+  };
+
   const deleteResult = (id: string) => {
     console.log("Delete result with ID:", id);
     // Implementar lógica para excluir resultado
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setDescription("Aguardando o resultado...");
+    const startTime = new Date().getTime();
+    fetchProductsInWeb(searchTerm);
+    if (containerRef.current) {
+      containerRef.current.classList.add("d-none");
+    }
+
+    // Chamar a API para criar a busca
+    try {
+      const response = await axios.post("http://localhost:8080/create_search", {
+        description: searchTerm,
+      });
+      console.log("Search created:", response.data);
+
+      if (response.data && Array.isArray(response.data)) {
+        const productWithLowestPrice = response.data.reduce(
+          (lowest, product) => {
+            console.log("Comparing products:", lowest, product); // Log de comparação
+            return product.price < lowest.price ? product : lowest;
+          },
+          response.data[0],
+        );
+        console.log(
+          "***********************************************************************",
+        );
+        console.log("Product with lowest price:", productWithLowestPrice); // Log do produto com menor preço
+        console.log(
+          "***********************************************************************",
+        );
+        setLowestPriceProduct(productWithLowestPrice);
+      }
+
+      await getResults(); // Atualizar os resultados após a criação da busca
+    } catch (error) {
+      console.error("Error creating search:", error);
+    } finally {
+      const endTime = new Date().getTime(); // Marca o fim do tempo
+      const duration = (endTime - startTime) / 1000; // Calcula a duração em segundos
+      setRequestTime(duration);
+      setDescription("Resultado");
+      if (containerRef.current) {
+        containerRef.current.classList.remove("d-none");
+      }
+    }
   };
 
   return (
@@ -182,28 +263,44 @@ const CollectProduct = () => {
                 </p>
               </div>
               <div className="row">
-                <div className="col-md-6 d-flex gap-1 align-items-center justify-content-md-start mb-3">
-                  <div className="form-group">
+                <div className="col-md-8 offset-md-2 mb-3">
+                  <form
+                    className="searchbox input-group"
+                    onSubmit={handleSubmit}
+                  >
                     <input
-                      type="text"
-                      placeholder="Localizar..."
-                      className="form-control"
-                      autoComplete="off"
+                      className="searchbox__input form-control form-control-lg"
+                      type="search"
+                      placeholder="Localizar um produto..."
+                      aria-label="Search"
+                      value={searchTerm}
+                      onChange={handleChange}
                     />
-                  </div>
-                  <div className="col-md-4">
-                    <select id="inputState" className="form-select">
-                      <option selected>Selecione uma fonte...</option>
-                      <option>State 1</option>
-                      <option>State 2</option>
-                      <option>State 3</option>
-                    </select>
-                  </div>
+                    <div className="searchbox__btn-group">
+                      <button
+                        className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
+                        type="submit"
+                      >
+                        <i className="demo-pli-magnifi-glass"></i>
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
 
+              <div className="pb-3 mb-5 border-bottom">
+                <h2 className="mb-2">
+                  <span className="text-nowrap">
+                    179 resultados encontrados para o produto:{" "}
+                  </span>
+                  <i className="text-info-emphasis text-normal">
+                    Dashboard Theme
+                  </i>
+                </h2>
+                <small>Tempo de solicitação ({requestTime} segundos)</small>
+              </div>
               <hr />
-              <h3 className="h4">Resultado</h3>
+              <h3 className="h4">{description}</h3>
               <div id="_dm-gridjsSorting" ref={containerRef}></div>
             </div>
           </div>

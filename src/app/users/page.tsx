@@ -32,47 +32,50 @@ const Users = () => {
     container.innerHTML = "";
 
     console.log("Rendering grid with users:", users);
-
     const grid = new Grid({
       className: {
         table: "table table-striped",
         thead: "thead-dark",
       },
       columns: [
-        { name: "Email", width: "200px" },
+        { name: "Email" },
         { name: "Ativo", width: "100px" },
-        { name: "Tipo", width: "150px" },
-        { name: "Criado em:", width: "120px" },
+        { name: "Tipo", width: "100px" },
+        { name: "Criado em:", width: "100px" },
         {
           name: "Ações",
-          width: "150px",
+          width: "80px",
           formatter: (_, row) => {
             const userIndex = row.cells[4].data as number; // Acessar o índice correto
             const userId = users[userIndex].id;
             console.log("User ID:", userId); // Log do ID do usuário
 
             const editButton = h(
-              "button",
+              "a",
               {
-                className: "btn btn-sm btn-outline-primary me-2",
+                href: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-primary",
                 onClick: () => {
-                  console.log("Edit clicked for search:", userId);
+                  console.log("Edit clicked for user:", userId);
                   editUser(userId);
                 },
               },
-              "Editar",
+              h("i", { className: "demo-pli-pen-5 fs-5" }),
             );
+
             const deleteButton = h(
-              "button",
+              "a",
               {
-                className: "btn btn-sm btn-outline-danger",
+                href: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for user:", userId);
                   deleteUser(userId);
                 },
               },
-              "Deletar",
+              h("i", { className: "demo-pli-trash fs-5" }),
             );
+
             return h("div", {}, [editButton, deleteButton]);
           },
         },

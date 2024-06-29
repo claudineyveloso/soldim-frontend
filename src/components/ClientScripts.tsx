@@ -1,4 +1,3 @@
-// components/ClientScripts.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -7,7 +6,6 @@ import Script from "next/script";
 const ClientScripts = () => {
   useEffect(() => {
     const updateColorVars = () => {
-      // Sua lógica para updatecolorvars
       console.log("Update color variables");
     };
 
@@ -16,6 +14,15 @@ const ClientScripts = () => {
     } else {
       updateColorVars();
     }
+
+    (async () => {
+      try {
+        const bootstrapModule = await import('bootstrap/dist/js/bootstrap.bundle.min.js');
+        window.bootstrap = bootstrapModule.default;
+      } catch (err) {
+        console.error('Error loading bootstrap:', err);
+      }
+    })();
 
     return () => {
       document.removeEventListener("DOMContentLoaded", updateColorVars);

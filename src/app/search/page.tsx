@@ -39,37 +39,39 @@ const Searches = () => {
         thead: "thead-dark",
       },
       columns: [
-        { name: "Descrição", width: "500px" },
-        { name: "Criado em:", width: "120px" },
+        { name: "Descrição" },
+        { name: "Criado em:", width: "80px" },
         {
           name: "Ações",
-          width: "150px",
+          width: "80px",
           formatter: (_, row) => {
             const searchIndex = row.cells[2].data as number; // Corrigido índice
             const searchId = searches[searchIndex].id;
             console.log("Search ID:", searchId); // Log do ID do usuário
 
             const editButton = h(
-              "button",
+              "a",
               {
-                className: "btn btn-sm btn-outline-primary me-2",
+                herf: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-primary",
                 onClick: () => {
                   console.log("Edit clicked for user:", searchId);
                   editSearch(searchId);
                 },
               },
-              "Editar",
+              h("i", { className: "demo-pli-pen-5 fs-5" }),
             );
             const deleteButton = h(
-              "button",
+              "a",
               {
-                className: "btn btn-sm btn-outline-danger",
+                herf: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for search:", searchId);
                   deleteSearch(searchId);
                 },
               },
-              "Deletar",
+              h("i", { className: "demo-pli-trash fs-5" }),
             );
             return h("div", {}, [editButton, deleteButton]);
           },

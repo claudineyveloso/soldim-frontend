@@ -4,6 +4,7 @@ import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
 import { fetchProducts } from "@/services/productService";
+import axios from "axios";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -11,6 +12,31 @@ const Products = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const gridInstanceRef = useRef<any>(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const modalRef = useRef(null);
+  const [editProductId, setEditProductId] = useState<number | null>(null);
+
+  const [product, setProduct] = useState({
+    codigo: "",
+    nome: "",
+    preco: "",
+    unidade: "",
+    tipo: "P",
+    situacao: "A",
+    condicao: "0",
+    formato: "S",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
+    setProduct({
+      ...product,
+      [name]: value,
+    });
+  };
 
   const getProducts = useCallback(async (name: string = "") => {
     try {
@@ -38,6 +64,28 @@ const Products = () => {
   useEffect(() => {
     getProducts();
   }, [getProducts]);
+
+  const handleGetProductId = async (id: number) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/get_product_id?productID=${id}`,
+      );
+      setProduct(response.data);
+      setEditProductId(id);
+      // Open the modal after setting the product data
+      if (window.bootstrap && window.bootstrap.Modal) {
+        const modal = new window.bootstrap.Modal(
+          document.getElementById("editProductModal"),
+        );
+        modal.show();
+      }
+    } catch (error) {
+      console.error("Erro ao buscar produto:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!loading && containerRef.current) {
@@ -167,14 +215,67 @@ const Products = () => {
     }
   };
 
-  const editProduct = (id: number) => {
+  const editProduct = async (id: number) => {
     console.log("Edit product with ID:", id);
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/get_product_id?productID=${id}`,
+      );
+      setProduct(response.data || {});
+      console.log(response.data, "Valor de data");
+      console.log(response.data[0].nome, "Valor do nome");
+
+      if (window.bootstrap && window.bootstrap.Modal) {
+        const modal = new window.bootstrap.Modal(
+          document.getElementById("modalProduct"),
+        );
+        modal.show();
+      }
+    } catch (error) {
+      console.error("Erro ao buscar produto:", error);
+    } finally {
+    }
     // Implementar lógica para editar usuário
   };
 
   const deleteProduct = (id: number) => {
     console.log("Delete product with ID:", id);
     // Implementar lógica para excluir usuário
+  };
+
+  const handleSaveProduct = async () => {
+    console.log("Salva os dados do produto", product);
+
+    try {
+      const response = await fetch("http://localhost:8080/create_product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+
+      if (response.ok) {
+        console.log("Produto criado com sucesso!");
+        setSuccessMessage("Produto criado com sucesso!");
+        setTimeout(() => setSuccessMessage(""), 3000);
+        setProduct({
+          codigo: "",
+          nome: "",
+          preco: "",
+          unidade: "",
+          tipo: "",
+          situacao: "",
+          condicao: "",
+          formato: "S",
+        });
+        // Adicionar lógica para fechar o modal ou limpar o formulário
+      } else {
+        console.error("Erro ao criar produto");
+      }
+    } catch (error) {
+      console.error("Erro ao criar produto:", error);
+    }
   };
 
   return (
@@ -280,10 +381,13 @@ const Products = () => {
                                     Nome
                                   </label>
                                   <input
-                                    id="_dm-inputAddress"
+                                    id="nome"
+                                    name="nome"
                                     type="text"
                                     className="form-control"
                                     placeholder=""
+                                    value={product.nome}
+                                    onChange={handleChange}
                                   />
                                 </div>
 
@@ -295,10 +399,13 @@ const Products = () => {
                                     Código (SKU)
                                   </label>
                                   <input
-                                    id="_dm-inputAddress2"
+                                    id="codigo"
+                                    name="codigo"
                                     type="text"
                                     className="form-control"
                                     placeholder=""
+                                    value={product.codigo}
+                                    onChange={handleChange}
                                   />
                                 </div>
 
@@ -310,10 +417,13 @@ const Products = () => {
                                     Preço venda
                                   </label>
                                   <input
-                                    id="_dm-inputAddress2"
+                                    id="preco"
+                                    name="preco"
                                     type="text"
                                     className="form-control"
                                     placeholder=""
+                                    value={product.preco}
+                                    onChange={handleChange}
                                   />
                                 </div>
 
@@ -325,9 +435,12 @@ const Products = () => {
                                     Unidade
                                   </label>
                                   <input
-                                    id="_dm-inputCity"
+                                    id="unidade"
+                                    name="unidade"
                                     type="text"
                                     className="form-control"
+                                    value={product.unidade}
+                                    onChange={handleChange}
                                   />
                                 </div>
 
@@ -339,10 +452,13 @@ const Products = () => {
                                     Formato
                                   </label>
                                   <select
-                                    id="inputState"
+                                    id="formato"
+                                    name="formato"
                                     className="form-select"
+                                    value={product.formato}
+                                    onChange={handleChange}
                                   >
-                                    <option value="S" selected={true}>
+                                    <option value="S">
                                       Simples ou com variação
                                     </option>
                                     <option value="E">Com composição</option>
@@ -357,12 +473,13 @@ const Products = () => {
                                     Tipo
                                   </label>
                                   <select
-                                    id="inputState"
+                                    id="tipo"
+                                    name="tipo"
                                     className="form-select"
+                                    value={product.tipo}
+                                    onChange={handleChange}
                                   >
-                                    <option value="P" selected={true}>
-                                      Produto
-                                    </option>
+                                    <option value="P">Produto</option>
                                     <option value="S">Serviço</option>
                                   </select>
                                 </div>
@@ -375,12 +492,13 @@ const Products = () => {
                                     Condição
                                   </label>
                                   <select
-                                    id="inputState"
+                                    id="condicao"
+                                    name="condicao"
                                     className="form-select"
+                                    value={product.condicao}
+                                    onChange={handleChange}
                                   >
-                                    <option value="0" selected={true}>
-                                      Não especificado
-                                    </option>
+                                    <option value="0">Não especificado</option>
                                     <option value="1">Novo</option>
                                     <option value="2">Usado</option>
                                     <option value="3">Recondicionado</option>
@@ -398,6 +516,7 @@ const Products = () => {
                                   <button
                                     type="button"
                                     className="btn btn-primary"
+                                    onClick={handleSaveProduct}
                                   >
                                     Salvar
                                   </button>
