@@ -308,6 +308,73 @@ const Products = () => {
                   eficiente
                 </p>
               </div>
+
+              <div className="col-md-8 offset-md-2 mb-3">
+                <form className="searchbox input-group">
+                  <input
+                    className="searchbox__input form-control form-control-lg"
+                    type="search"
+                    placeholder="Localizar um produro..."
+                    aria-label="Search"
+                  />
+                  <div className="searchbox__btn-group">
+                    <button
+                      className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
+                      type="submit"
+                    >
+                      <i className="demo-pli-magnifi-glass"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="d-flex flex-wrap align-items-end justify-content-center gap-2 mb-3 pb-3">
+                <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
+                  <div className="text-center mb-2 mb-md-0">
+                    Somente por Situação
+                  </div>
+                  <select
+                    className="form-select w-auto"
+                    aria-label="Categories"
+                  >
+                    <option value="5">Todos</option>
+                    <option value="1">Últimos incluídos</option>
+                    <option value="2">Ativos</option>
+                    <option value="3">Inativos</option>
+                    <option value="4">Excluídos</option>
+                  </select>
+                </div>
+                <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
+                  <div className="text-center mb-2 mb-md-0">Sort by</div>
+                  <select
+                    className="form-select w-auto"
+                    aria-label="Sort options"
+                  >
+                    <option value="date-created" selected={true}>
+                      Date Created
+                    </option>
+                    <option value="date-modified">Date Modified</option>
+                    <option value="frequency-used">Frequency Used</option>
+                    <option value="alpabetically">Alpabetically</option>
+                    <option value="alpabetically-reversed">
+                      Alpabetically Reversed
+                    </option>
+                  </select>
+                </div>
+                <button className="btn btn-light mb-3 mb-sm-0">Filtrar</button>
+                <button className="btn btn-light mb-3 mb-sm-0">Limpar</button>
+                <button
+                  type="button"
+                  className="btn btn-primary hstack gap-2 align-self-center"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalProduct"
+                >
+                  <i className="demo-psi-add fs-5"></i>
+                  <span className="vr"></span>
+                  Novo produto
+                </button>
+              </div>
+
               <div className="row">
                 <div className="col-md-6 d-flex gap-1 align-items-center justify-content-md-start mb-3">
                   <div className="form-group">

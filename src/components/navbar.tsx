@@ -161,29 +161,48 @@ export default function NavBar() {
 
             <ul className="mainnav__menu nav flex-column">
               <li className="nav-item has-sub">
-                <Link href="#" className="mininav-toggle nav-link collapsed">
+                <Link
+                  href="#"
+                  className={`mininav-toggle nav-link collapsed ${activeItem === "sales-order" || activeItem === "sales-seller" || activeItem === "sales-channel" || activeItem === "stock-forecast" ? "active" : ""}`}
+                >
                   <i className="demo-pli-home fs-5 me-2"></i>
                   <span className="nav-label ms-1">Consumo</span>
                 </Link>
                 <ul className="mininav-content nav collapse">
                   <li data-popper-arrow className="arrow"></li>
                   <li className="nav-item">
-                    <Link href="./index.html" className="nav-link">
+                    <Link
+                      href="./index.html"
+                      className={`nav-link ${activeItem === "sales-order" ? "active" : ""}`}
+                      onClick={() => handleItemClick("sales-order")}
+                    >
                       Pedidos de vendas
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link href="./dashboard-2.html" className="nav-link">
+                    <Link
+                      href="./dashboard-2.html"
+                      className={`nav-link ${activeItem === "sales-saller" ? "active" : ""}`}
+                      onClick={() => handleItemClick("sales-saller")}
+                    >
                       Vendas por vendedor
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link href="./dashboard-2.html" className="nav-link">
+                    <Link
+                      href="./dashboard-2.html"
+                      className={`nav-link ${activeItem === "sales-channel" ? "active" : ""}`}
+                      onClick={() => handleItemClick("sales-channel")}
+                    >
                       Vendas por canal
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link href="./dashboard-2.html" className="nav-link">
+                    <Link
+                      href="./dashboard-2.html"
+                      className={`nav-link ${activeItem === "stock-forecast" ? "active" : ""}`}
+                      onClick={() => handleItemClick("stock-forecast")}
+                    >
                       Previsão de estoque
                     </Link>
                   </li>
