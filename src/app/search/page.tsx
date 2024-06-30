@@ -59,7 +59,7 @@ const Searches = () => {
                   editSearch(searchId);
                 },
               },
-              h("i", { className: "demo-pli-pen-5 fs-5" }),
+              h("i", { className: "demo-pli-list-view fs-5" }),
             );
             const deleteButton = h(
               "a",

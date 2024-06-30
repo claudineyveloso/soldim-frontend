@@ -99,7 +99,7 @@ const CollectProduct = () => {
         { name: "ID", hidden: true }, // Coluna oculta para armazenar o ID
         {
           name: "Ações",
-          width: "100px",
+          width: "130px",
           formatter: (_, row) => {
             const desc = row.cells[1] ? String(row.cells[1].data) : ""; // Converter descrição para string
             const resultId = row.cells[7] ? String(row.cells[7].data) : ""; // Converter resultId para string
@@ -108,13 +108,25 @@ const CollectProduct = () => {
               "a",
               {
                 herf: "#",
-                className: "btn btn-icon btn-sm btn-hover btn-primary",
+                className: "btn btn-icon btn-sm btn-hover bg-body-tertiary",
                 onClick: () => {
                   console.log("Edit clicked for user:", desc);
                   newSearch(desc);
                 },
               },
               h("i", { className: "demo-pli-magnifi-glass fs-5" }),
+            );
+            const draftButton = h(
+              "a",
+              {
+                herf: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-warning",
+                onClick: () => {
+                  console.log("Edit clicked for user:", desc);
+                  draftProduct(resultId);
+                },
+              },
+              h("i", { className: "demo-pli-file-edit fs-5" }),
             );
 
             const deleteButton = h(
@@ -129,7 +141,7 @@ const CollectProduct = () => {
               },
               h("i", { className: "demo-pli-trash fs-5" }),
             );
-            return h("div", {}, [searchButton, deleteButton]);
+            return h("div", {}, [searchButton, draftButton, deleteButton]);
           },
         },
       ],
@@ -172,7 +184,7 @@ const CollectProduct = () => {
     };
   }, [results]);
 
-  const newSearch = (id: string) => {
+  const newSearch = (description: string) => {
     console.log("search with the description:", description);
     // Implementar lógica para editar
   };
@@ -180,6 +192,11 @@ const CollectProduct = () => {
   const deleteResult = (id: string) => {
     console.log("Delete result with ID:", id);
     // Implementar lógica para excluir resultado
+  };
+
+  const draftProduct = (id: string) => {
+    console.log("Draft product with ID:", id);
+    // Implementar lógica para rascunho de produto
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
