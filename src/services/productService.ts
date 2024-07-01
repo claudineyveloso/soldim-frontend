@@ -3,6 +3,7 @@ export async function fetchProducts(
   page: number,
   limit: number = 100,
   name: string = "",
+  criterio: number = 0,
 ) {
   console.log(
     "Fetching products with page:",
@@ -11,10 +12,11 @@ export async function fetchProducts(
     limit,
     "and name:",
     name,
+    criterio,
   );
   try {
     const response = await fetch(
-      `http://localhost:8080/get_products?page=${page}&limit=${limit}&name=${name}`,
+      `http://localhost:8080/get_products?page=${page}&limit=${limit}&name=${name}&criterio=${criterio}`,
     );
     if (!response.ok) {
       throw new Error("Erro ao buscar os produtos");
@@ -37,6 +39,7 @@ export async function fetchProductsByPage(
   page: number,
   limit: number = 100,
   name: string = "",
+  criterio: number = 0,
 ) {
   console.log(
     "Fetching products with page:",
@@ -45,10 +48,11 @@ export async function fetchProductsByPage(
     limit,
     "and name:",
     name,
+    criterio,
   );
   try {
     const response = await fetch(
-      `http://localhost:8080/get_products?page=${page}&limit=${limit}&name=${name}`,
+      `http://localhost:8080/get_products?page=${page}&limit=${limit}&name=${name}&criterio=${criterio}`,
     );
     if (!response.ok) {
       throw new Error("Erro ao buscar os produtos");

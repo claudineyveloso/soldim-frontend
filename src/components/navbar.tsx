@@ -166,7 +166,7 @@ export default function NavBar() {
                   className={`mininav-toggle nav-link collapsed ${activeItem === "sales-order" || activeItem === "sales-seller" || activeItem === "sales-channel" || activeItem === "stock-forecast" ? "active" : ""}`}
                 >
                   <i className="demo-pli-home fs-5 me-2"></i>
-                  <span className="nav-label ms-1">Consumo</span>
+                  <span className="nav-label ms-1">Negociação</span>
                 </Link>
                 <ul className="mininav-content nav collapse">
                   <li data-popper-arrow className="arrow"></li>

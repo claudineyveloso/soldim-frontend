@@ -15,6 +15,7 @@ const Products = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const modalRef = useRef(null);
   const [editProductId, setEditProductId] = useState<number | null>(null);
+  const [criterio, setCriterio] = useState<number>(0);
 
   const [product, setProduct] = useState({
     codigo: "",
@@ -38,28 +39,33 @@ const Products = () => {
     });
   };
 
-  const getProducts = useCallback(async (name: string = "") => {
-    try {
-      setLoading(true);
-      const page = 1;
-      const limit = 100;
-      console.log(
-        "Fetching products with page:",
-        page,
-        "limit:",
-        limit,
-        "and name:",
-        name,
-      );
-      const { products } = await fetchProducts(page, limit, name);
-      console.log("Fetched products:", products);
-      setProducts(products);
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const getProducts = useCallback(
+    async (name: string = "", criterio: number = 0) => {
+      try {
+        setLoading(true);
+        const page = 1;
+        const limit = 100;
+        console.log(
+          "Fetching products with page:",
+          page,
+          "limit:",
+          limit,
+          "and name:",
+          name,
+          "criterio:",
+          criterio,
+        );
+        const { products } = await fetchProducts(page, limit, name, criterio);
+        console.log("Fetched products:", products);
+        setProducts(products);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     getProducts();
@@ -119,8 +125,8 @@ const Products = () => {
           },
           columns: [
             {
-              name: "Imagem",
-              width: "30px",
+              name: "",
+              width: "70px",
               formatter: (cell: string) =>
                 h("img", {
                   src: cell || "/assets/img/moldura.png", // Caminho da imagem padrão
@@ -128,10 +134,10 @@ const Products = () => {
                   height: 30,
                 }),
             },
-            { name: "Nome", width: "200px" },
+            { name: "Nome" },
             {
               name: "Codigo",
-              width: "50px",
+              width: "130px",
               formatter: (cell: string) =>
                 cell
                   ? cell
@@ -143,7 +149,7 @@ const Products = () => {
             },
             {
               name: "Preço",
-              width: "50px",
+              width: "120px",
               formatter: (cell: number) =>
                 new Intl.NumberFormat("pt-BR", {
                   style: "currency",
@@ -152,33 +158,35 @@ const Products = () => {
             },
             {
               name: "Ações",
-              width: "150px",
+              width: "100px",
               formatter: (_, row) => {
                 const productIndex = row.cells[4].data as number;
                 const productId = products[productIndex].id;
                 console.log("Product ID:", productId); // Log do ID do usuário
 
                 const editButton = h(
-                  "button",
+                  "a",
                   {
-                    className: "btn btn-sm btn-outline-primary me-2",
+                    href: "#",
+                    className: "btn btn-icon btn-sm btn-hover btn-primary",
                     onClick: () => {
                       console.log("Edit clicked for search:", productId);
                       editProduct(productId);
                     },
                   },
-                  "Editar",
+                  h("i", { className: "demo-pli-pen-5 fs-5" }),
                 );
                 const deleteButton = h(
-                  "button",
+                  "a",
                   {
-                    className: "btn btn-sm btn-outline-danger",
+                    href: "#",
+                    className: "btn btn-icon btn-sm btn-hover btn-danger",
                     onClick: () => {
                       console.log("Delete clicked for product:", productId);
                       deleteProduct(productId);
                     },
                   },
-                  "Deletar",
+                  h("i", { className: "demo-pli-trash fs-5" }),
                 );
                 return h("div", {}, [editButton, deleteButton]);
               },
@@ -206,6 +214,7 @@ const Products = () => {
 
   const handleClear = () => {
     setSearchName("");
+    setCriterio(0);
     getProducts();
   };
 
@@ -213,6 +222,12 @@ const Products = () => {
     if (event.key === "Enter") {
       handleSearch();
     }
+  };
+
+  const handleCriterioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCriterio = parseInt(e.target.value);
+    setCriterio(selectedCriterio);
+    getProducts(searchName, selectedCriterio);
   };
 
   const editProduct = async (id: number) => {
@@ -316,6 +331,9 @@ const Products = () => {
                     type="search"
                     placeholder="Localizar um produro..."
                     aria-label="Search"
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                    onKeyDown={handleKeyPress}
                   />
                   <div className="searchbox__btn-group">
                     <button
@@ -336,6 +354,7 @@ const Products = () => {
                   <select
                     className="form-select w-auto"
                     aria-label="Categories"
+                    onChange={handleCriterioChange}
                   >
                     <option value="5">Todos</option>
                     <option value="1">Últimos incluídos</option>
@@ -344,25 +363,18 @@ const Products = () => {
                     <option value="4">Excluídos</option>
                   </select>
                 </div>
-                <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
-                  <div className="text-center mb-2 mb-md-0">Sort by</div>
-                  <select
-                    className="form-select w-auto"
-                    aria-label="Sort options"
-                  >
-                    <option value="date-created" selected={true}>
-                      Date Created
-                    </option>
-                    <option value="date-modified">Date Modified</option>
-                    <option value="frequency-used">Frequency Used</option>
-                    <option value="alpabetically">Alpabetically</option>
-                    <option value="alpabetically-reversed">
-                      Alpabetically Reversed
-                    </option>
-                  </select>
-                </div>
-                <button className="btn btn-light mb-3 mb-sm-0">Filtrar</button>
-                <button className="btn btn-light mb-3 mb-sm-0">Limpar</button>
+                <button
+                  className="btn btn-light mb-3 mb-sm-0"
+                  onClick={handleSearch}
+                >
+                  Filtrar
+                </button>
+                <button
+                  className="btn btn-light mb-3 mb-sm-0"
+                  onClick={handleClear}
+                >
+                  Limpar
+                </button>
                 <button
                   type="button"
                   className="btn btn-primary hstack gap-2 align-self-center"
@@ -383,18 +395,21 @@ const Products = () => {
                       placeholder="Localizar..."
                       className="form-control"
                       autoComplete="off"
-                      value={searchName}
-                      onChange={(e) => setSearchName(e.target.value)}
-                      onKeyPress={handleKeyPress}
+                      //value={searchName}
+                      //onChange={(e) => setSearchName(e.target.value)}
+                      //onKeyDown={handleKeyPress}
                     />
                   </div>
                   <div className="btn-group">
-                    <button className="btn btn-primary" onClick={handleSearch}>
+                    <button
+                      className="btn btn-primary"
+                      //onClick={handleSearch}
+                    >
                       Buscar
                     </button>
                     <button
                       className="btn btn-secondary ms-2"
-                      onClick={handleClear}
+                      //onClick={handleClear}
                     >
                       Limpar
                     </button>
