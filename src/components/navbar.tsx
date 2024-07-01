@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
@@ -7,8 +7,17 @@ import { signOut } from "next-auth/react";
 export default function NavBar() {
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
+  useEffect(() => {
+    // Recuperar o estado salvo no localStorage quando o componente for montado
+    const savedActiveItem = localStorage.getItem("activeItem");
+    if (savedActiveItem) {
+      setActiveItem(savedActiveItem);
+    }
+  }, []);
+
   const handleItemClick = (item: string) => {
     setActiveItem(item);
+    localStorage.setItem("activeItem", item);
   };
   return (
     <nav id="mainnav-container" className="mainnav">
