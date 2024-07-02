@@ -4,7 +4,11 @@ import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
 import axios from "axios";
-import { fetchSearchesResult } from "@/services/searchResultService";
+import {
+  fetchSearchesResult,
+  fetchSearchResult,
+} from "@/services/searchResultService";
+import { createDraft } from "@/services/draftService";
 
 const fetchProductsInWeb = (searchTerm: string) => {
   // Lógica para buscar produtos
@@ -194,9 +198,38 @@ const CollectProduct = () => {
     // Implementar lógica para excluir resultado
   };
 
-  const draftProduct = (id: string) => {
+  const draftProduct = async (id: string) => {
     console.log("Draft product with ID:", id);
     // Implementar lógica para rascunho de produto
+    try {
+      // Fetch the search result by ID
+      const searchResult = await fetchSearchResult(id);
+      if (!searchResult) {
+        throw new Error("Resultado da pesquisa não encontrado");
+      }
+
+      // Create a draft using the fetched search result data
+      const newDraft = {
+        image_url: searchResult.image_url,
+        description: searchResult.description,
+        source: searchResult.source,
+        price: searchResult.price,
+        promotion: searchResult.promotion,
+        link: searchResult.link,
+        search_id: searchResult.search_id,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      const draftResponse = await createDraft(newDraft);
+      if (draftResponse) {
+        console.log("Rascunho criado com sucesso:", draftResponse);
+      } else {
+        console.error("Erro ao criar rascunho");
+      }
+    } catch (error) {
+      console.error("Erro ao criar rascunho do produto:", error);
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
