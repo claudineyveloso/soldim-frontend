@@ -89,7 +89,7 @@ export default function NavBar() {
               <li className="nav-item has-sub">
                 <Link
                   href="#"
-                  className={`mininav-toggle nav-link ${activeItem === "diary" || activeItem === "monthly" ? "active" : ""}`}
+                  className={`mininav-toggle nav-link ${activeItem === "diary" || activeItem === "monthly" ? "active" : "collapsed"}`}
                 >
                   <i className="demo-pli-home fs-5 me-2"></i>
                   <span className="nav-label ms-1">Dashboard</span>
@@ -126,7 +126,7 @@ export default function NavBar() {
               <li className="nav-item has-sub">
                 <Link
                   href="#"
-                  className={`mininav-toggle nav-link collapsed ${activeItem === "product-stock" || activeItem === "suggestion" || activeItem === "no-movement" ? "active" : ""}`}
+                  className={`mininav-toggle nav-link ${activeItem === "product-stock" || activeItem === "suggestion" || activeItem === "no-movement" ? "active" : "collapsed"}`}
                 >
                   <i className="demo-pli-home fs-5 me-2"></i>
                   <span className="nav-label ms-1">Consumo</span>
@@ -139,7 +139,7 @@ export default function NavBar() {
                       className={`nav-link ${activeItem === "product-stock" ? "active" : ""}`}
                       onClick={() => handleItemClick("product-stock")}
                     >
-                      Estoque de produtos
+                      Estoque de items
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -148,7 +148,7 @@ export default function NavBar() {
                       className={`nav-link ${activeItem === "suggestion" ? "active" : ""}`}
                       onClick={() => handleItemClick("suggestion")}
                     >
-                      Sugestão de compras
+                      Opções de compras
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -219,6 +219,41 @@ export default function NavBar() {
               </li>
             </ul>
           </div>
+          <div className="mainnav__categoriy py-3">
+            <h6 className="mainnav__caption mt-0 fw-bold">Coleta</h6>
+            <ul className="mainnav__menu nav flex-column">
+              <li className="nav-item has-sub">
+                <Link
+                  href="#"
+                  className={`mininav-toggle nav-link ${activeItem === "researches" || activeItem === "storage" ? "active" : "collapsed"}`}
+                >
+                  <i className="demo-pli-home fs-5 me-2"></i>
+                  <span className="nav-label ms-1">Armazenamento</span>
+                </Link>
+                <ul className="mininav-content nav collapse">
+                  <li data-popper-arrow className="arrow"></li>
+                  <li className="nav-item">
+                    <Link
+                      href="/search"
+                      className={`nav-link ${activeItem === "researches" ? "active" : ""}`}
+                      onClick={() => handleItemClick("researches")}
+                    >
+                      Pesquisas
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      href="/collect_product"
+                      className={`nav-link ${activeItem === "storage" ? "active" : ""}`}
+                      onClick={() => handleItemClick("storage")}
+                    >
+                      Coleta de preços
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
 
           <div className="mainnav__categoriy py-3">
             <h6 className="mainnav__caption mt-0 fw-bold">Cadastros</h6>
@@ -235,32 +270,6 @@ export default function NavBar() {
             </ul>
           </div>
 
-          <div className="mainnav__categoriy py-3">
-            <h6 className="mainnav__caption mt-0 fw-bold">Coleta</h6>
-            <ul className="mainnav__menu nav flex-column">
-              <li className="nav-item">
-                <Link href="/search" className="nav-link mininav-toggle">
-                  <i className="demo-pli-magnifi-glass fs-5 me-2" />
-                  <span className="nav-label mininav-content ms-1">
-                    <span data-popper-arrow className="arrow" />
-                    Pesquisas
-                  </span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  href="/collect_product"
-                  className="nav-link mininav-toggle"
-                >
-                  <i className="demo-pli-shopping-cart fs-5 me-2" />
-                  <span className="nav-label mininav-content ms-1">
-                    <span data-popper-arrow className="arrow" />
-                    Coleta de preços
-                  </span>
-                </Link>
-              </li>
-            </ul>
-          </div>
           <div className="mainnav__categoriy py-3">
             <h6 className="mainnav__caption mt-0 fw-bold">Importaçãp</h6>
             <ul className="mainnav__menu nav flex-column">

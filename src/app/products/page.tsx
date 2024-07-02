@@ -213,9 +213,11 @@ const Products = () => {
   };
 
   const handleClear = () => {
+    setLoading(true);
     setSearchName("");
     setCriterio(0);
     getProducts();
+    setLoading(false);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -225,9 +227,11 @@ const Products = () => {
   };
 
   const handleCriterioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLoading(true);
     const selectedCriterio = parseInt(e.target.value);
     setCriterio(selectedCriterio);
     getProducts(searchName, selectedCriterio);
+    setLoading(false);
   };
 
   const editProduct = async (id: number) => {
