@@ -261,11 +261,29 @@ const CollectProduct = () => {
       const draftResponse = await createDraft(newDraft);
       if (draftResponse) {
         console.log("Rascunho criado com sucesso:", draftResponse);
+        Swal.fire({
+          title: "Sucesso!",
+          text: "Rascunho criado com sucesso",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
       } else {
         console.error("Erro ao criar rascunho");
+        Swal.fire({
+          title: "Erro!",
+          text: "Erro ao criar rascunho",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     } catch (error) {
       console.error("Erro ao criar rascunho do produto:", error);
+      Swal.fire({
+        title: "Erro!",
+        text: "Erro ao criar rascunho do produto",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
