@@ -7,8 +7,14 @@ import axios from "axios";
 import {
   fetchSearchesResult,
   fetchSearchResult,
+  deleteSearchResult,
 } from "@/services/searchResultService";
 import { createDraft } from "@/services/draftService";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import Swal from "sweetalert2";
 
 const fetchProductsInWeb = (searchTerm: string) => {
   // Lógica para buscar produtos
@@ -140,7 +146,7 @@ const CollectProduct = () => {
                 className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for result:", resultId);
-                  deleteResult(resultId);
+                  confirmDelete(resultId);
                 },
               },
               h("i", { className: "demo-pli-trash fs-5" }),
@@ -193,9 +199,40 @@ const CollectProduct = () => {
     // Implementar lógica para editar
   };
 
-  const deleteResult = (id: string) => {
+  const confirmDelete = (id: string) => {
+    Swal.fire({
+      title: "Deseja excluir este item?",
+      text: "Você não poderá reverter isso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, exclua isso!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteResult(id);
+      }
+    });
+  };
+
+  const deleteResult = async (id: string) => {
     console.log("Delete result with ID:", id);
-    // Implementar lógica para excluir resultado
+    // Implementar lógica para excluir resultados
+
+    try {
+      const success = await deleteSearchResult(id);
+      if (success) {
+        toast.success("Item do Resultado da Busca deletado com sucesso");
+        // Atualizar a lista de resultados após a exclusão
+        await getResults();
+      } else {
+        toast.error("Erro ao deletar resultado");
+      }
+    } catch (error) {
+      toast.error("Erro ao deletar resultado da busca");
+      console.error("Erro ao deletar resultado:", error);
+    }
   };
 
   const draftProduct = async (id: string) => {
@@ -281,82 +318,88 @@ const CollectProduct = () => {
   };
 
   return (
-    <section id="content" className="content">
-      <div className="content__header content__boxed overlapping">
-        <div className="content__wrap">
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link href="/dashboard">Home</Link>
-              </li>
-              <li className="breadcrumb-item active" aria-current="page">
-                Coleta de Produtos
-              </li>
-            </ol>
-          </nav>
-          <h1 className="page-title mb-0 mt-2">Lista de coleta de produtos</h1>
-          <p className="lead">
-            Visualizar, adicionar, editar e excluir coletas cadastrados no
-            sistema.
-          </p>
+    <>
+      <ToastContainer />
+      <section id="content" className="content">
+        <div className="content__header content__boxed overlapping">
+          <div className="content__wrap">
+            <nav aria-label="breadcrumb">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link href="/dashboard">Home</Link>
+                </li>
+                <li className="breadcrumb-item active" aria-current="page">
+                  Coleta de Produtos
+                </li>
+              </ol>
+            </nav>
+            <h1 className="page-title mb-0 mt-2">
+              Lista de coleta de produtos
+            </h1>
+            <p className="lead">
+              Visualizar, adicionar, editar e excluir coletas cadastrados no
+              sistema.
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="content__boxed">
-        <div className="content__wrap">
-          <div className="card mb-3">
-            <div className="card-body">
-              <div className="mb-3">
-                <h2>Coleta de Produtos</h2>
-                <p className="m-0">
-                  Utilize as ferramentas de busca e filtro para encontrar
-                  coletas específicos e gerenciar seus perfis de forma eficiente
-                </p>
-              </div>
-              <div className="row">
-                <div className="col-md-8 offset-md-2 mb-3">
-                  <form
-                    className="searchbox input-group"
-                    onSubmit={handleSubmit}
-                  >
-                    <input
-                      className="searchbox__input form-control form-control-lg"
-                      type="search"
-                      placeholder="Localizar um produto..."
-                      aria-label="Search"
-                      value={searchTerm}
-                      onChange={handleChange}
-                    />
-                    <div className="searchbox__btn-group">
-                      <button
-                        className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
-                        type="submit"
-                      >
-                        <i className="demo-pli-magnifi-glass"></i>
-                      </button>
-                    </div>
-                  </form>
+        <div className="content__boxed">
+          <div className="content__wrap">
+            <div className="card mb-3">
+              <div className="card-body">
+                <div className="mb-3">
+                  <h2>Coleta de Produtos</h2>
+                  <p className="m-0">
+                    Utilize as ferramentas de busca e filtro para encontrar
+                    coletas específicos e gerenciar seus perfis de forma
+                    eficiente
+                  </p>
                 </div>
-              </div>
+                <div className="row">
+                  <div className="col-md-8 offset-md-2 mb-3">
+                    <form
+                      className="searchbox input-group"
+                      onSubmit={handleSubmit}
+                    >
+                      <input
+                        className="searchbox__input form-control form-control-lg"
+                        type="search"
+                        placeholder="Localizar um produto..."
+                        aria-label="Search"
+                        value={searchTerm}
+                        onChange={handleChange}
+                      />
+                      <div className="searchbox__btn-group">
+                        <button
+                          className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
+                          type="submit"
+                        >
+                          <i className="demo-pli-magnifi-glass"></i>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
 
-              <div className="pb-3 mb-5 border-bottom">
-                <h2 className="mb-2">
-                  <span className="text-nowrap">
-                    179 resultados encontrados para o produto:{" "}
-                  </span>
-                  <i className="text-info-emphasis text-normal">
-                    Dashboard Theme
-                  </i>
-                </h2>
-                <small>Tempo de solicitação ({requestTime} segundos)</small>
+                <div className="pb-3 mb-5 border-bottom">
+                  <h2 className="mb-2">
+                    <span className="text-nowrap">
+                      179 resultados encontrados para o produto:{" "}
+                    </span>
+                    <i className="text-info-emphasis text-normal">
+                      Dashboard Theme
+                    </i>
+                  </h2>
+                  <small>Tempo de solicitação ({requestTime} segundos)</small>
+                </div>
+                <hr />
+                <h3 className="h4">{description}</h3>
+                <div id="_dm-gridjsSorting" ref={containerRef}></div>
               </div>
-              <hr />
-              <h3 className="h4">{description}</h3>
-              <div id="_dm-gridjsSorting" ref={containerRef}></div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

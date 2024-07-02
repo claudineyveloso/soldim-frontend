@@ -114,7 +114,7 @@ const DraftProduct = () => {
                   newSearch(desc);
                 },
               },
-              h("i", { className: "demo-pli-magnifi-glass fs-5" }),
+              h("i", { className: "demo-pli-pen-5 fs-5" }),
             );
             const deleteButton = h(
               "a",
