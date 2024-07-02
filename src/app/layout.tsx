@@ -5,6 +5,8 @@ import "../../assets/css/nifty.min.css";
 import "../../assets/css/custom.css";
 import "../../assets/css/demo-purpose/demo-icons.min.css";
 import "../../assets/css/demo-purpose/demo-settings.min.css";
+import "../../assets/premium/icon-sets/line-icons/premium-line-icons.min.css";
+
 import Header from "@/components/header";
 import NavBar from "@/components/navbar";
 import SideBar from "@/components/sidebar";

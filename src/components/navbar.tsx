@@ -126,9 +126,9 @@ export default function NavBar() {
               <li className="nav-item has-sub">
                 <Link
                   href="#"
-                  className={`mininav-toggle nav-link ${activeItem === "product-stock" || activeItem === "suggestion" || activeItem === "no-movement" ? "active" : "collapsed"}`}
+                  className={`mininav-toggle nav-link ${activeItem === "product-stock" || activeItem === "suggestion" || activeItem === "no-movement" || activeItem === "draft" ? "active" : "collapsed"}`}
                 >
-                  <i className="demo-pli-home fs-5 me-2"></i>
+                  <i className="pli-checkout fs-5 me-2"></i>
                   <span className="nav-label ms-1">Consumo</span>
                 </Link>
                 <ul className="mininav-content nav collapse">
@@ -160,6 +160,16 @@ export default function NavBar() {
                       Sem movimentação
                     </Link>
                   </li>
+
+                  <li className="nav-item">
+                    <Link
+                      href="/drafts"
+                      className={`nav-link ${activeItem === "draft" ? "active" : ""}`}
+                      onClick={() => handleItemClick("draft")}
+                    >
+                      Rascunho
+                    </Link>
+                  </li>
                 </ul>
               </li>
             </ul>
@@ -174,7 +184,7 @@ export default function NavBar() {
                   href="#"
                   className={`mininav-toggle nav-link collapsed ${activeItem === "sales-order" || activeItem === "sales-seller" || activeItem === "sales-channel" || activeItem === "stock-forecast" ? "active" : ""}`}
                 >
-                  <i className="demo-pli-home fs-5 me-2"></i>
+                  <i className="pli-handshake fs-5 me-2"></i>
                   <span className="nav-label ms-1">Negociação</span>
                 </Link>
                 <ul className="mininav-content nav collapse">
@@ -227,7 +237,7 @@ export default function NavBar() {
                   href="#"
                   className={`mininav-toggle nav-link ${activeItem === "researches" || activeItem === "storage" ? "active" : "collapsed"}`}
                 >
-                  <i className="demo-pli-home fs-5 me-2"></i>
+                  <i className="pli-arrow-loop fs-5 me-2"></i>
                   <span className="nav-label ms-1">Armazenamento</span>
                 </Link>
                 <ul className="mininav-content nav collapse">
@@ -264,21 +274,6 @@ export default function NavBar() {
                   <span className="nav-label mininav-content ms-1">
                     <span data-popper-arrow className="arrow" />
                     Usuários
-                  </span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="mainnav__categoriy py-3">
-            <h6 className="mainnav__caption mt-0 fw-bold">Importaçãp</h6>
-            <ul className="mainnav__menu nav flex-column">
-              <li className="nav-item">
-                <Link href="/users" className="nav-link mininav-toggle">
-                  <i className="demo-pli-idea fs-5 me-2" />
-                  <span className="nav-label mininav-content ms-1">
-                    <span data-popper-arrow className="arrow" />
-                    Bling
                   </span>
                 </Link>
               </li>
