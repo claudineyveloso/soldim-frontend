@@ -101,7 +101,7 @@ const CollectProduct = () => {
             ]);
           },
         },
-        { name: "Preço", width: "100px" },
+        { name: "Preço", width: "120px" },
         { name: "Promoção", width: "120px" },
         { name: "Criado em:", width: "120px" },
         { name: "Source", hidden: true }, // Coluna oculta para armazenar a fonte
@@ -109,7 +109,7 @@ const CollectProduct = () => {
         { name: "ID", hidden: true }, // Coluna oculta para armazenar o ID
         {
           name: "Ações",
-          width: "130px",
+          width: "140px",
           formatter: (_, row) => {
             const desc = row.cells[1] ? String(row.cells[1].data) : ""; // Converter descrição para string
             const resultId = row.cells[7] ? String(row.cells[7].data) : ""; // Converter resultId para string

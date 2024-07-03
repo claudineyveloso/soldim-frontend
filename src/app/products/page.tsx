@@ -137,7 +137,7 @@ const Products = () => {
             { name: "Nome" },
             {
               name: "Codigo",
-              width: "130px",
+              width: "150px",
               formatter: (cell: string) =>
                 cell
                   ? cell
@@ -158,7 +158,7 @@ const Products = () => {
             },
             {
               name: "Ações",
-              width: "100px",
+              width: "120px",
               formatter: (_, row) => {
                 const productIndex = row.cells[4].data as number;
                 const productId = products[productIndex].id;
