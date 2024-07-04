@@ -5,6 +5,7 @@ import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
 import { fetchProducts } from "@/services/productService";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -277,6 +278,17 @@ const Products = () => {
       if (response.ok) {
         console.log("Produto criado com sucesso!");
         setSuccessMessage("Produto criado com sucesso!");
+
+        // Mostrar mensagem de sucesso com SweetAlert2
+        Swal.fire({
+          icon: "success",
+          title: "Sucesso!",
+          text: "Produto criado com sucesso!",
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+
         setTimeout(() => setSuccessMessage(""), 3000);
         setProduct({
           codigo: "",
@@ -291,9 +303,19 @@ const Products = () => {
         // Adicionar lógica para fechar o modal ou limpar o formulário
       } else {
         console.error("Erro ao criar produto");
+        Swal.fire({
+          icon: "error",
+          title: "Erro!",
+          text: "Erro ao criar produto.",
+        });
       }
     } catch (error) {
       console.error("Erro ao criar produto:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Erro!",
+        text: "Erro ao criar produto. Por favor, tente novamente mais tarde.",
+      });
     }
   };
 
@@ -390,8 +412,8 @@ const Products = () => {
                   Novo produto
                 </button>
               </div>
-
-              <div className="row">
+              {/*
+              
                 <div className="col-md-6 d-flex gap-1 align-items-center justify-content-md-start mb-3">
                   <div className="form-group">
                     <input
@@ -420,18 +442,9 @@ const Products = () => {
                   </div>
                 </div>
 
-                <div className="col-md-6 d-flex gap-1 justify-content-md-end align-items-center mb-3">
-                  <button
-                    type="button"
-                    className="btn btn-primary hstack gap-2 align-self-center"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalProduct"
-                  >
-                    <i className="demo-psi-add fs-5"></i>
-                    <span className="vr"></span>
-                    Novo produto
-                  </button>
-                </div>
+
+              */}
+              <div className="row">
                 <div
                   className="modal fade"
                   id="modalProduct"

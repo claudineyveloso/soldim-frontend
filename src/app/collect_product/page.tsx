@@ -197,11 +197,12 @@ const CollectProduct = () => {
     };
   }, [results]);
 
-  const newSearch = (description: string) => {
-    console.log("search with the description:", description);
-    // Implementar lógica para editar
-  };
-
+  // const newSearch = (description: string) => {
+  //
+  //   console.log("search with the description:", description);
+  //   // Implementar lógica para editar
+  // };
+  //
   const confirmDelete = (id: string) => {
     Swal.fire({
       title: "Deseja excluir este item?",
@@ -277,7 +278,64 @@ const CollectProduct = () => {
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const description = event.currentTarget.description.value; // ou a maneira como você obtém o valor da descrição
+    handleSubmit(description);
+  };
+
+  const handleSubmit = async (description: string) => {
+    setDescription("Aguardando o resultado...");
+    const startTime = new Date().getTime();
+    fetchProductsInWeb(description);
+    if (containerRef.current) {
+      containerRef.current.classList.add("d-none");
+    }
+    // Chamar a API para criar a busca
+    try {
+      const response = await axios.post("http://localhost:8080/create_search", {
+        description: description,
+      });
+      console.log("Search created:", response.data);
+
+      if (response.data && Array.isArray(response.data)) {
+        const productWithLowestPrice = response.data.reduce(
+          (lowest, product) => {
+            console.log("Comparing products:", lowest, product); // Log de comparação
+            return product.price < lowest.price ? product : lowest;
+          },
+          response.data[0],
+        );
+        console.log(
+          "***********************************************************************",
+        );
+        console.log("Product with lowest price:", productWithLowestPrice); // Log do produto com menor preço
+        console.log(
+          "***********************************************************************",
+        );
+        setLowestPriceProduct(productWithLowestPrice);
+      }
+
+      await getResults(); // Atualizar os resultados após a criação da busca
+    } catch (error) {
+      console.error("Error creating search:", error);
+    } finally {
+      const endTime = new Date().getTime(); // Marca o fim do tempo
+      const duration = (endTime - startTime) / 1000; // Calcula a duração em segundos
+      setRequestTime(duration);
+      setDescription("Resultado");
+      if (containerRef.current) {
+        containerRef.current.classList.remove("d-none");
+      }
+    }
+  };
+
+  const newSearch = (description: string) => {
+    console.log("search with the description:", description);
+    handleSubmit(description); // Chama handleSubmit passando a descrição
+  };
+
+  const handleSubmitdd = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setDescription("Aguardando o resultado...");
     const startTime = new Date().getTime();
@@ -324,6 +382,13 @@ const CollectProduct = () => {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSubmit(searchTerm); // Chama handleSubmit passando a descrição
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -365,7 +430,7 @@ const CollectProduct = () => {
                   <div className="col-md-8 offset-md-2 mb-3">
                     <form
                       className="searchbox input-group"
-                      onSubmit={handleSubmit}
+                      onSubmit={onFormSubmit}
                     >
                       <input
                         className="searchbox__input form-control form-control-lg"
@@ -374,6 +439,7 @@ const CollectProduct = () => {
                         aria-label="Search"
                         value={searchTerm}
                         onChange={handleChange}
+                        onKeyDown={handleKeyDown}
                       />
                       <div className="searchbox__btn-group">
                         <button

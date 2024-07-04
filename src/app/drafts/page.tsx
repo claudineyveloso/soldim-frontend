@@ -6,6 +6,17 @@ import Link from "next/link";
 import axios from "axios";
 import { fetchDrafts } from "@/services/draftService";
 
+interface Product {
+  codigo: string;
+  nome: string;
+  preco: string;
+  unidade: string;
+  tipo: string;
+  situacao: string;
+  condicao: string;
+  formato: string;
+}
+
 const fetchProductsInWeb = (searchTerm: string) => {
   // Lógica para buscar produtos
   console.log("Searching for:", searchTerm);
@@ -228,8 +239,33 @@ const DraftProduct = () => {
     }
   };
 
-  const handleSaveProduct = () => {
+  const handleSaveProduct = async (product: Product) => {
     console.log("Product data:", product);
+
+    try {
+      const response = await axios.post("http://localhost:8080/create_draft", {
+        product_id: product.codigo,
+        description: product.nome,
+        price: product.preco,
+        link: product.unidade,
+        image_url: product.formato,
+        source: product.tipo,
+        source: product.condicao,
+      });
+
+      if (response.status === 200) {
+        console.log("Draft created successfully:", response.data);
+        // Adicione lógica adicional aqui, como atualização de estado ou notificação do usuário
+      } else {
+        console.error(
+          "Failed to create draft:",
+          response.status,
+          response.statusText,
+        );
+      }
+    } catch (error) {
+      console.error("Error creating draft:", error);
+    }
   };
 
   const handleEditClick = (rowData) => {
