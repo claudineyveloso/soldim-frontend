@@ -18,7 +18,7 @@ import Swal from "sweetalert2";
 
 const fetchProductsInWeb = (searchTerm: string) => {
   // Lógica para buscar produtos
-  console.log("Searching for:", searchTerm);
+  // console.log("Searching for:", searchTerm);
 };
 
 const CollectProduct = () => {
@@ -36,7 +36,7 @@ const CollectProduct = () => {
   const getResults = async () => {
     try {
       const data = await fetchSearchesResult();
-      console.log("Fetched searches result:", data); // Verifique os dados recebidos
+      // console.log("Fetched searches result:", data); // Verifique os dados recebidos
       if (data && Array.isArray(data)) {
         setResults(data);
       } else {
@@ -59,7 +59,7 @@ const CollectProduct = () => {
     // Limpar o contêiner antes de renderizar a tabela
     container.innerHTML = "";
 
-    console.log("Rendering grid with results:", results);
+    // console.log("Rendering grid with results:", results);
 
     const grid = new Grid({
       className: {
@@ -68,6 +68,7 @@ const CollectProduct = () => {
       },
       columns: [
         {
+          id: "Imagem",
           name: "",
           width: "80px",
           formatter: (cell: string) => {
@@ -83,9 +84,10 @@ const CollectProduct = () => {
           },
         },
         {
+          id: "description",
           name: "Descrição",
           formatter: (cell: string, row: any) => {
-            console.log("Row data:", row.cells); // Verifique todos os dados da linha
+            // console.log("Row data:", row.cells); // Verifique todos os dados da linha
             const source = row.cells[5]
               ? row.cells[5].data
               : "Fonte desconhecida"; // Verifique se row.cells[5] existe
@@ -101,23 +103,24 @@ const CollectProduct = () => {
             ]);
           },
         },
-        { name: "Preço", width: "120px" },
-        { name: "Promoção", width: "120px" },
-        { name: "Criado em:", width: "120px" },
-        { name: "Source", hidden: true }, // Coluna oculta para armazenar a fonte
-        { name: "Link", hidden: true }, // Coluna oculta para armazenar o link
-        { name: "ID", hidden: true }, // Coluna oculta para armazenar o ID
+        { id: "price", name: "Preço", width: "120px" },
+        { id: "promotion", name: "Promoção", width: "120px" },
+        { id: "created_at", name: "Criado em:", width: "120px" },
+        { id: "source", name: "Source", hidden: true }, // Coluna oculta para armazenar a fonte
+        { id: "link", name: "Link", hidden: true }, // Coluna oculta para armazenar o link
+        { id: "id", name: "ID", hidden: true }, // Coluna oculta para armazenar o ID
         {
+          id: "actions",
           name: "Ações",
-          width: "140px",
+          width: "150px",
           formatter: (_, row) => {
             const desc = row.cells[1] ? String(row.cells[1].data) : ""; // Converter descrição para string
             const resultId = row.cells[7] ? String(row.cells[7].data) : ""; // Converter resultId para string
-            console.log("Result ID:", resultId); // Log do ID do usuário
+            // console.log("Result ID:", resultId); // Log do ID do usuário
             const searchButton = h(
               "a",
               {
-                herf: "#",
+                href: "#",
                 className: "btn btn-icon btn-sm btn-hover bg-body-tertiary",
                 onClick: () => {
                   console.log("Edit clicked for user:", desc);
@@ -129,7 +132,7 @@ const CollectProduct = () => {
             const draftButton = h(
               "a",
               {
-                herf: "#",
+                href: "#",
                 className: "btn btn-icon btn-sm btn-hover btn-warning",
                 onClick: () => {
                   console.log("Edit clicked for user:", desc);
@@ -157,7 +160,7 @@ const CollectProduct = () => {
       ],
       sort: true,
       data: results.map((result) => {
-        console.log("Result data:", result);
+        // console.log("Result data:", result);
         return [
           result.image_url ? String(result.image_url) : "", // Garantir que todos os valores sejam strings
           result.description ? String(result.description) : "",
@@ -262,28 +265,15 @@ const CollectProduct = () => {
       if (draftResponse) {
         console.log("Rascunho criado com sucesso:", draftResponse);
         Swal.fire({
-          title: "Sucesso!",
-          text: "Rascunho criado com sucesso",
           icon: "success",
-          confirmButtonText: "OK",
+          title: "Rascunho criado com sucesso!",
+          text: `O rascunho do produto foi criado com sucesso.`,
         });
       } else {
         console.error("Erro ao criar rascunho");
-        Swal.fire({
-          title: "Erro!",
-          text: "Erro ao criar rascunho",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
       }
     } catch (error) {
       console.error("Erro ao criar rascunho do produto:", error);
-      Swal.fire({
-        title: "Erro!",
-        text: "Erro ao criar rascunho do produto",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
     }
   };
 
@@ -295,7 +285,6 @@ const CollectProduct = () => {
     if (containerRef.current) {
       containerRef.current.classList.add("d-none");
     }
-
     // Chamar a API para criar a busca
     try {
       const response = await axios.post("http://localhost:8080/create_search", {

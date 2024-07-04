@@ -24,7 +24,7 @@ const Searches = () => {
   }, []);
 
   useEffect(() => {
-    if (searches.length === 0 || !containerRef.current) return;
+    if (!searches || searches.length === 0 || !containerRef.current) return;
 
     const container = containerRef.current;
 
@@ -40,7 +40,7 @@ const Searches = () => {
       },
       columns: [
         { name: "Descrição" },
-        { name: "Criado em:", width: "80px" },
+        { name: "Criado em:", width: "100px" },
         {
           name: "Ações",
           width: "80px",

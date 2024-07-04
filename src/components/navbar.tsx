@@ -91,7 +91,7 @@ export default function NavBar() {
                   href="#"
                   className={`mininav-toggle nav-link ${activeItem === "diary" || activeItem === "monthly" ? "active" : "collapsed"}`}
                 >
-                  <i className="demo-pli-home fs-5 me-2"></i>
+                  <i className="pli-statistic fs-5 me-2"></i>
                   <span className="nav-label ms-1">Dashboard</span>
                 </Link>
                 <ul className="mininav-content nav collapse">
@@ -126,7 +126,7 @@ export default function NavBar() {
               <li className="nav-item has-sub">
                 <Link
                   href="#"
-                  className={`mininav-toggle nav-link ${activeItem === "product-stock" || activeItem === "suggestion" || activeItem === "no-movement" || activeItem === "draft" ? "active" : "collapsed"}`}
+                  className={`mininav-toggle nav-link ${activeItem === "product-stock" || activeItem === "suggestion" || activeItem === "no-movement" ? "active" : "collapsed"}`}
                 >
                   <i className="pli-checkout fs-5 me-2"></i>
                   <span className="nav-label ms-1">Consumo</span>
@@ -158,16 +158,6 @@ export default function NavBar() {
                       onClick={() => handleItemClick("no-movement")}
                     >
                       Sem movimentação
-                    </Link>
-                  </li>
-
-                  <li className="nav-item">
-                    <Link
-                      href="/drafts"
-                      className={`nav-link ${activeItem === "draft" ? "active" : ""}`}
-                      onClick={() => handleItemClick("draft")}
-                    >
-                      Rascunho
                     </Link>
                   </li>
                 </ul>
@@ -274,6 +264,20 @@ export default function NavBar() {
                   <span className="nav-label mininav-content ms-1">
                     <span data-popper-arrow className="arrow" />
                     Usuários
+                  </span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="mainnav__categoriy py-3">
+            <h6 className="mainnav__caption mt-0 fw-bold">Importação</h6>
+            <ul className="mainnav__menu nav flex-column">
+              <li className="nav-item">
+                <Link href="/drafts" className="nav-link mininav-toggle">
+                  <i className="pli-file-share fs-5 me-2" />
+                  <span className="nav-label mininav-content ms-1">
+                    <span data-popper-arrow className="arrow" />
+                    Rascunho
                   </span>
                 </Link>
               </li>
