@@ -6,6 +6,7 @@ import Link from "next/link";
 import { fetchProducts } from "@/services/productService";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { get } from "http";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -17,7 +18,6 @@ const Products = () => {
   const modalRef = useRef(null);
   const [editProductId, setEditProductId] = useState<number | null>(null);
   const [criterio, setCriterio] = useState<number>(0);
-
   const [product, setProduct] = useState({
     codigo: "",
     nome: "",
@@ -241,9 +241,29 @@ const Products = () => {
       const response = await axios.get(
         `http://localhost:8080/get_product_id?productID=${id}`,
       );
-      setProduct(response.data || {});
-      console.log(response.data, "Valor de data");
-      console.log(response.data[0].nome, "Valor do nome");
+      let productData;
+
+      // Verifica se a resposta é uma string e tenta parsear como JSON
+      if (typeof response.data === "string") {
+        productData = JSON.parse(response.data);
+      } else {
+        productData = response.data;
+      }
+
+      setEditProductId(productData.id);
+
+      console.log("Dados do produto retornados:", productData);
+      // Atualiza o estado com os dados do produto
+      setProduct({
+        codigo: productData.codigo || "",
+        nome: productData.nome || "",
+        preco: productData.preco ? productData.preco.toString() : "",
+        unidade: productData.unidade || "",
+        tipo: productData.tipo || "P",
+        situacao: productData.situacao || "A",
+        condicao: productData.condicao || "0",
+        formato: productData.formato || "S",
+      });
 
       if (window.bootstrap && window.bootstrap.Modal) {
         const modal = new window.bootstrap.Modal(
@@ -264,7 +284,90 @@ const Products = () => {
   };
 
   const handleSaveProduct = async () => {
+    const url = editProductId
+      ? `http://localhost:8080/update_product?productID=${editProductId}`
+      : "http://localhost:8080/create_product";
+    const method = editProductId ? "PUT" : "POST";
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+
+      if (response.ok) {
+        const successMessage = editProductId
+          ? "Produto atualizado com sucesso!"
+          : "Produto criado com sucesso!";
+        console.log(successMessage);
+        setSuccessMessage(successMessage);
+
+        // Mostrar mensagem de sucesso com SweetAlert2
+        Swal.fire({
+          icon: "success",
+          title: "Sucesso!",
+          text: successMessage,
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+
+        setTimeout(() => setSuccessMessage(""), 3000);
+        setProduct({
+          codigo: "",
+          nome: "",
+          preco: "",
+          unidade: "",
+          tipo: "",
+          situacao: "",
+          condicao: "",
+          formato: "S",
+        });
+        setEditProductId(null); // Limpar o editProductId após salvar
+        // Adicionar lógica para fechar o modal ou limpar o formulário
+        //getProducts();
+        //setLoading(false);
+        const modalElement = document.getElementById("modalProduct");
+        if (modalElement) {
+          const modal = window.bootstrap.Modal.getInstance(modalElement);
+          if (modal) {
+            modal.hide();
+          }
+        }
+        setLoading(true);
+        getProducts();
+        setLoading(false);
+      } else {
+        const errorMessage = editProductId
+          ? "Erro ao atualizar produto"
+          : "Erro ao criar produto";
+        console.error(errorMessage);
+        Swal.fire({
+          icon: "error",
+          title: "Erro!",
+          text: errorMessage,
+        });
+      }
+    } catch (error) {
+      const errorMessage = editProductId
+        ? "Erro ao atualizar produto. Por favor, tente novamente mais tarde."
+        : "Erro ao criar produto. Por favor, tente novamente mais tarde.";
+      console.error(errorMessage, error);
+      Swal.fire({
+        icon: "error",
+        title: "Erro!",
+        text: errorMessage,
+      });
+    }
+  };
+
+  const handleSaveProduct11 = async () => {
     console.log("Salva os dados do produto", product);
+
+    console.log("Edit Product ID:", editProductId);
 
     try {
       const response = await fetch("http://localhost:8080/create_product", {
@@ -317,6 +420,19 @@ const Products = () => {
         text: "Erro ao criar produto. Por favor, tente novamente mais tarde.",
       });
     }
+  };
+
+  const handleNewProduct = () => {
+    setProduct({
+      codigo: "",
+      nome: "",
+      preco: "",
+      unidade: "",
+      tipo: "P",
+      situacao: "A",
+      condicao: "0",
+      formato: "S",
+    });
   };
 
   return (
@@ -406,6 +522,7 @@ const Products = () => {
                   className="btn btn-primary hstack gap-2 align-self-center"
                   data-bs-toggle="modal"
                   data-bs-target="#modalProduct"
+                  onClick={handleNewProduct}
                 >
                   <i className="demo-psi-add fs-5"></i>
                   <span className="vr"></span>
