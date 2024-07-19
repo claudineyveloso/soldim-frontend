@@ -17,7 +17,7 @@ const Products = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const modalRef = useRef(null);
   const [editProductId, setEditProductId] = useState<number | null>(null);
-  const [criterio, setCriterio] = useState<number>(0);
+  const [situation, setSituation] = useState<string>("");
   const [product, setProduct] = useState({
     codigo: "",
     nome: "",
@@ -216,7 +216,7 @@ const Products = () => {
   const handleClear = () => {
     setLoading(true);
     setSearchName("");
-    setCriterio(0);
+    setSituation("");
     getProducts();
     setLoading(false);
   };
@@ -229,9 +229,9 @@ const Products = () => {
 
   const handleCriterioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLoading(true);
-    const selectedCriterio = e.target.value;
-    setCriterio(selectedCriterio);
-    getProducts(searchName, selectedCriterio);
+    const selectedSituation = e.target.value;
+    setSituation(selectedSituation);
+    getProducts(searchName, selectedSituation);
     setLoading(false);
   };
 
