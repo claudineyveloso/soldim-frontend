@@ -41,7 +41,7 @@ const Products = () => {
   };
 
   const getProducts = useCallback(
-    async (name: string = "", criterio: number = 0) => {
+    async (nome: string = "", situacao: string = "") => {
       try {
         setLoading(true);
         const page = 1;
@@ -52,11 +52,11 @@ const Products = () => {
           "limit:",
           limit,
           "and name:",
-          name,
-          "criterio:",
-          criterio,
+          nome,
+          "situacao:",
+          situacao,
         );
-        const { products } = await fetchProducts(page, limit, name, criterio);
+        const { products } = await fetchProducts(nome, situacao);
         console.log("Fetched products:", products);
         setProducts(products);
       } catch (error) {
@@ -76,7 +76,7 @@ const Products = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8080/get_product_id?productID=${id}`,
+        `http://localhost:8080/get_product/${id}`,
       );
       setProduct(response.data);
       setEditProductId(id);
@@ -229,7 +229,7 @@ const Products = () => {
 
   const handleCriterioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLoading(true);
-    const selectedCriterio = parseInt(e.target.value);
+    const selectedCriterio = e.target.value;
     setCriterio(selectedCriterio);
     getProducts(searchName, selectedCriterio);
     setLoading(false);
@@ -239,7 +239,7 @@ const Products = () => {
     console.log("Edit product with ID:", id);
     try {
       const response = await axios.get(
-        `http://localhost:8080/get_product_id?productID=${id}`,
+        `http://localhost:8080/get_product/${id}`,
       );
       let productData;
 
@@ -498,11 +498,11 @@ const Products = () => {
                     aria-label="Categories"
                     onChange={handleCriterioChange}
                   >
-                    <option value="5">Todos</option>
-                    <option value="1">Últimos incluídos</option>
-                    <option value="2">Ativos</option>
-                    <option value="3">Inativos</option>
-                    <option value="4">Excluídos</option>
+                    <option value="A">Todos</option>
+                    <option value="A">Últimos incluídos</option>
+                    <option value="A">Ativos</option>
+                    <option value="I">Inativos</option>
+                    <option value="E">Excluídos</option>
                   </select>
                 </div>
                 <button

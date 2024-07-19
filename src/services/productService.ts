@@ -1,30 +1,24 @@
 // services/productService.ts
-export async function fetchProducts(
-  page: number,
-  limit: number = 100,
-  name: string = "",
-  criterio: number = 0,
-) {
-  console.log(
-    "Fetching products with page:",
-    page,
-    "limit:",
-    limit,
-    "and name:",
-    name,
-    criterio,
-  );
+export async function fetchProducts(nome: string = "", situacao: string = "") {
+  console.log("Fetching products with page:", nome, situacao);
   try {
     const response = await fetch(
-      `http://localhost:8080/get_products?page=${page}&limit=${limit}&name=${name}&criterio=${criterio}`,
+      `http://localhost:8080/get_products?nome=${name}&situacao=${situacao}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
     );
     if (!response.ok) {
       throw new Error("Erro ao buscar os produtos");
     }
     const data = await response.json();
+    const totalPages = 1;
     return {
-      products: data.products,
-      totalPages: data.totalPages,
+      products: data,
+      totalPages: totalPages,
     };
   } catch (error) {
     console.error("Erro ao buscar produtos:", error);
@@ -36,23 +30,13 @@ export async function fetchProducts(
 }
 
 export async function fetchProductsByPage(
-  page: number,
-  limit: number = 100,
-  name: string = "",
-  criterio: number = 0,
+  nome: string = "",
+  situacao: string = "",
 ) {
-  console.log(
-    "Fetching products with page:",
-    page,
-    "limit:",
-    limit,
-    "and name:",
-    name,
-    criterio,
-  );
+  console.log("Fetching products with page:", nome, situacao);
   try {
     const response = await fetch(
-      `http://localhost:8080/get_products?page=${page}&limit=${limit}&name=${name}&criterio=${criterio}`,
+      `http://localhost:8080/get_products?nome=${nome}&situacao=${situacao}`,
     );
     if (!response.ok) {
       throw new Error("Erro ao buscar os produtos");
