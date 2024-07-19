@@ -44,14 +44,8 @@ const Products = () => {
     async (nome: string = "", situacao: string = "") => {
       try {
         setLoading(true);
-        const page = 1;
-        const limit = 100;
         console.log(
           "Fetching products with page:",
-          page,
-          "limit:",
-          limit,
-          "and name:",
           nome,
           "situacao:",
           situacao,
