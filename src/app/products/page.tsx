@@ -452,7 +452,9 @@ const Products = () => {
           <div className="card mb-3">
             <div className="card-body">
               <div className="mb-3">
-                <h2>Produtos</h2>
+                <h2>
+                  Produtos - <small>Estoque de itens</small>
+                </h2>
                 <p className="m-0">
                   Utilize as ferramentas de busca e filtro para encontrar
                   produtos específicos e gerenciar seus perfis de forma

@@ -1,3 +1,9 @@
+h2 small {
+  position: relative;
+  top: -3px;
+  font-size: 0.9375rem;
+  color: #717478;
+}
 .card-none-box-shadow {
   box-shadow: none !important;
 }

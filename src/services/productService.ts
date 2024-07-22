@@ -3,7 +3,7 @@ export async function fetchProducts(nome: string = "", situacao: string = "") {
   console.log("Fetching products with page:", nome, situacao);
   try {
     const response = await fetch(
-      `http://localhost:8080/get_products?nome=${name}&situacao=${situacao}`,
+      `http://localhost:8080/get_products?nome=${nome}&situacao=${situacao}`,
       {
         method: "GET",
         headers: {

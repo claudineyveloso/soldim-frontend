@@ -148,9 +148,9 @@ export default async function Dashboard() {
                           role="progressbar"
                           style={{ width: "70%" }}
                           aria-label="Incoming Progress"
-                          aria-valuenow="70"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
+                          aria-valuenow={70}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
                         />
                       </div>
 
@@ -163,9 +163,9 @@ export default async function Dashboard() {
                           className="progress-bar bg-info"
                           role="progressbar"
                           style={{ width: "10%" }}
-                          aria-valuenow="10"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
+                          aria-valuenow={10}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
                         />
                       </div>
                       {/* END : Bandwidth usage and progress bars */}
@@ -280,11 +280,15 @@ export default async function Dashboard() {
                       </h5>
                       <ul className="list-group list-group-borderless">
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
-                          <div className="me-auto">Completo</div>
+                          <div className="me-auto">jzacessorios</div>
                           <span className="fw-bold">34</span>
                         </li>
                         <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
-                          <div className="me-auto">Total</div>
+                          <div className="me-auto">jzfull</div>
+                          <span className="fw-bold">79</span>
+                        </li>
+                        <li className="list-group-item p-0 text-reset d-flex justify-content-between align-items-start">
+                          <div className="me-auto">jzacessorios</div>
                           <span className="fw-bold">79</span>
                         </li>
                       </ul>
