@@ -45,13 +45,13 @@ const Products = () => {
       try {
         setLoading(true);
         console.log(
-          "Fetching products with page:",
+          "Fetching products with nome:",
           nome,
           "situacao:",
           situacao,
         );
         const { products } = await fetchProducts(nome, situacao);
-        console.log("Fetched products:", products);
+        console.log("Fetched products nao está funcionando:", products);
         setProducts(products);
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -157,7 +157,7 @@ const Products = () => {
               formatter: (_, row) => {
                 const productIndex = row.cells[4].data as number;
                 const productId = products[productIndex].id;
-                console.log("Product ID:", productId); // Log do ID do usuário
+                // console.log("Product ID:", productId); // Log do ID do usuário
 
                 const editButton = h(
                   "a",
@@ -203,8 +203,11 @@ const Products = () => {
     }
   }, [loading, products]);
 
-  const handleSearch = () => {
-    getProducts(searchName);
+  const handleSearch = (event?: React.FormEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+    getProducts(searchName, situation);
   };
 
   const handleClear = () => {
@@ -215,7 +218,7 @@ const Products = () => {
     setLoading(false);
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleSearch();
     }
@@ -361,7 +364,7 @@ const Products = () => {
   const handleSaveProduct11 = async () => {
     console.log("Salva os dados do produto", product);
 
-    console.log("Edit Product ID:", editProductId);
+    // console.log("Edit Product ID:", editProductId);
 
     try {
       const response = await fetch("http://localhost:8080/create_product", {
@@ -463,7 +466,7 @@ const Products = () => {
               </div>
 
               <div className="col-md-8 offset-md-2 mb-3">
-                <form className="searchbox input-group">
+                <form className="searchbox input-group" onSubmit={handleSearch}>
                   <input
                     className="searchbox__input form-control form-control-lg"
                     type="search"
@@ -471,7 +474,7 @@ const Products = () => {
                     aria-label="Search"
                     value={searchName}
                     onChange={(e) => setSearchName(e.target.value)}
-                    onKeyDown={handleKeyPress}
+                    onKeyUp={handleKeyUp}
                   />
                   <div className="searchbox__btn-group">
                     <button

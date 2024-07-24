@@ -144,7 +144,7 @@ export default function NavBar() {
                   </li>
                   <li className="nav-item">
                     <Link
-                      href="/products"
+                      href="/shopping_options"
                       className={`nav-link ${activeItem === "suggestion" ? "active" : ""}`}
                       onClick={() => handleItemClick("suggestion")}
                     >
@@ -153,7 +153,7 @@ export default function NavBar() {
                   </li>
                   <li className="nav-item">
                     <Link
-                      href="/products"
+                      href="/no_movements"
                       className={`nav-link ${activeItem === "no-movement" ? "active" : ""}`}
                       onClick={() => handleItemClick("no-movement")}
                     >
@@ -181,7 +181,7 @@ export default function NavBar() {
                   <li data-popper-arrow className="arrow"></li>
                   <li className="nav-item">
                     <Link
-                      href="./index.html"
+                      href="/sales_orders"
                       className={`nav-link ${activeItem === "sales-order" ? "active" : ""}`}
                       onClick={() => handleItemClick("sales-order")}
                     >
@@ -190,7 +190,7 @@ export default function NavBar() {
                   </li>
                   <li className="nav-item">
                     <Link
-                      href="./dashboard-2.html"
+                      href="sales_by_seller"
                       className={`nav-link ${activeItem === "sales-saller" ? "active" : ""}`}
                       onClick={() => handleItemClick("sales-saller")}
                     >
@@ -199,7 +199,7 @@ export default function NavBar() {
                   </li>
                   <li className="nav-item">
                     <Link
-                      href="./dashboard-2.html"
+                      href="sales_by_channel"
                       className={`nav-link ${activeItem === "sales-channel" ? "active" : ""}`}
                       onClick={() => handleItemClick("sales-channel")}
                     >
