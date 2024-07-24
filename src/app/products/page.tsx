@@ -470,7 +470,7 @@ const Products = () => {
                   <input
                     className="searchbox__input form-control form-control-lg"
                     type="search"
-                    placeholder="Localizar um produro..."
+                    placeholder="Localizar um produto..."
                     aria-label="Search"
                     value={searchName}
                     onChange={(e) => setSearchName(e.target.value)}

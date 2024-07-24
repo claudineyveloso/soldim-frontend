@@ -25,23 +25,25 @@ const ShoppingOptions = () => {
     setLoading(false);
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      handleSearch();
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event) {
+      event.preventDefault();
     }
+    getProductsEmptyStock(searchName, situation);
   };
 
-  const handleSearch = () => {
-    getProductsEmptyStock(searchName);
-    // getProductsEmptyStock(searchName);
+  const handleSearch = (event?: React.FormEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+    getProductsEmptyStock(searchName, situation);
   };
 
   const handleCriterioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLoading(true);
     const selectedSituation = e.target.value;
     setSituation(selectedSituation);
-    getProductsEmptyStock();
-    // getProductsEmptyStock(searchName, selectedSituation);
+    getProductsEmptyStock(searchName, selectedSituation);
     setLoading(false);
   };
 
@@ -55,8 +57,7 @@ const ShoppingOptions = () => {
           "situacao:",
           situacao,
         );
-        const { products } = await fetchProductsEmptyStockPage();
-        // const { products } = await fetchProductsEmptyStockPage(nome, situacao);
+        const { products } = await fetchProductsEmptyStockPage(nome, situacao);
         console.log("Fetched products:", products);
         setProducts(products);
       } catch (error) {
@@ -260,15 +261,15 @@ const ShoppingOptions = () => {
               </div>
 
               <div className="col-md-8 offset-md-2 mb-3">
-                <form className="searchbox input-group">
+                <form className="searchbox input-group" onSubmit={handleSearch}>
                   <input
                     className="searchbox__input form-control form-control-lg"
                     type="search"
-                    placeholder="Localizar um produro..."
+                    placeholder="Localizar um produto..."
                     aria-label="Search"
                     value={searchName}
                     onChange={(e) => setSearchName(e.target.value)}
-                    onKeyDown={handleKeyPress}
+                    onKeyUp={handleKeyUp}
                   />
                   <div className="searchbox__btn-group">
                     <button

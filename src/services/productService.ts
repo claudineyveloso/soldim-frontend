@@ -111,16 +111,27 @@ export async function fetchProductsEmptyStockPage(
   nome: string = "",
   situacao: string = "",
 ) {
-  console.log("Fetching products with page:", nome, situacao);
+  console.log(
+    "Fetching products with page fetchProductsEmptyStockPage:",
+    nome,
+    situacao,
+  );
   try {
-    const response = await fetch(
+    const response = await axios.get(
       `http://localhost:8080/get_products_empty_stock`,
+      {
+        params: {
+          nome: nome,
+          situacao: situacao,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
     );
-    if (!response.ok) {
-      throw new Error("Erro ao buscar os produtos com o estoque vazio");
-    }
-    const data = await response.json();
-    return data.products;
+    return {
+      products: response.data,
+    };
   } catch (error) {
     console.error("Erro ao buscar produtos com estoque vazio:", error);
     return [];
