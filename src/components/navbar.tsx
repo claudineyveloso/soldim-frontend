@@ -148,7 +148,7 @@ export default function NavBar() {
                       className={`nav-link ${activeItem === "suggestion" ? "active" : ""}`}
                       onClick={() => handleItemClick("suggestion")}
                     >
-                      Opções de compras
+                      Sem estoque
                     </Link>
                   </li>
                   <li className="nav-item">
