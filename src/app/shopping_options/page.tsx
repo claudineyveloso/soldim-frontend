@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
-import { fetchProductsEmptyStockPage } from "@/services/productService";
+import { fetchProductsEmptyStock } from "@/services/productService";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -57,7 +57,7 @@ const ShoppingOptions = () => {
           "situacao:",
           situacao,
         );
-        const { products } = await fetchProductsEmptyStockPage(nome, situacao);
+        const { products } = await fetchProductsEmptyStock(nome, situacao);
         console.log("Fetched products:", products);
         setProducts(products);
       } catch (error) {

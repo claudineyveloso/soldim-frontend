@@ -50,7 +50,7 @@ export async function fetchProductsByPage(
   }
 }
 
-export async function fetchProductsNoMovementPage(
+export async function fetchProductsNoMovements(
   nome: string = "",
   situacao: string = "",
 ) {
@@ -81,7 +81,7 @@ export async function fetchProductsNoMovementPage(
   }
 }
 
-export async function fetchProductsEmptyStockPage(
+export async function fetchProductsEmptyStock(
   nome: string = "",
   situacao: string = "",
 ) {
