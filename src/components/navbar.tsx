@@ -256,6 +256,42 @@ export default function NavBar() {
           </div>
 
           <div className="mainnav__categoriy py-3">
+            <h6 className="mainnav__caption mt-0 fw-bold">Lote</h6>
+            <ul className="mainnav__menu nav flex-column">
+              <li className="nav-item has-sub">
+                <Link
+                  href="#"
+                  className={`mininav-toggle nav-link ${activeItem === "batch" || activeItem === "triage" ? "active" : "collapsed"}`}
+                >
+                  <i className="pli-arrow-loop fs-5 me-2"></i>
+                  <span className="nav-label ms-1">Triagem</span>
+                </Link>
+                <ul className="mininav-content nav collapse">
+                  <li data-popper-arrow className="arrow"></li>
+                  <li className="nav-item">
+                    <Link
+                      href="/search"
+                      className={`nav-link ${activeItem === "batch" ? "active" : ""}`}
+                      onClick={() => handleItemClick("researches")}
+                    >
+                      Importar
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      href="/collect_product"
+                      className={`nav-link ${activeItem === "storage" ? "active" : ""}`}
+                      onClick={() => handleItemClick("storage")}
+                    >
+                      Listagem
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div className="mainnav__categoriy py-3">
             <h6 className="mainnav__caption mt-0 fw-bold">Cadastros</h6>
             <ul className="mainnav__menu nav flex-column">
               <li className="nav-item">

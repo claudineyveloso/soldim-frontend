@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 interface PaginationProps {
   totalPages: number;
@@ -23,7 +24,7 @@ const Pagination: React.FC<PaginationProps> = ({
           key={i}
           className={`page-item ${currentPage === i ? "active" : ""}`}
         >
-          <a
+          <Link
             className="page-link"
             href="#"
             onClick={(e) => {
@@ -32,7 +33,7 @@ const Pagination: React.FC<PaginationProps> = ({
             }}
           >
             {i}
-          </a>
+          </Link>
         </li>,
       );
     }
@@ -49,7 +50,7 @@ const Pagination: React.FC<PaginationProps> = ({
           key={totalPages}
           className={`page-item ${currentPage === totalPages ? "active" : ""}`}
         >
-          <a
+          <Link
             className="page-link"
             href="#"
             onClick={(e) => {
@@ -58,7 +59,7 @@ const Pagination: React.FC<PaginationProps> = ({
             }}
           >
             {totalPages}
-          </a>
+          </Link>
         </li>,
       );
     }
@@ -85,7 +86,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <li
           className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
         >
-          <a
+          <Link
             className="page-link"
             href="#"
             onClick={(e) => {
@@ -94,7 +95,7 @@ const Pagination: React.FC<PaginationProps> = ({
             }}
           >
             Próximo
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>
