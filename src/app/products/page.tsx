@@ -7,6 +7,7 @@ import { fetchProducts } from "@/services/productService";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { get } from "http";
+import Pagination from "@/components/Pagination";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -16,6 +17,9 @@ const Products = () => {
   const gridInstanceRef = useRef<any>(null);
   const [successMessage, setSuccessMessage] = useState("");
   const modalRef = useRef(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10); // Define the page size
   const [editProductId, setEditProductId] = useState<number | null>(null);
   const [situation, setSituation] = useState<string>("");
   const [product, setProduct] = useState({
@@ -41,7 +45,12 @@ const Products = () => {
   };
 
   const getProducts = useCallback(
-    async (nome: string = "", situacao: string = "") => {
+    async (
+      nome: string = "",
+      situacao: string = "",
+      limit: number = 10,
+      offset: number = 0,
+    ) => {
       try {
         setLoading(true);
         console.log(
@@ -50,9 +59,15 @@ const Products = () => {
           "situacao:",
           situacao,
         );
-        const { products } = await fetchProducts(nome, situacao);
+        const { products, totalCount } = await fetchProducts(
+          nome,
+          situacao,
+          limit,
+          offset,
+        );
         console.log("Fetched products nao está funcionando:", products);
         setProducts(products);
+        setTotalCount(totalCount);
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
@@ -63,8 +78,10 @@ const Products = () => {
   );
 
   useEffect(() => {
-    getProducts();
-  }, [getProducts]);
+    getProducts("", "", pageSize, (currentPage - 1) * pageSize);
+  }, [getProducts, currentPage, pageSize]);
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const handleGetProductId = async (id: number) => {
     setLoading(true);
@@ -779,6 +796,11 @@ const Products = () => {
                 <div id="_dm-gridjsSorting" ref={containerRef}></div>
               )}
             </div>
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
           </div>
         </div>
       </div>

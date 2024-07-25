@@ -6,6 +6,7 @@ import Link from "next/link";
 import { fetchProductsEmptyStock } from "@/services/productService";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Pagination from "@/components/Pagination";
 
 const ShoppingOptions = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -13,6 +14,10 @@ const ShoppingOptions = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const gridInstanceRef = useRef<any>(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10); // Define the page size
+
   const [editProductId, setEditProductId] = useState<number | null>(null);
 
   const [situation, setSituation] = useState<string>("");
@@ -48,7 +53,12 @@ const ShoppingOptions = () => {
   };
 
   const getProductsEmptyStock = useCallback(
-    async (nome: string = "", situacao: string = "") => {
+    async (
+      nome: string = "",
+      situacao: string = "",
+      limit: number = 10,
+      offset: number = 0,
+    ) => {
       try {
         setLoading(true);
         console.log(
@@ -57,9 +67,15 @@ const ShoppingOptions = () => {
           "situacao:",
           situacao,
         );
-        const { products } = await fetchProductsEmptyStock(nome, situacao);
+        const { products, totalCount } = await fetchProductsEmptyStock(
+          nome,
+          situacao,
+          limit,
+          offset,
+        );
         console.log("Fetched products:", products);
         setProducts(products);
+        setTotalCount(totalCount);
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
@@ -70,8 +86,10 @@ const ShoppingOptions = () => {
   );
 
   useEffect(() => {
-    getProductsEmptyStock();
-  }, [getProductsEmptyStock]);
+    getProductsEmptyStock("", "", pageSize, (currentPage - 1) * pageSize);
+  }, [getProductsEmptyStock, currentPage, pageSize]);
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const editProduct = async (id: number) => {
     console.log("Edit product with ID:", id);
@@ -338,6 +356,11 @@ const ShoppingOptions = () => {
                 <div id="_dm-gridjsSorting" ref={containerRef}></div>
               )}
             </div>
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
           </div>
         </div>
       </div>

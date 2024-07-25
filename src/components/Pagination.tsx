@@ -67,7 +67,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <nav className="text-align-center mt-5" aria-label="Table navigation">
+    <nav className="text-align-center mt-3 mb-3" aria-label="Table navigation">
       <ul className="pagination justify-content-center">
         <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
           <a
