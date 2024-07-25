@@ -6,6 +6,7 @@ import Link from "next/link";
 import { fetchProductsNoMovements } from "@/services/productService";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Pagination from "@/components/Pagination";
 
 const NoMovements = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -13,6 +14,9 @@ const NoMovements = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const gridInstanceRef = useRef<any>(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10); // Define the page size
   const [editProductId, setEditProductId] = useState<number | null>(null);
 
   const [situation, setSituation] = useState<string>("");
@@ -21,7 +25,7 @@ const NoMovements = () => {
     setLoading(true);
     setSearchName("");
     setSituation("");
-    getProductsEmptyStock();
+    getProductsNoMovements();
     setLoading(false);
   };
 
@@ -48,7 +52,12 @@ const NoMovements = () => {
   };
 
   const getProductsNoMovements = useCallback(
-    async (nome: string = "", situacao: string = "") => {
+    async (
+      nome: string = "",
+      situacao: string = "",
+      limit: number = 10,
+      offset: number = 0,
+    ) => {
       try {
         setLoading(true);
         console.log(
@@ -57,9 +66,15 @@ const NoMovements = () => {
           "situacao:",
           situacao,
         );
-        const { products } = await fetchProductsNoMovements(nome, situacao);
+        const { products, totalCount } = await fetchProductsNoMovements(
+          nome,
+          situacao,
+          limit,
+          offset,
+        );
         console.log("Fetched products:", products);
         setProducts(products);
+        setTotalCount(totalCount);
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
@@ -70,8 +85,10 @@ const NoMovements = () => {
   );
 
   useEffect(() => {
-    getProductsNoMovements();
-  }, [getProductsNoMovements]);
+    getProductsNoMovements("", "", pageSize, (currentPage - 1) * pageSize);
+  }, [getProductsNoMovements, currentPage, pageSize]);
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const editProduct = async (id: number) => {
     console.log("Edit product with ID:", id);
@@ -120,18 +137,15 @@ const NoMovements = () => {
               product.nome,
               product.codigo
                 ? String(product.codigo)
-                : h(
-                    "span",
-                    { className: "text-danger fw-bolder" },
-                    "Não informado",
-                  ),
+                : h("span", { className: "text-danger fw-bolder" }, "N/I"),
               product.preco,
+              product.datasaida,
               index,
             ]),
           })
           .forceRender();
       } else {
-        console.log("Rendering grid with products:", products);
+        console.log("Rendering grid witr products:", products);
 
         const container = containerRef.current;
 
@@ -174,10 +188,22 @@ const NoMovements = () => {
                 }).format(cell),
             },
             {
+              name: "Data saída",
+              width: "150px",
+              formatter: (cell: string) => {
+                const date = new Date(cell);
+                return new Intl.DateTimeFormat("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                }).format(date);
+              },
+            },
+            {
               name: "Ações",
               width: "120px",
               formatter: (_, row) => {
-                const productIndex = row.cells[4].data as number;
+                const productIndex = row.cells[5].data as number;
                 const productId = products[productIndex].id;
                 // console.log("Product ID:", productId); // Log do ID do usuário
 
@@ -215,6 +241,7 @@ const NoMovements = () => {
             product.nome,
             product.codigo,
             product.preco,
+            product.datasaida,
             index,
           ]),
         });
@@ -338,6 +365,11 @@ const NoMovements = () => {
                 <div id="_dm-gridjsSorting" ref={containerRef}></div>
               )}
             </div>
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
           </div>
         </div>
       </div>

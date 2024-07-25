@@ -53,11 +53,15 @@ export async function fetchProductsByPage(
 export async function fetchProductsNoMovements(
   nome: string = "",
   situacao: string = "",
+  limit: number = 10,
+  offset: number = 0,
 ) {
   console.log(
     "Fetching products with page fetchProductsNoMovementPage:",
     nome,
     situacao,
+    limit,
+    offset,
   );
   try {
     const response = await axios.get(
@@ -66,6 +70,8 @@ export async function fetchProductsNoMovements(
         params: {
           nome: nome,
           situacao: situacao,
+          limit: limit,
+          offset: offset,
         },
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +79,10 @@ export async function fetchProductsNoMovements(
       },
     );
     return {
-      products: response.data,
+      products: response.data.products,
+      totalCount: response.data.total_count,
+      page: offset / limit + 1,
+      pageSize: limit,
     };
   } catch (error) {
     console.error("Erro ao buscar produtos sem movimento:", error);
@@ -84,11 +93,15 @@ export async function fetchProductsNoMovements(
 export async function fetchProductsEmptyStock(
   nome: string = "",
   situacao: string = "",
+  limit: number = 10,
+  offset: number = 0,
 ) {
   console.log(
     "Fetching products with page fetchProductsEmptyStockPage:",
     nome,
     situacao,
+    limit,
+    offset,
   );
   try {
     const response = await axios.get(
@@ -108,6 +121,11 @@ export async function fetchProductsEmptyStock(
     };
   } catch (error) {
     console.error("Erro ao buscar produtos com estoque vazio:", error);
-    return [];
+    return {
+      products: [],
+      totalCount: 0,
+      page: 1,
+      pageSize: limit,
+    };
   }
 }

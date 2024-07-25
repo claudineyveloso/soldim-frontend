@@ -120,12 +120,10 @@ const ShoppingOptions = () => {
               product.nome,
               product.codigo
                 ? String(product.codigo)
-                : h(
-                    "span",
-                    { className: "text-danger fw-bolder" },
-                    "Não informado",
-                  ),
+                : h("span", { className: "text-danger fw-bolder" }, "N/I"),
               product.preco,
+              product.saldo_fisico,
+              product.saldo_virtual,
               index,
             ]),
           })
@@ -173,11 +171,14 @@ const ShoppingOptions = () => {
                   currency: "BRL",
                 }).format(cell),
             },
+            { name: "Saldo Físico", width: "150px" },
+            { name: "Saldo Virtual", width: "150px" },
+
             {
               name: "Ações",
               width: "120px",
               formatter: (_, row) => {
-                const productIndex = row.cells[4].data as number;
+                const productIndex = row.cells[6].data as number;
                 const productId = products[productIndex].id;
                 // console.log("Product ID:", productId); // Log do ID do usuário
 
@@ -215,6 +216,8 @@ const ShoppingOptions = () => {
             product.nome,
             product.codigo,
             product.preco,
+            product.salfo_fisico,
+            product.salfo_virtual,
             index,
           ]),
         });

@@ -98,11 +98,7 @@ const Products = () => {
               product.nome,
               product.codigo
                 ? String(product.codigo)
-                : h(
-                    "span",
-                    { className: "text-danger fw-bolder" },
-                    "Não informado",
-                  ),
+                : h("span", { className: "text-danger fw-bolder" }, "N/I"),
               product.preco,
               index,
             ]),
@@ -153,7 +149,7 @@ const Products = () => {
             },
             {
               name: "Ações",
-              width: "120px",
+              width: "140px",
               formatter: (_, row) => {
                 const productIndex = row.cells[4].data as number;
                 const productId = products[productIndex].id;
@@ -183,7 +179,20 @@ const Products = () => {
                   },
                   h("i", { className: "demo-pli-trash fs-5" }),
                 );
-                return h("div", {}, [editButton, deleteButton]);
+                const deleteButtonA = h(
+                  "a",
+                  {
+                    href: "#",
+                    className: "btn btn-icon btn-sm btn-hover btn-danger",
+                    onClick: () => {
+                      console.log("Delete clicked for product:", productId);
+                      deleteProduct(productId);
+                    },
+                  },
+                  h("i", { className: "demo-pli-list-view fs-5" }),
+                );
+
+                return h("div", {}, [editButton, deleteButton, deleteButtonA]);
               },
             },
           ],
