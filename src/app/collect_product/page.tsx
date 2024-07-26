@@ -36,9 +36,32 @@ const CollectProduct = () => {
   const getResults = async () => {
     try {
       const data = await fetchSearchesResult();
-      // console.log("Fetched searches result:", data); // Verifique os dados recebidos
+      // Log detalhado da estrutura dos dados recebidos
+      console.log("Fetched searches result:", data);
+
+      if (data && Array.isArray(data.searchesResult)) {
+        // Log de todas as image_urls
+        data.searchesResult.forEach((result, index) => {
+          console.log(`Image URL for result ${index}:`, result.image_url);
+        });
+        setResults(data.searchesResult);
+      } else {
+        console.error("Unexpected data format:", data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch searches result:", error);
+    }
+  };
+
+  const getResultsss = async () => {
+    try {
+      const data = await fetchSearchesResult();
+      console.log(
+        "Fetched searches result fffsdafdsafdsa:",
+        data.searchesResult,
+      ); // Verifique os dados recebidos
       if (data && Array.isArray(data)) {
-        setResults(data);
+        setResults(data.searchesResult);
       } else {
         console.error("Unexpected data format:", data);
       }
