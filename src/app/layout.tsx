@@ -6,6 +6,7 @@ import "../../assets/css/custom.css";
 import "../../assets/css/demo-purpose/demo-icons.min.css";
 import "../../assets/css/demo-purpose/demo-settings.min.css";
 import "../../assets/premium/icon-sets/line-icons/premium-line-icons.min.css";
+import "../../assets/css/dropzone.min.css";
 
 import Header from "@/components/header";
 import NavBar from "@/components/navbar";
@@ -82,7 +83,15 @@ export default async function RootLayout({
           strategy="afterInteractive"
         />
         <Script
+          src="/assets/vendors/dropzone/dropzone-min.js"
+          strategy="afterInteractive"
+        />
+        <Script
           src="/assets/pages/dashboard-1.js"
+          strategy="beforeInteractive"
+        />
+        <Script
+          src="/assets/pages/file-uploads.js"
           strategy="beforeInteractive"
         />
       </body>

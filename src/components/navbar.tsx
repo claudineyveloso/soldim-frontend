@@ -270,18 +270,18 @@ export default function NavBar() {
                   <li data-popper-arrow className="arrow"></li>
                   <li className="nav-item">
                     <Link
-                      href="/search"
+                      href="/file_upload"
                       className={`nav-link ${activeItem === "batch" ? "active" : ""}`}
-                      onClick={() => handleItemClick("researches")}
+                      onClick={() => handleItemClick("batch")}
                     >
                       Importar
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link
-                      href="/collect_product"
-                      className={`nav-link ${activeItem === "storage" ? "active" : ""}`}
-                      onClick={() => handleItemClick("storage")}
+                      href="/triage"
+                      className={`nav-link ${activeItem === "list_triage" ? "active" : ""}`}
+                      onClick={() => handleItemClick("list_triage")}
                     >
                       Listagem
                     </Link>
