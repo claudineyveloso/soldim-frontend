@@ -13,9 +13,8 @@ import { createDraft } from "@/services/draftService";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import Swal from "sweetalert2";
-
+import Pagination from "@/components/Pagination";
 const fetchProductsInWeb = (searchTerm: string) => {
   // Lógica para buscar produtos
   // console.log("Searching for:", searchTerm);
@@ -28,6 +27,9 @@ const CollectProduct = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [requestTime, setRequestTime] = useState<number | null>(null);
   const [lowestPriceProduct, setLowestPriceProduct] = useState<any>(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10); // Define the page size
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -45,6 +47,7 @@ const CollectProduct = () => {
           console.log(`Image URL for result ${index}:`, result.image_url);
         });
         setResults(data.searchesResult);
+        setTotalCount(totalCount);
       } else {
         console.error("Unexpected data format:", data);
       }
@@ -412,6 +415,8 @@ const CollectProduct = () => {
     }
   };
 
+  const totalPages = Math.ceil(totalCount / pageSize);
+
   return (
     <>
       <ToastContainer />
@@ -458,7 +463,7 @@ const CollectProduct = () => {
                       <input
                         className="searchbox__input form-control form-control-lg"
                         type="search"
-                        placeholder="Localizar um produto..."
+                        placeholder="Localizar um produto na web..."
                         aria-label="Search"
                         value={searchTerm}
                         onChange={handleChange}
@@ -476,7 +481,7 @@ const CollectProduct = () => {
                   </div>
                 </div>
 
-                <div className="pb-3 mb-5 border-bottom">
+                <div className="pb-3 mb-5 border-bottom d-none">
                   <h2 className="mb-2">
                     <span className="text-nowrap">
                       179 resultados encontrados para o produto:{" "}
@@ -491,6 +496,11 @@ const CollectProduct = () => {
                 <h3 className="h4">{description}</h3>
                 <div id="_dm-gridjsSorting" ref={containerRef}></div>
               </div>
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
             </div>
           </div>
         </div>
