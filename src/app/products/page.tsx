@@ -6,7 +6,7 @@ import Link from "next/link";
 import { fetchProducts } from "@/services/productService";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { get } from "http";
+//import { get } from "http";
 import Pagination from "@/components/Pagination";
 
 const Products = () => {
@@ -555,7 +555,7 @@ const Products = () => {
                 </button>
               </div>
               {/*
-              
+
                 <div className="col-md-6 d-flex gap-1 align-items-center justify-content-md-start mb-3">
                   <div className="form-group">
                     <input

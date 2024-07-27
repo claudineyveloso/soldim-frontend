@@ -2,6 +2,11 @@
 
 import axios from "axios";
 
+interface SearchResultSource {
+  source: string;
+  search_id: string;
+}
+
 interface FetchSearchesResultResponse {
   searchesResult: any[];
   totalCount: number;
@@ -10,6 +15,7 @@ interface FetchSearchesResultResponse {
 }
 
 export async function fetchSearchesResult(
+  source: string = "",
   limit: number = 10,
   offset: number = 0,
 ): Promise<FetchSearchesResultResponse> {
@@ -18,6 +24,7 @@ export async function fetchSearchesResult(
       "http://localhost:8080/get_searches_result",
       {
         params: {
+          source: source,
           limit: limit,
           offset: offset,
         },
@@ -57,6 +64,35 @@ export async function fetchSearchesResult(
       page: 1,
       pageSize: limit,
     };
+  }
+}
+
+export async function fetchSearchesResultSource(
+  searchID: string = "",
+): Promise<SearchResultSource[]> {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/get_search_result_sources/${searchID}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    // Verificar o status da resposta
+    console.log("API response status:", response.status); // Adicione log para depuração
+    if (response.status !== 200) {
+      throw new Error("Erro ao buscar resultados da pesquisa");
+    }
+
+    // Extrair dados da resposta
+    const data = response.data;
+    console.log("Data from API dos sourceID:", data);
+    return data;
+  } catch (error) {
+    console.error("Erro ao buscar resultados da pesquisa:", error);
+    return [];
   }
 }
 

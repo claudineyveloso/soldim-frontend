@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import {
   fetchSearchesResult,
   fetchSearchResult,
   deleteSearchResult,
+  fetchSearchesResultSource,
 } from "@/services/searchResultService";
 import { createDraft } from "@/services/draftService";
 
@@ -15,6 +16,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import Pagination from "@/components/Pagination";
+
+interface SearchResultSource {
+  source: string;
+  search_id: string;
+}
+
 const fetchProductsInWeb = (searchTerm: string) => {
   // Lógica para buscar produtos
   // console.log("Searching for:", searchTerm);
@@ -22,6 +29,7 @@ const fetchProductsInWeb = (searchTerm: string) => {
 
 const CollectProduct = () => {
   const [results, setResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [description, setDescription] = useState("Resultado");
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,52 +38,50 @@ const CollectProduct = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10); // Define the page size
-
+  const [sources, setSources] = useState<SearchResultSource[]>([]);
+  const [selectedSource, setSelectedSource] = useState<string>("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  const getResults = async () => {
-    try {
-      const data = await fetchSearchesResult();
-      // Log detalhado da estrutura dos dados recebidos
-      console.log("Fetched searches result:", data);
+  useEffect(() => {
+    const fetchSources = async () => {
+      const fixedSearchID = "53282568-ffdb-47f1-89ac-ab5dba2a1c26";
+      const result = await fetchSearchesResultSource(fixedSearchID);
+      console.log("Fetched sources:", result);
+      setSources(result);
+    };
 
-      if (data && Array.isArray(data.searchesResult)) {
-        // Log de todas as image_urls
-        data.searchesResult.forEach((result, index) => {
-          console.log(`Image URL for result ${index}:`, result.image_url);
-        });
-        setResults(data.searchesResult);
+    fetchSources();
+  }, []);
+
+  const getResults = useCallback(
+    async (source: string = "", limit: number = 10, offset: number = 0) => {
+      try {
+        setLoading(true);
+        console.log("Fetching products with nome:", "source:", source);
+        const { searchesResult, totalCount } = await fetchSearchesResult(
+          source,
+          limit,
+          offset,
+        );
+        console.log("Fetched products nao está funcionando:", searchesResult);
+        setResults(searchesResult);
         setTotalCount(totalCount);
-      } else {
-        console.error("Unexpected data format:", data);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Failed to fetch searches result:", error);
-    }
-  };
-
-  const getResultsss = async () => {
-    try {
-      const data = await fetchSearchesResult();
-      console.log(
-        "Fetched searches result fffsdafdsafdsa:",
-        data.searchesResult,
-      ); // Verifique os dados recebidos
-      if (data && Array.isArray(data)) {
-        setResults(data.searchesResult);
-      } else {
-        console.error("Unexpected data format:", data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch searches result:", error);
-    }
-  };
+    },
+    [],
+  );
 
   useEffect(() => {
-    getResults();
-  }, []);
+    getResults("", pageSize, (currentPage - 1) * pageSize);
+  }, [getResults, currentPage, pageSize]);
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   useEffect(() => {
     if (results.length === 0 || !containerRef.current) return;
@@ -415,7 +421,11 @@ const CollectProduct = () => {
     }
   };
 
-  const totalPages = Math.ceil(totalCount / pageSize);
+  const handleSourceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSource(event.target.value);
+    // Adicione sua lógica para manipular a mudança de fonte
+    console.log("Fonte selecionada:", event.target.value);
+  };
 
   return (
     <>
@@ -478,6 +488,25 @@ const CollectProduct = () => {
                         </button>
                       </div>
                     </form>
+                    <div className="d-flex flex-wrap align-items-end justify-content-center gap-2 mt-3 pb-3">
+                      <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
+                        <div className="text-center mb-2 mb-md-0">
+                          Somente por fonte:
+                        </div>
+                        <select
+                          className="form-select w-auto"
+                          aria-label="Categories"
+                          onChange={handleSourceChange}
+                        >
+                          <option value="a">Todas as fontes</option>
+                          {sources.map((source) => (
+                            <option key={source.source} value={source.source}>
+                              {source.source}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
