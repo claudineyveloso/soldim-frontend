@@ -43,7 +43,7 @@ const Searches = () => {
         { name: "Criado em:", width: "100px" },
         {
           name: "Ações",
-          width: "80px",
+          width: "100px",
           formatter: (_, row) => {
             const searchIndex = row.cells[2].data as number; // Corrigido índice
             const searchId = searches[searchIndex].id;
@@ -138,14 +138,6 @@ const Searches = () => {
                   Utilize as ferramentas de busca e filtro para encontrar
                   pesquisas específicas e gerenciar seus perfis de forma
                   eficiente
-                </p>
-                <p className="mt-2">
-                  <i className="demo-psi-coding h4 mb-0 me-2"></i>
-                  <a
-                    className="btn-link text-decoration-underline"
-                    href="https://github.com/olifolkerd/tabulator"
-                    target="blank"
-                  ></a>
                 </p>
               </div>
               <hr />

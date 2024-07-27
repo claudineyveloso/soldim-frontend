@@ -22,6 +22,13 @@ interface SearchResultSource {
   search_id: string;
 }
 
+interface FetchSearchesResultResponse {
+  searchesResult: any[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+}
+
 const fetchProductsInWeb = (searchTerm: string) => {
   // Lógica para buscar produtos
   // console.log("Searching for:", searchTerm);
@@ -421,7 +428,32 @@ const CollectProduct = () => {
     }
   };
 
-  const handleSourceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSourceChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const selectedValue = event.target.value;
+    setSelectedSource(selectedValue);
+    console.log("Fonte selecionada:", selectedValue);
+
+    // Chame a função fetchSearchesResult com o valor selecionado
+    try {
+      const data: FetchSearchesResultResponse = await fetchSearchesResult(
+        selectedValue,
+        pageSize,
+        (currentPage - 1) * pageSize,
+      );
+      setResults(data.searchesResult);
+      // setTotalCount(data.totalCount);
+      setTotalCount(12);
+      // GetTotalSearchesResult
+    } catch (error) {
+      console.error("Erro ao buscar resultados da pesquisa:", error);
+    }
+  };
+
+  const handleSourceChangess = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setSelectedSource(event.target.value);
     // Adicione sua lógica para manipular a mudança de fonte
     console.log("Fonte selecionada:", event.target.value);
