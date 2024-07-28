@@ -46,6 +46,23 @@ export async function fetchProducts(
   }
 }
 
+export async function fetchProduct(id: number) {
+  console.log("Fetching product with id:", id);
+  try {
+    const response = await fetch(`http://localhost:8080/get_product/${id}`);
+
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar o produto: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data || null;
+  } catch (error) {
+    console.error("Erro ao buscar produto:", error);
+    return null; // Retornar null em caso de erro
+  }
+}
+
 export async function fetchProductsByPage(
   nome: string = "",
   situacao: string = "",
