@@ -29,8 +29,8 @@ const Products = () => {
     async (nome: string = "", situacao: string = "") => {
       try {
         setLoading(true);
-        const { products } = await fetchProducts(nome, situacao);
-        setProducts(products);
+        const response = await fetchProducts(nome, situacao);
+        setProducts(response.products);
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
@@ -41,14 +41,18 @@ const Products = () => {
   );
 
   useEffect(() => {
-    getProducts();
-  }, [getProducts]);
+    getProducts("", situation);
+  }, [getProducts, situation]);
 
-  const handleCriterioChange = (
+  const handleCriterioChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setSituation(event.target.value);
-    getProducts("", event.target.value);
+    const situacao = event.target.value;
+    setSituation(situacao);
+    const response = await fetchProducts("", situacao);
+    setProducts(response.products);
+    console.log("Situação:", response.products);
+    //getProducts("", situacao);
   };
 
   const handleEdit = async (id: number) => {
@@ -141,7 +145,7 @@ const Products = () => {
                   </h2>
                   <p className="m-0">
                     Utilize as ferramentas de busca e filtro para encontrar
-                    produtos específicos e gerenciar seus perfis de forma
+                    produtos específicos e gerenciar os produtos de forma
                     eficiente
                   </p>
                 </div>
@@ -154,6 +158,7 @@ const Products = () => {
                     <select
                       className="form-select w-auto"
                       aria-label="Categories"
+                      value={situation}
                       onChange={handleCriterioChange}
                     >
                       <option value="A">Todos</option>

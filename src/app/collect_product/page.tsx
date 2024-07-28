@@ -492,7 +492,7 @@ const CollectProduct = () => {
                   <h2>Coleta de Produtos</h2>
                   <p className="m-0">
                     Utilize as ferramentas de busca e filtro para encontrar
-                    coletas específicos e gerenciar seus perfis de forma
+                    coletas específicos e gerenciar suas coletas de forma
                     eficiente
                   </p>
                 </div>
