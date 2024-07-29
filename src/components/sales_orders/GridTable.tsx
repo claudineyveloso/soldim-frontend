@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 
-interface GridTableProductsProps {
+interface GridTableSalesOrdersProps {
   data: any[];
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
 }
 
-const GridTableProducts: React.FC<GridTableProductsProps> = ({
+const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
   data,
   onEdit,
   onDelete,
@@ -57,6 +57,20 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
             }).format(cell),
         },
         {
+          id: "data_saida",
+          name: "Data Saída",
+          width: "150px",
+          formatter: (cell: string) => {
+            const date = new Date(cell);
+            return date.toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            });
+          },
+        },
+
+        {
           id: "acoes",
           name: "Ações",
           width: "100px",
@@ -97,11 +111,11 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
       data: () => {
         return new Promise((resolve) => {
           resolve(
-            data.map((product, index) => [
-              product.image_url,
-              product.nome,
-              product.codigo,
-              product.preco,
+            data.map((salesOrder, index) => [
+              salesOrder.nome,
+              salesOrder.codigo,
+              salesOrder.preco,
+              salesOrder.datasaida,
               index, // índice
             ]),
           );
@@ -137,4 +151,4 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
   return <div ref={gridRef} id="grid-wrapper" />;
 };
 
-export default GridTableProducts;
+export default GridTableSalesOrders;

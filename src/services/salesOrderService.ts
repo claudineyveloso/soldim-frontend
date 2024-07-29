@@ -1,3 +1,4 @@
+import SalesOrders from "@/app/sales_orders/page";
 import axios from "axios";
 
 export async function fetchSalesOrders(nome: string = "") {
@@ -18,7 +19,29 @@ export async function fetchSalesOrders(nome: string = "") {
   } catch (error) {
     console.error("Erro ao buscar as vendas dos produtos:", error);
     return {
-      products: [],
+      SalesOrders: [],
+    };
+  }
+}
+
+export async function fetchProductsSalesOrders() {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/get_products_sales_orders",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    return {
+      salesOrders: response.data,
+    };
+  } catch (error) {
+    console.error("Erro ao buscar as vendas dos produtos:", error);
+    return {
+      salesOrders: [],
     };
   }
 }

@@ -1,114 +1,68 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Grid, h } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
-import { fetchProductsNoMovements } from "@/services/productService";
-import axios from "axios";
+import {
+  fetchProductsNoMovements,
+  fetchProduct,
+} from "@/services/productService";
 import Swal from "sweetalert2";
-import Pagination from "@/components/Pagination";
+import GridTableProductsNoMovement from "@/components/products_no_movement/GridTable";
+import ProductModal from "@/components/products/ProductModal";
 
-const NoMovements = () => {
+const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
-  const [searchName, setSearchName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const gridInstanceRef = useRef<any>(null);
-  const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10); // Define the page size
-  const [editProductId, setEditProductId] = useState<number | null>(null);
+  const modalRef = useRef(null);
+  const [situation, setSituation] = useState<string>("A"); // Situação inicial definida
+  const [product, setProduct] = useState({
+    codigo: "",
+    nome: "",
+    preco: "",
+    unidade: "",
+    tipo: "P",
+    situacao: "A",
+    condicao: "0",
+    formato: "S",
+  });
 
-  const [situation, setSituation] = useState<string>("");
-
-  const handleClear = () => {
-    setLoading(true);
-    setSearchName("");
-    setSituation("");
-    getProductsNoMovements();
-    setLoading(false);
-  };
-
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event) {
-      event.preventDefault();
+  const getProducts = useCallback(async (situacao: string) => {
+    try {
+      setLoading(true);
+      const response = await fetchProductsNoMovements("", situacao);
+      setProducts(response.products);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setLoading(false);
     }
-    getProductsNoMovements(searchName, situation);
-  };
-
-  const handleSearch = (event?: React.FormEvent) => {
-    if (event) {
-      event.preventDefault();
-    }
-    getProductsNoMovements(searchName, situation);
-  };
-
-  const handleCriterioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLoading(true);
-    const selectedSituation = e.target.value;
-    setSituation(selectedSituation);
-    getProductsNoMovements(searchName, selectedSituation);
-    setLoading(false);
-  };
-
-  const getProductsNoMovements = useCallback(
-    async (
-      nome: string = "",
-      situacao: string = "",
-      limit: number = 10,
-      offset: number = 0,
-    ) => {
-      try {
-        setLoading(true);
-        console.log(
-          "Fetching products with page:",
-          nome,
-          "situacao:",
-          situacao,
-        );
-        const { products, totalCount } = await fetchProductsNoMovements(
-          nome,
-          situacao,
-          limit,
-          offset,
-        );
-        console.log("Fetched products:", products);
-        setProducts(products);
-        setTotalCount(totalCount);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [],
-  );
+  }, []);
 
   useEffect(() => {
-    getProductsNoMovements("", "", pageSize, (currentPage - 1) * pageSize);
-  }, [getProductsNoMovements, currentPage, pageSize]);
+    getProducts(situation);
+  }, [getProducts, situation]);
 
-  const totalPages = Math.ceil(totalCount / pageSize);
+  const handleCriterioChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const situacao = event.target.value;
+    setSituation(situacao);
+  };
 
-  const editProduct = async (id: number) => {
-    console.log("Edit product with ID:", id);
+  const handleEdit = async (id: number) => {
+    console.log("Edit clicked for product:", id);
     try {
-      const response = await axios.get(
-        `http://localhost:8080/get_product/${id}`,
-      );
-      let productData;
+      const product = await fetchProduct(id);
+      setProduct({
+        codigo: product.codigo || "",
+        nome: product.nome || "",
+        preco: product.preco ? product.preco.toString() : "",
+        unidade: product.unidade || "",
+        tipo: product.tipo || "P",
+        situacao: product.situacao || "A",
+        condicao: product.condicao || "0",
+        formato: product.formato || "S",
+      });
 
-      // Verifica se a resposta é uma string e tenta parsear como JSON
-      if (typeof response.data === "string") {
-        productData = JSON.parse(response.data);
-      } else {
-        productData = response.data;
-      }
-
-      setEditProductId(productData.id);
-
-      console.log("Dados do produto retornados:", productData);
-      // Atualiza o estado com os dados do produto
       if (window.bootstrap && window.bootstrap.Modal) {
         const modal = new window.bootstrap.Modal(
           document.getElementById("modalProduct"),
@@ -117,263 +71,111 @@ const NoMovements = () => {
       }
     } catch (error) {
       console.error("Erro ao buscar produto:", error);
-    } finally {
     }
-    // Implementar lógica para editar usuário
   };
 
-  const deleteProduct = (id: number) => {
-    console.log("Delete product with ID:", id);
-    // Implementar lógica para excluir usuário
+  const handleDelete = (id: number) => {
+    console.log("Delete clicked for product:", id);
+    // Adicione a lógica de exclusão aqui
   };
 
-  useEffect(() => {
-    if (!loading && containerRef.current) {
-      if (gridInstanceRef.current) {
-        gridInstanceRef.current
-          .updateConfig({
-            data: products.map((product, index) => [
-              product.imagemURL,
-              product.nome,
-              product.codigo
-                ? String(product.codigo)
-                : h("span", { className: "text-danger fw-bolder" }, "N/I"),
-              product.preco,
-              product.datasaida,
-              index,
-            ]),
-          })
-          .forceRender();
-      } else {
-        console.log("Rendering grid witr products:", products);
+  const handleNewProduct = () => {
+    setProduct({
+      codigo: "",
+      nome: "",
+      preco: "",
+      unidade: "",
+      tipo: "P",
+      situacao: "A",
+      condicao: "0",
+      formato: "S",
+    });
+  };
 
-        const container = containerRef.current;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
+    setProduct({
+      ...product,
+      [name]: value,
+    });
+  };
 
-        const grid = new Grid({
-          className: {
-            table: "table table-striped",
-            thead: "thead-dark",
-          },
-          columns: [
-            {
-              name: "",
-              width: "70px",
-              formatter: (cell: string) =>
-                h("img", {
-                  src: cell || "/assets/img/moldura.png", // Caminho da imagem padrão
-                  width: 30,
-                  height: 30,
-                }),
-            },
-            { name: "Nome" },
-            {
-              name: "Codigo",
-              width: "150px",
-              formatter: (cell: string) =>
-                cell
-                  ? cell
-                  : h(
-                      "span",
-                      { className: "text-danger fw-bolder" },
-                      "Código vazio",
-                    ),
-            },
-            {
-              name: "Preço",
-              width: "120px",
-              formatter: (cell: number) =>
-                new Intl.NumberFormat("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                }).format(cell),
-            },
-            {
-              name: "Data saída",
-              width: "150px",
-              formatter: (cell: string) => {
-                const date = new Date(cell);
-                return new Intl.DateTimeFormat("pt-BR", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                }).format(date);
-              },
-            },
-            {
-              name: "Ações",
-              width: "120px",
-              formatter: (_, row) => {
-                const productIndex = row.cells[5].data as number;
-                const productId = products[productIndex].id;
-                // console.log("Product ID:", productId); // Log do ID do usuário
-
-                const editButton = h(
-                  "a",
-                  {
-                    href: "#",
-                    className: "btn btn-icon btn-sm btn-hover btn-primary",
-                    onClick: () => {
-                      console.log("Edit clicked for search:", productId);
-                      editProduct(productId);
-                    },
-                  },
-                  h("i", { className: "demo-pli-pen-5 fs-5" }),
-                );
-                const deleteButton = h(
-                  "a",
-                  {
-                    href: "#",
-                    className: "btn btn-icon btn-sm btn-hover btn-danger",
-                    onClick: () => {
-                      console.log("Delete clicked for product:", productId);
-                      deleteProduct(productId);
-                    },
-                  },
-                  h("i", { className: "demo-pli-trash fs-5" }),
-                );
-                return h("div", {}, [editButton, deleteButton]);
-              },
-            },
-          ],
-          sort: true,
-          data: products.map((product, index) => [
-            product.imagemURL,
-            product.nome,
-            product.codigo,
-            product.preco,
-            product.datasaida,
-            index,
-          ]),
-        });
-
-        grid.render(container);
-        gridInstanceRef.current = grid;
-      }
-    }
-  }, [loading, products]);
+  const handleSaveProduct = () => {
+    console.log("Salvar produto:", product);
+    // Adicione a lógica para salvar o produto
+    // Depois de salvar, feche o modal e atualize a lista de produtos
+  };
 
   return (
-    <section id="content" className="content">
-      <div className="content__header content__boxed overlapping">
-        <div className="content__wrap">
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link href="/dashboard">Home</Link>
-              </li>
-              <li className="breadcrumb-item active" aria-current="page">
-                Produtos
-              </li>
-            </ol>
-          </nav>
-          <h1 className="page-title mb-0 mt-2">
-            Lista de produtos sem movimentação
-          </h1>
-          <p className="lead">
-            Visualizar opções de produtos sem movimentação cadastrados no
-            sistema.
-          </p>
-        </div>
-      </div>
-      <div className="content__boxed">
-        <div className="content__wrap">
-          <div className="card mb-3">
-            <div className="card-body">
-              <div className="mb-3">
-                <h2>
-                  Produtos - <small>Opções de compras</small>
-                </h2>
-                <p className="m-0">
-                  Utilize as ferramentas de busca e filtro para encontrar
-                  produtos específicos e gerenciar seus perfis de forma
-                  eficiente
-                </p>
-              </div>
-
-              <div className="col-md-8 offset-md-2 mb-3">
-                <form className="searchbox input-group" onSubmit={handleSearch}>
-                  <input
-                    className="searchbox__input form-control form-control-lg"
-                    type="search"
-                    placeholder="Localizar um produto..."
-                    aria-label="Search"
-                    value={searchName}
-                    onChange={(e) => setSearchName(e.target.value)}
-                    onKeyUp={handleKeyUp}
-                  />
-                  <div className="searchbox__btn-group">
-                    <button
-                      className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
-                      type="submit"
-                    >
-                      <i className="demo-pli-magnifi-glass"></i>
-                    </button>
-                  </div>
-                </form>
-              </div>
-
-              <div className="d-flex flex-wrap align-items-end justify-content-center gap-2 mb-3 pb-3">
-                <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
-                  <div className="text-center mb-2 mb-md-0">
-                    Somente por Situação
-                  </div>
-                  <select
-                    className="form-select w-auto"
-                    aria-label="Categories"
-                    onChange={handleCriterioChange}
-                  >
-                    <option value="A">Todos</option>
-                    <option value="A">Últimos incluídos</option>
-                    <option value="A">Ativos</option>
-                    <option value="I">Inativos</option>
-                    <option value="E">Excluídos</option>
-                  </select>
-                </div>
-                <button
-                  className="btn btn-light mb-3 mb-sm-0"
-                  onClick={handleSearch}
-                >
-                  Filtrar
-                </button>
-                <button
-                  className="btn btn-light mb-3 mb-sm-0"
-                  onClick={handleClear}
-                >
-                  Limpar
-                </button>
-              </div>
-              <h3 className="h4">Listagem</h3>
-              {loading ? (
-                <div
-                  className="d-flex justify-content-center align-items-center"
-                  style={{ height: "200px" }}
-                >
-                  <button
-                    className="btn btn-primary text-center"
-                    type="button"
-                    disabled
-                  >
-                    <span
-                      className="spinner-border spinner-border-sm me-3"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    Aguarde... Carregando os produtos.
-                  </button>
-                </div>
-              ) : (
-                <div id="_dm-gridjsSorting" ref={containerRef}></div>
-              )}
-            </div>
-            <Pagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              onPageChange={(page) => setCurrentPage(page)}
-            />
+    <>
+      <section id="content" className="content">
+        <div className="content__header content__boxed overlapping">
+          <div className="content__wrap">
+            <nav aria-label="breadcrumb">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link href="/dashboard">Home</Link>
+                </li>
+                <li className="breadcrumb-item active" aria-current="page">
+                  Produtos
+                </li>
+              </ol>
+            </nav>
+            <h1 className="page-title mb-0 mt-2">Lista de produtos</h1>
+            <p className="lead">Visualizar produtos cadastrados no sistema.</p>
           </div>
         </div>
-      </div>
-    </section>
+
+        <div className="content__boxed">
+          <div className="content__wrap">
+            <div className="card mb-3">
+              <div className="card-body">
+                <div className="mb-3">
+                  <h2>
+                    Produtos - <small>Estoque de itens</small>
+                  </h2>
+                  <p className="m-0">
+                    Utilize as ferramentas de busca e filtro para encontrar
+                    produtos específicos e gerenciar os produtos de forma
+                    eficiente
+                  </p>
+                </div>
+
+                <div className="d-flex flex-wrap align-items-end justify-content-end gap-2 mb-3 pb-3">
+                  <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
+                    <div className="text-center mb-2 mb-md-0">
+                      Somente por Situação
+                    </div>
+                    <select
+                      className="form-select w-auto"
+                      aria-label="Categories"
+                      value={situation}
+                      onChange={handleCriterioChange}
+                    >
+                      <option value="A">Todos</option>
+                      <option value="A">Últimos incluídos</option>
+                      <option value="A">Ativos</option>
+                      <option value="I">Inativos</option>
+                      <option value="E">Excluídos</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="row">
+                  <GridTableProductsNoMovement
+                    data={products}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
-export default NoMovements;
+export default Products;

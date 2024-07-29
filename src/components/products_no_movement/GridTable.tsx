@@ -8,13 +8,12 @@ interface GridTableProductsProps {
   onDelete: (id: number) => void;
 }
 
-const GridTableProducts: React.FC<GridTableProductsProps> = ({
+const GridTableProductsNoMovement: React.FC<GridTableProductsProps> = ({
   data,
   onEdit,
   onDelete,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (data.length === 0) return; // Não renderizar o grid se não houver dados
 
@@ -22,7 +21,6 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
     if (gridRef.current) {
       gridRef.current.innerHTML = "";
     }
-
     const grid = new Grid({
       columns: [
         {
@@ -40,7 +38,7 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
         {
           id: "codigo",
           name: "Codigo",
-          width: "100px",
+          width: "130px",
           formatter: (cell: string) =>
             cell
               ? cell
@@ -49,7 +47,7 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
         {
           id: "preco",
           name: "Preço",
-          width: "100px",
+          width: "130px",
           formatter: (cell: number) =>
             new Intl.NumberFormat("pt-BR", {
               style: "currency",
@@ -57,11 +55,24 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
             }).format(cell),
         },
         {
+          id: "data_saida",
+          name: "Data Saída",
+          width: "150px",
+          formatter: (cell: string) => {
+            const date = new Date(cell);
+            return date.toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            });
+          },
+        },
+        {
           id: "acoes",
           name: "Ações",
-          width: "100px",
+          width: "120px",
           formatter: (_, row) => {
-            const productIndex = row.cells[4].data as number; // índice do produto na lista
+            const productIndex = row.cells[5].data as number; // índice do produto na lista
             const productId = data[productIndex].id; // obtendo o ID do produto a partir do índice
 
             const editButton = h(
@@ -102,6 +113,7 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
               product.nome,
               product.codigo,
               product.preco,
+              product.datasaida,
               index, // índice
             ]),
           );
@@ -137,4 +149,4 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
   return <div ref={gridRef} id="grid-wrapper" />;
 };
 
-export default GridTableProducts;
+export default GridTableProductsNoMovement;

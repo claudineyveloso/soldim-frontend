@@ -8,7 +8,7 @@ interface GridTableProductsProps {
   onDelete: (id: number) => void;
 }
 
-const GridTableProducts: React.FC<GridTableProductsProps> = ({
+const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
   data,
   onEdit,
   onDelete,
@@ -40,7 +40,7 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
         {
           id: "codigo",
           name: "Codigo",
-          width: "100px",
+          width: "130px",
           formatter: (cell: string) =>
             cell
               ? cell
@@ -49,19 +49,21 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
         {
           id: "preco",
           name: "Preço",
-          width: "100px",
+          width: "130px",
           formatter: (cell: number) =>
             new Intl.NumberFormat("pt-BR", {
               style: "currency",
               currency: "BRL",
             }).format(cell),
         },
+        { id: "saldo_fisico", name: "Saldo Físico", width: "150px" },
+        { id: "saldo_virtual", name: "Saldo Virtual", width: "150px" },
         {
           id: "acoes",
           name: "Ações",
-          width: "100px",
+          width: "130px",
           formatter: (_, row) => {
-            const productIndex = row.cells[4].data as number; // índice do produto na lista
+            const productIndex = row.cells[6].data as number; // índice do produto na lista
             const productId = data[productIndex].id; // obtendo o ID do produto a partir do índice
 
             const editButton = h(
@@ -102,6 +104,8 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
               product.nome,
               product.codigo,
               product.preco,
+              product.saldo_fisico,
+              product.saldo_virtual,
               index, // índice
             ]),
           );
@@ -137,4 +141,4 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
   return <div ref={gridRef} id="grid-wrapper" />;
 };
 
-export default GridTableProducts;
+export default GridTableProductsEmptyStock;

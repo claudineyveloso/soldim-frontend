@@ -81,15 +81,11 @@ export async function fetchProductsByPage(
 export const fetchProductsNoMovements = async (
   nome: string = "",
   situacao: string = "",
-  limit: number = 10,
-  offset: number = 0,
 ): Promise<FetchProductsResponse> => {
   console.log(
     "Fetching products with fetchProductsNoMovements:",
     nome,
     situacao,
-    limit,
-    offset,
   );
   try {
     const response = await axios.get(
@@ -98,8 +94,6 @@ export const fetchProductsNoMovements = async (
         params: {
           nome: nome,
           situacao: situacao,
-          limit: limit,
-          offset: offset,
         },
         headers: {
           "Content-Type": "application/json",
@@ -107,19 +101,19 @@ export const fetchProductsNoMovements = async (
       },
     );
 
+    if (response.status !== 200) {
+      throw new Error(
+        `Erro ao buscar produtos sem movimentação: ${response.statusText}`,
+      );
+    }
+
     return {
       products: response.data.products,
-      totalCount: response.data.total_count,
-      page: offset / limit + 1,
-      pageSize: limit,
     };
   } catch (error) {
     console.error("Erro ao buscar produtos sem movimento:", error);
     return {
       products: [],
-      totalCount: 0,
-      page: 1,
-      pageSize: limit,
     };
   }
 };
@@ -127,15 +121,11 @@ export const fetchProductsNoMovements = async (
 export async function fetchProductsEmptyStock(
   nome: string = "",
   situacao: string = "",
-  limit: number = 10,
-  offset: number = 0,
 ): Promise<FetchProductsResponse> {
   console.log(
     "Fetching products with page fetchProductsEmptyStockPage:",
     nome,
     situacao,
-    limit,
-    offset,
   );
   try {
     const response = await axios.get(
@@ -144,27 +134,26 @@ export async function fetchProductsEmptyStock(
         params: {
           nome: nome,
           situacao: situacao,
-          limit: limit,
-          offset: offset,
         },
         headers: {
           "Content-Type": "application/json",
         },
       },
     );
+
+    if (response.status !== 200) {
+      throw new Error(
+        `Erro ao buscar produtos com estoque vazio: ${response.statusText}`,
+      );
+    }
+
     return {
       products: response.data.products,
-      totalCount: response.data.total_count,
-      page: offset / limit + 1,
-      pageSize: limit,
     };
   } catch (error) {
     console.error("Erro ao buscar produtos com estoque vazio:", error);
     return {
       products: [],
-      totalCount: 0,
-      page: 1,
-      pageSize: limit,
     };
   }
 }
