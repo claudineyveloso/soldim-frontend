@@ -530,7 +530,7 @@ const CollectProduct = () => {
                           aria-label="Categories"
                           onChange={handleSourceChange}
                         >
-                          <option value="a">Todas as fontes</option>
+                          <option value="">Todas</option>
                           {sources.map((source) => (
                             <option key={source.source} value={source.source}>
                               {source.source}
