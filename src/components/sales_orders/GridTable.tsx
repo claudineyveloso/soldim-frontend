@@ -25,22 +25,11 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
 
     const grid = new Grid({
       columns: [
-        {
-          id: "image",
-          name: "",
-          width: "70px",
-          formatter: (cell: string) =>
-            h("img", {
-              src: cell || "/assets/img/moldura.png", // Caminho da imagem padrão
-              width: 30,
-              height: 30,
-            }),
-        },
         { id: "nome", name: "Nome" },
         {
           id: "codigo",
           name: "Codigo",
-          width: "100px",
+          width: "120px",
           formatter: (cell: string) =>
             cell
               ? cell
@@ -49,7 +38,7 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
         {
           id: "preco",
           name: "Preço",
-          width: "100px",
+          width: "120px",
           formatter: (cell: number) =>
             new Intl.NumberFormat("pt-BR", {
               style: "currency",
@@ -69,11 +58,10 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
             });
           },
         },
-
         {
           id: "acoes",
           name: "Ações",
-          width: "100px",
+          width: "120px",
           formatter: (_, row) => {
             const productIndex = row.cells[4].data as number; // índice do produto na lista
             const productId = data[productIndex].id; // obtendo o ID do produto a partir do índice
@@ -114,7 +102,7 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
             data.map((salesOrder, index) => [
               salesOrder.nome,
               salesOrder.codigo,
-              salesOrder.preco,
+              salesOrder.totalprodutos,
               salesOrder.datasaida,
               index, // índice
             ]),

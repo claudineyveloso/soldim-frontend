@@ -34,7 +34,7 @@ export async function fetchProductsSalesOrders() {
         },
       },
     );
-
+    console.log("Fetching products sales orders", response.data);
     return {
       salesOrders: response.data,
     };

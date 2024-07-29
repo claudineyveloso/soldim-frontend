@@ -172,7 +172,7 @@ export default function NavBar() {
               <li className="nav-item has-sub">
                 <Link
                   href="#"
-                  className={`mininav-toggle nav-link collapsed ${activeItem === "sales-order" || activeItem === "sales-seller" || activeItem === "sales-channel" || activeItem === "stock-forecast" ? "active" : ""}`}
+                  className={`mininav-toggle nav-link ${activeItem === "sales-order" || activeItem === "sales-seller" || activeItem === "sales-channel" || activeItem === "stock-forecast" ? "active" : "collapsed"}`}
                 >
                   <i className="pli-handshake fs-5 me-2"></i>
                   <span className="nav-label ms-1">Negociação</span>
@@ -261,7 +261,7 @@ export default function NavBar() {
               <li className="nav-item has-sub">
                 <Link
                   href="#"
-                  className={`mininav-toggle nav-link ${activeItem === "batch" || activeItem === "triage" ? "active" : "collapsed"}`}
+                  className={`mininav-toggle nav-link ${activeItem === "batch" || activeItem === "triageImport" ? "active" : "collapsed"}`}
                 >
                   <i className="pli-arrow-loop fs-5 me-2"></i>
                   <span className="nav-label ms-1">Triagem</span>
@@ -280,8 +280,8 @@ export default function NavBar() {
                   <li className="nav-item">
                     <Link
                       href="/triage"
-                      className={`nav-link ${activeItem === "list_triage" ? "active" : ""}`}
-                      onClick={() => handleItemClick("list_triage")}
+                      className={`nav-link ${activeItem === "triage" ? "active" : ""}`}
+                      onClick={() => handleItemClick("triage")}
                     >
                       Listagem
                     </Link>
