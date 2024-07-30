@@ -9,15 +9,10 @@ interface SearchResultSource {
 
 interface FetchSearchesResultResponse {
   searchesResult: any[];
-  totalCount: number;
-  page: number;
-  pageSize: number;
 }
 
 export async function fetchSearchesResult(
   source: string = "",
-  limit: number = 10,
-  offset: number = 0,
 ): Promise<FetchSearchesResultResponse> {
   try {
     const response = await axios.get(
@@ -25,8 +20,6 @@ export async function fetchSearchesResult(
       {
         params: {
           source: source,
-          limit: limit,
-          offset: offset,
         },
         headers: {
           "Content-Type": "application/json",
@@ -52,17 +45,11 @@ export async function fetchSearchesResult(
 
     return {
       searchesResult: data.search_results,
-      totalCount: data.total_count,
-      page: Math.floor(offset / limit) + 1,
-      pageSize: limit,
     };
   } catch (error) {
     console.error("Erro ao buscar o resultado da busca:", error);
     return {
       searchesResult: [],
-      totalCount: 0,
-      page: 1,
-      pageSize: limit,
     };
   }
 }
