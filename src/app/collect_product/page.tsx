@@ -29,6 +29,10 @@ const CollectProduct = () => {
   const [lowestPriceProduct, setLowestPriceProduct] = useState<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteSearchResultId, setDeleteSearchResultId] = useState<string>("");
+  const [draftSearchResultId, setDraftSearchResultId] = useState<string>("");
+  const [descriptionNewSearchResult, setDescriptionNewSearchResult] =
+    useState("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -67,12 +71,30 @@ const CollectProduct = () => {
     getCollects(selectedSource);
   }, [getCollects, selectedSource]);
 
-  const handleDelete = async (id: number) => {
+  const confirmDelete = (id: string) => {
+    Swal.fire({
+      title: "Deseja excluir este item?",
+      text: "Você não poderá reverter isso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, exclua isso!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteResult(id);
+      }
+    });
+  };
+
+  const deleteResult = async (id: string) => {
+    console.log("Delete result with ID:", id);
     try {
       const success = await deleteSearchResult(id.toString());
       if (success) {
         toast.success("Item do Resultado da Busca deletado com sucesso");
-        getCollects(selectedSource);
+        await getCollects(selectedSource);
       } else {
         toast.error("Erro ao deletar resultado");
       }
@@ -87,14 +109,18 @@ const CollectProduct = () => {
   ) => {
     const selectedValue = event.target.value;
     setSelectedSource(selectedValue);
+    console.log("Fonte selecionada:", selectedValue);
+
     try {
-      await getCollects(selectedValue);
+      const data: FetchSearchesResultResponse =
+        await fetchSearchesResult(selectedValue);
+      setCollects(data.searchesResult);
     } catch (error) {
       console.error("Erro ao buscar resultados da pesquisa:", error);
     }
   };
 
-  const draftProduct = async (id: number) => {
+  const draftProduct = async (id: string) => {
     try {
       const searchResult = await fetchSearchResult(id.toString());
       if (!searchResult) {
@@ -238,6 +264,7 @@ const CollectProduct = () => {
                             </button>
                           </div>
                         </form>
+
                         <div className="d-flex flex-wrap align-items-end justify-content-center gap-2 mt-3 pb-3">
                           <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
                             <div className="text-center mb-2 mb-md-0">
@@ -269,7 +296,7 @@ const CollectProduct = () => {
                     data={collects}
                     onNewSearch={newSearch}
                     onDraftProduct={draftProduct}
-                    onDelete={handleDelete}
+                    onDelete={confirmDelete}
                   />
                 </div>
               </div>
