@@ -40,7 +40,7 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
         {
           id: "codigo",
           name: "Codigo",
-          width: "100px",
+          width: "120px",
           formatter: (cell: string) =>
             cell
               ? cell
@@ -49,7 +49,7 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
         {
           id: "preco",
           name: "Preço",
-          width: "100px",
+          width: "120px",
           formatter: (cell: number) =>
             new Intl.NumberFormat("pt-BR", {
               style: "currency",
@@ -59,7 +59,7 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
         {
           id: "acoes",
           name: "Ações",
-          width: "100px",
+          width: "120px",
           formatter: (_, row) => {
             const productIndex = row.cells[4].data as number; // índice do produto na lista
             const productId = data[productIndex].id; // obtendo o ID do produto a partir do índice
