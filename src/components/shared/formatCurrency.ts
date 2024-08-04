@@ -1,10 +1,4 @@
-const formatCurrency = (value: number | string): string => {
-  if (typeof value === "string") {
-    value = parseFloat(value.replace(/[^\d.-]/g, ""));
-  }
-  if (isNaN(value)) {
-    return "";
-  }
+const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",

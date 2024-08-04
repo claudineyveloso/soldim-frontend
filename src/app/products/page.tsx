@@ -15,14 +15,19 @@ const Products = () => {
   const [situation, setSituation] = useState<string>("");
   const [sources, setSources] = useState<any[]>([]);
   const [product, setProduct] = useState({
+    id: 0,
     codigo: "",
     nome: "",
-    preco: "",
+    preco: 0,
     unidade: "",
     tipo: "P",
     situacao: "A",
-    condicao: "0",
+    condicao: 0,
     formato: "S",
+    saldo_fisico_total: 0,
+    saldo_virtual_total: 0,
+    saldo_fiscao: 0,
+    salco_virtual: 0,
   });
 
   const getProducts = useCallback(
@@ -55,19 +60,30 @@ const Products = () => {
     //getProducts("", situacao);
   };
 
+  const handleDetails = async (id: number) => {
+    console.log("Details clicked for product:", id);
+    const product = await fetchProduct(id);
+    console.log("Product details:", product);
+  };
+
   const handleEdit = async (id: number) => {
     console.log("Edit clicked for product:", id);
     try {
       const product = await fetchProduct(id);
       setProduct({
+        id: product.id || 0,
         codigo: product.codigo || "",
         nome: product.nome || "",
-        preco: product.preco ? product.preco.toString() : "",
+        preco: product.preco || 0,
         unidade: product.unidade || "",
         tipo: product.tipo || "P",
         situacao: product.situacao || "A",
-        condicao: product.condicao || "0",
+        condicao: product.condicao || 0,
         formato: product.formato || "S",
+        saldo_fisico_total: product.saldo_fisico_total || 0,
+        saldo_virtual_total: product.saldo_virtual_total || 0,
+        saldo_fiscao: product.saldo_fisico_total || 0,
+        salco_virtual: product.saldo_virtual || 0,
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -88,14 +104,19 @@ const Products = () => {
 
   const handleNewProduct = () => {
     setProduct({
+      id: 0,
       codigo: "",
       nome: "",
-      preco: "",
+      preco: 0,
       unidade: "",
       tipo: "P",
       situacao: "A",
-      condicao: "0",
+      condicao: 0,
       formato: "S",
+      saldo_fisico_total: 0,
+      saldo_virtual_total: 0,
+      saldo_fiscao: 0,
+      salco_virtual: 0,
     });
   };
 
@@ -106,7 +127,8 @@ const Products = () => {
     console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
     setProduct({
       ...product,
-      [name]: value,
+      [name]:
+        name === "preco" || name === "condicao" ? parseFloat(value) : value,
     });
   };
 
@@ -115,6 +137,7 @@ const Products = () => {
     // Adicione a lógica para salvar o produto
     // Depois de salvar, feche o modal e atualize a lista de produtos
   };
+
   return (
     <>
       <section id="content" className="content">
@@ -175,8 +198,8 @@ const Products = () => {
                     data-bs-target="#modalProduct"
                     onClick={handleNewProduct}
                   >
-                    <i className="demo-psi-add fs-5"></i>
-                    <span className="vr"></span>
+                    <i className="demo-psi-add fs-5" />
+                    <span className="vr" />
                     Novo produto
                   </button>
                 </div>
@@ -185,6 +208,7 @@ const Products = () => {
                     data={products}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
+                    onDetails={handleDetails}
                   />
                 </div>
               </div>
@@ -201,4 +225,5 @@ const Products = () => {
     </>
   );
 };
+
 export default Products;

@@ -252,6 +252,128 @@ const ProductModal: React.FC<ProductModalProps> = ({
                               </div>
                             </div>
                           </div>
+                          <div
+                            id="_dm-coTabsBaseProfile"
+                            className="tab-pane fade active show"
+                            role="tabpanel"
+                            aria-labelledby="profile-tab"
+                          >
+                            <div className="row mb-3">
+                              <div className="col-md-6">
+                                <label
+                                  htmlFor="_dm-inputAddress2"
+                                  className="form-label"
+                                >
+                                  Mínimo
+                                </label>
+                                <input
+                                  id="codigo"
+                                  name="codigo"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder=""
+                                  value={localProduct.codigo}
+                                  onChange={onChange}
+                                />
+                              </div>
+                              <div className="col-md-6">
+                                <label
+                                  htmlFor="_dm-inputAddress2"
+                                  className="form-label"
+                                >
+                                  Máximo
+                                </label>
+                                <input
+                                  id="preco"
+                                  name="preco"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder=""
+                                  value={localProduct.preco}
+                                  onChange={handlePriceChange}
+                                />
+                              </div>
+                            </div>
+                            <div className="row mb-3">
+                              <div className="col-md-6">
+                                <label
+                                  htmlFor="_dm-inputAddress2"
+                                  className="form-label"
+                                >
+                                  crossdocking
+                                </label>
+                                <input
+                                  id="codigo"
+                                  name="codigo"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder=""
+                                  value={localProduct.codigo}
+                                  onChange={onChange}
+                                />
+                              </div>
+                              <div className="col-md-6">
+                                <label
+                                  htmlFor="_dm-inputAddress2"
+                                  className="form-label"
+                                >
+                                  localizacao
+                                </label>
+                                <input
+                                  id="preco"
+                                  name="preco"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder=""
+                                  value={localProduct.preco}
+                                  onChange={handlePriceChange}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            id="_dm-coTabsBaseContact"
+                            className="tab-pane fade"
+                            role="tabpanel"
+                            aria-labelledby="contact-tab"
+                          >
+                            <div className="row mb-3">
+                              <div className="col-md-6">
+                                <label
+                                  htmlFor="_dm-inputAddress2"
+                                  className="form-label"
+                                >
+                                  Preço de custo:
+                                </label>
+                                <input
+                                  id="codigo"
+                                  name="codigo"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder=""
+                                  value={localProduct.codigo}
+                                  onChange={onChange}
+                                />
+                              </div>
+                              <div className="col-md-6">
+                                <label
+                                  htmlFor="_dm-inputAddress2"
+                                  className="form-label"
+                                >
+                                  Preço venda
+                                </label>
+                                <input
+                                  id="preco"
+                                  name="preco"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder=""
+                                  value={localProduct.preco}
+                                  onChange={handlePriceChange}
+                                />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
