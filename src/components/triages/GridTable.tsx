@@ -2,16 +2,18 @@ import React, { useEffect, useRef } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 
-interface GridTableSalesOrdersProps {
+interface GridTableTriagesProps {
   data: any[];
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onDetails: (id: string) => void;
 }
 
-const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
+const GridTableTriages: React.FC<GridTableTriagesProps> = ({
   data,
   onEdit,
   onDelete,
+  onDetails,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -39,32 +41,14 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
           id: "preco",
           name: "Preço",
           width: "120px",
-          formatter: (cell: number) =>
-            new Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(cell),
-        },
-        {
-          id: "data_saida",
-          name: "Data Saída",
-          width: "150px",
-          formatter: (cell: string) => {
-            const date = new Date(cell);
-            return date.toLocaleDateString("pt-BR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            });
-          },
         },
         {
           id: "acoes",
           name: "Ações",
-          width: "120px",
+          width: "140px",
           formatter: (_, row) => {
-            const productIndex = row.cells[4].data as number; // índice do produto na lista
-            const productId = data[productIndex].id; // obtendo o ID do produto a partir do índice
+            const triageIndex = row.cells[3].data as string; // índice do produto na lista
+            const triageId = data[triageIndex].id; // obtendo o ID do produto a partir do índice
 
             const editButton = h(
               "a",
@@ -72,8 +56,8 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
                 href: "#",
                 className: "btn btn-icon btn-sm btn-hover btn-primary",
                 onClick: () => {
-                  console.log("Edit clicked for product:", productId);
-                  onEdit(productId);
+                  console.log("Edit clicked for product:", triageId);
+                  onEdit(triageId);
                 },
               },
               h("i", { className: "demo-pli-pen-5 fs-5" }),
@@ -85,25 +69,37 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
                 href: "#",
                 className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
-                  console.log("Delete clicked for product:", productId);
-                  onDelete(productId);
+                  console.log("Delete clicked for product:", triageId);
+                  onDelete(triageId);
                 },
               },
               h("i", { className: "demo-pli-trash fs-5" }),
             );
 
-            return h("div", {}, [editButton, deleteButton]);
+            const detailsButton = h(
+              "a",
+              {
+                href: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-danger",
+                onClick: () => {
+                  console.log("Details clicked for product:", triageId);
+                  onDetails(triageId);
+                },
+              },
+              h("i", { className: "pli-spell-check fs-5" }),
+            );
+
+            return h("div", {}, [editButton, deleteButton, detailsButton]);
           },
         },
       ],
       data: () => {
         return new Promise((resolve) => {
           resolve(
-            data.map((salesOrder, index) => [
-              salesOrder.itens[0].descricao,
-              salesOrder.numero,
-              salesOrder.totalprodutos,
-              salesOrder.datasaida,
+            data.map((triage, index) => [
+              triage.description,
+              triage.sku_wms,
+              triage.seller,
               index, // índice
             ]),
           );
@@ -134,9 +130,9 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
     return () => {
       grid.destroy();
     };
-  }, [data, onEdit, onDelete]);
+  }, [data, onEdit, onDelete, onDetails]);
 
   return <div ref={gridRef} id="grid-wrapper" />;
 };
 
-export default GridTableSalesOrders;
+export default GridTableTriages;

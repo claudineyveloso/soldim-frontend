@@ -1,20 +1,18 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { fetchTriages } from "@/services/triageService";
+import { fetchTriages, fetchTriage } from "@/services/triageService";
 import Swal from "sweetalert2";
-import GridTableProducts from "@/components/products/GridTable";
+import GridTableTriages from "@/components/triages/GridTable";
 import ProductModal from "@/components/products/ProductModal";
 
-const Products = () => {
-  const [products, setProducts] = useState<any[]>([]);
+const Triages = () => {
+  const [triages, setTriages] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [successMessage, setSuccessMessage] = useState("");
   const modalRef = useRef(null);
-  const [editProductId, setEditProductId] = useState<number | null>(null);
-  const [situation, setSituation] = useState<string>("");
-  const [sources, setSources] = useState<any[]>([]);
-  const [product, setProduct] = useState({
+  const [editTriageId, setEditTriageId] = useState<number | null>(null);
+  const [triage, setTriage] = useState({
     codigo: "",
     nome: "",
     preco: "",
@@ -25,40 +23,36 @@ const Products = () => {
     formato: "S",
   });
 
-  const getProducts = useCallback(
-    async (nome: string = "", situacao: string = "") => {
-      try {
-        setLoading(true);
-        const response = await fetchProducts(nome, situacao);
-        setProducts(response.products);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [],
-  );
+  const getTriages = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await fetchTriages();
+      console.log("Triages fetched:", response.triages);
+      setTriages(response.triages);
+    } catch (error) {
+      console.error("Failed to fetch triages:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    getProducts("", situation);
-  }, [getProducts, situation]);
+    getTriages();
+  }, [getTriages]);
 
   const handleCriterioChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const situacao = event.target.value;
     setSituation(situacao);
-    const response = await fetchProducts("", situacao);
-    setProducts(response.products);
-    console.log("Situação:", response.products);
-    //getProducts("", situacao);
+    const response = await fetchTriages();
+    setTriages(response.triages);
   };
 
-  const handleEdit = async (id: number) => {
+  const handleEdit = async (id: string) => {
     console.log("Edit clicked for product:", id);
     try {
-      const product = await fetchProduct(id);
+      const triage = await fetchTriage(id);
       setProduct({
         codigo: product.codigo || "",
         nome: product.nome || "",
@@ -81,13 +75,13 @@ const Products = () => {
     }
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     console.log("Delete clicked for product:", id);
     // Adicione a lógica de exclusão aqui
   };
 
   const handleNewProduct = () => {
-    setProduct({
+    setTriage({
       codigo: "",
       nome: "",
       preco: "",
@@ -102,16 +96,13 @@ const Products = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { name, value } = e.target;
-    console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
-    setProduct({
-      ...product,
-      [name]: value,
+    setTriage({
+      ...triage,
     });
   };
 
   const handleSaveProduct = () => {
-    console.log("Salvar produto:", product);
+    console.log("Salvar produto:", triage);
     // Adicione a lógica para salvar o produto
     // Depois de salvar, feche o modal e atualize a lista de produtos
   };
@@ -126,12 +117,16 @@ const Products = () => {
                   <Link href="/dashboard">Home</Link>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
-                  Produtos
+                  Produtos para Triagem
                 </li>
               </ol>
             </nav>
-            <h1 className="page-title mb-0 mt-2">Lista de produtos</h1>
-            <p className="lead">Visualizar produtos cadastrados no sistema.</p>
+            <h1 className="page-title mb-0 mt-2">
+              Lista de produtos para triagens
+            </h1>
+            <p className="lead">
+              Visualizar os produtos para triagens importadas para o sistema.
+            </p>
           </div>
         </div>
 
@@ -141,12 +136,12 @@ const Products = () => {
               <div className="card-body">
                 <div className="mb-3">
                   <h2>
-                    Produtos - <small>Estoque de itens</small>
+                    Triagem - <small>Produtos para triagem</small>
                   </h2>
                   <p className="m-0">
                     Utilize as ferramentas de busca e filtro para encontrar
-                    produtos específicos e gerenciar os produtos de forma
-                    eficiente
+                    produtos para triagem específicos e gerenciar os produtos
+                    para triagem de forma eficiente
                   </p>
                 </div>
 
@@ -158,8 +153,8 @@ const Products = () => {
                     <select
                       className="form-select w-auto"
                       aria-label="Categories"
-                      value={situation}
-                      onChange={handleCriterioChange}
+                      // value={situation}
+                      //onChange={handleCriterioChange}
                     >
                       <option value="A">Todos</option>
                       <option value="A">Últimos incluídos</option>
@@ -168,23 +163,13 @@ const Products = () => {
                       <option value="E">Excluídos</option>
                     </select>
                   </div>
-                  <button
-                    type="button"
-                    className="btn btn-primary hstack gap-2 align-self-center"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalProduct"
-                    onClick={handleNewProduct}
-                  >
-                    <i className="demo-psi-add fs-5"></i>
-                    <span className="vr"></span>
-                    Novo produto
-                  </button>
                 </div>
                 <div className="row">
-                  <GridTableProducts
-                    data={products}
+                  <GridTableTriages
+                    data={triages}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
+                    onDetails={handleEdit}
                   />
                 </div>
               </div>
@@ -192,13 +177,7 @@ const Products = () => {
           </div>
         </div>
       </section>
-      <ProductModal
-        product={product}
-        onChange={handleChange}
-        onSave={handleSaveProduct}
-        modalRef={modalRef}
-      />
     </>
   );
 };
-export default Products;
+export default Triages;

@@ -14,7 +14,7 @@ export async function fetchSalesOrders(nome: string = "") {
     });
 
     return {
-      salesOrders: response.data,
+      salesOrders: response.data.sales_orders,
     };
   } catch (error) {
     console.error("Erro ao buscar as vendas dos produtos:", error);

@@ -1,7 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { fetchProductsSalesOrders } from "@/services/salesOrderService";
+import {
+  fetchProductsSalesOrders,
+  fetchSalesOrders,
+} from "@/services/salesOrderService";
 
 import Swal from "sweetalert2";
 import GridTableSalesOrders from "@/components/sales_orders/GridTable";
@@ -28,7 +31,8 @@ const ProductSalesOrders = () => {
   const getSalesOrders = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetchProductsSalesOrders();
+      const response = await fetchSalesOrders();
+      console.log("Sales Orders fetched:", response.salesOrders);
       setSalesOrders(response.salesOrders);
     } catch (error) {
       console.error("Failed to fetch products:", error);
