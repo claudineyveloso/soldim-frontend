@@ -23,14 +23,16 @@ export async function fetchProducts(
     });
 
     if (response.status !== 200) {
-      throw new Error(`Erro ao buscar produtos: ${response.statusText}`);
+      throw new Error(
+        `Erro ao buscar produtos no Service: ${response.statusText}`,
+      );
     }
 
     return {
       products: response.data.products,
     };
   } catch (error) {
-    console.error("Erro ao buscar produtos:", error);
+    console.error("Erro ao buscar produtos no Services:", error);
     return {
       products: [],
     };
@@ -49,7 +51,7 @@ export async function fetchProduct(id: number) {
     const data = await response.json();
     return data || null;
   } catch (error) {
-    console.error("Erro ao buscar produto:", error);
+    console.error("Erro ao buscar produto no Services:", error);
     return null; // Retornar null em caso de erro
   }
 }
