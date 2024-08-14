@@ -96,7 +96,7 @@ const GridTableProducts: React.FC<GridTableProductsProps> = ({
               "a",
               {
                 href: "#",
-                className: "btn btn-icon btn-sm btn-hover btn-danger",
+                className: "btn btn-icon btn-sm btn-hover btn-warning",
                 onClick: () => {
                   console.log("Details clicked for product:", productId);
                   onDetails(productId);

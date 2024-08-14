@@ -1,19 +1,24 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { fetchProducts, fetchProduct } from "@/services/productService";
+import {
+  fetchProducts,
+  fetchProduct,
+  deleteProduct,
+} from "@/services/productService";
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify";
 import GridTableProducts from "@/components/products/GridTable";
 import ProductModal from "@/components/products/ProductModal";
+import DetailModal from "@/components/products/DetailModal";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [successMessage, setSuccessMessage] = useState("");
   const modalRef = useRef(null);
-  const [editProductId, setEditProductId] = useState<number | null>(null);
+  // const [editProductId, setEditProductId] = useState<number | null>(null);
   const [situation, setSituation] = useState<string>("");
-  const [sources, setSources] = useState<any[]>([]);
+  //const [sources, setSources] = useState<any[]>([]);
   const [product, setProduct] = useState({
     id: 0,
     codigo: "",
@@ -24,10 +29,19 @@ const Products = () => {
     situacao: "A",
     condicao: 0,
     formato: "S",
+    gtin: "",
+    gtin_embalagem: "",
     saldo_fisico_total: 0,
     saldo_virtual_total: 0,
-    saldo_fiscao: 0,
-    salco_virtual: 0,
+    saldo_fisico: 0,
+    saldo_virtual: 0,
+    minimo: 0,
+    maximo: 0,
+    crossdocking: 0,
+    localizacao: "",
+    preco_custo: 0,
+    preco_venda: 0,
+    marca: "",
   });
 
   const getProducts = useCallback(
@@ -64,6 +78,43 @@ const Products = () => {
     console.log("Details clicked for product:", id);
     const product = await fetchProduct(id);
     console.log("Product details:", product);
+    try {
+      const product = await fetchProduct(id);
+
+      setProduct({
+        id: product.id || 0,
+        codigo: product.codigo || "",
+        nome: product.nome || "",
+        preco: product.preco || 0,
+        unidade: product.unidade || "",
+        tipo: product.tipo || "P",
+        situacao: product.situacao || "A",
+        condicao: product.condicao || 0,
+        formato: product.formato || "S",
+        gtin: product.gtin || "",
+        gtin_embalagem: product.gtin_embalagem || "",
+        saldo_fisico_total: product.saldo_fisico_total || 0,
+        saldo_virtual_total: product.saldo_virtual_total || 0,
+        saldo_fisico: product.saldo_fisico || 0,
+        saldo_virtual: product.saldo_virtual || 0,
+        minimo: product.minimo || 0,
+        maximo: product.maximo || 0,
+        crossdocking: product.crossdocking || 0,
+        localizacao: product.localizacao || "",
+        preco_custo: product.preco_custo || 0,
+        preco_venda: product.preco_venda || 0,
+        marca: product.marca || "",
+      });
+
+      if (window.bootstrap && window.bootstrap.Modal) {
+        const modal = new window.bootstrap.Modal(
+          document.getElementById("modalDetailProduct"),
+        );
+        modal.show();
+      }
+    } catch (error) {
+      console.error("Erro ao buscar produto:", error);
+    }
   };
 
   const handleEdit = async (id: number) => {
@@ -80,10 +131,19 @@ const Products = () => {
         situacao: product.situacao || "A",
         condicao: product.condicao || 0,
         formato: product.formato || "S",
+        gtin: product.gtin || 0,
+        gtin_embalagem: product.gtin_embalagem || 0,
         saldo_fisico_total: product.saldo_fisico_total || 0,
         saldo_virtual_total: product.saldo_virtual_total || 0,
-        saldo_fiscao: product.saldo_fisico_total || 0,
-        salco_virtual: product.saldo_virtual || 0,
+        saldo_fisico: product.saldo_fisico || 0,
+        saldo_virtual: product.saldo_virtual || 0,
+        minimo: product.minimo || 0,
+        maximo: product.maximo || 0,
+        crossdocking: product.crossdocking || 0,
+        localizacao: product.localizacao || "",
+        preco_custo: product.preco_custo || 0,
+        preco_venda: product.preco_venda || 0,
+        marca: product.marca || "",
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -102,6 +162,39 @@ const Products = () => {
     // Adicione a lógica de exclusão aqui
   };
 
+  const confirmDelete = (id: number) => {
+    Swal.fire({
+      title: "Deseja excluir este item?",
+      text: "Você não poderá reverter isso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, exclua isso!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDeleteProduct(id);
+      }
+    });
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    console.log("Delete result with ID:", id);
+    try {
+      const success = await deleteProduct(id);
+      if (success) {
+        toast.success("Item do Resultado da Busca deletado com sucesso");
+        await getProducts("", situation);
+      } else {
+        toast.error("Erro ao deletar resultado");
+      }
+    } catch (error) {
+      toast.error("Erro ao deletar resultado da busca");
+      console.error("Erro ao deletar resultado:", error);
+    }
+  };
+
   const handleNewProduct = () => {
     setProduct({
       id: 0,
@@ -113,10 +206,19 @@ const Products = () => {
       situacao: "A",
       condicao: 0,
       formato: "S",
+      gtin: "",
+      gtin_embalagem: "",
       saldo_fisico_total: 0,
       saldo_virtual_total: 0,
-      saldo_fiscao: 0,
-      salco_virtual: 0,
+      saldo_fisico: 0,
+      saldo_virtual: 0,
+      minimo: 0,
+      maximo: 0,
+      crossdocking: 0,
+      localizacao: "",
+      preco_custo: 0,
+      preco_venda: 0,
+      marca: "",
     });
   };
 
@@ -207,7 +309,7 @@ const Products = () => {
                   <GridTableProducts
                     data={products}
                     onEdit={handleEdit}
-                    onDelete={handleDelete}
+                    onDelete={confirmDelete}
                     onDetails={handleDetails}
                   />
                 </div>
@@ -222,6 +324,7 @@ const Products = () => {
         onSave={handleSaveProduct}
         modalRef={modalRef}
       />
+      <DetailModal product={product} modalRef={modalRef} />
     </>
   );
 };

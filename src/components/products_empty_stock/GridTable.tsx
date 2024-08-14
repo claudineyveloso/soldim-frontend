@@ -6,12 +6,14 @@ interface GridTableProductsProps {
   data: any[];
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
+  onDetails: (id: number) => void;
 }
 
 const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
   data,
   onEdit,
   onDelete,
+  onDetails,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -61,7 +63,7 @@ const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
         {
           id: "acoes",
           name: "Ações",
-          width: "130px",
+          width: "140px",
           formatter: (_, row) => {
             const productIndex = row.cells[6].data as number; // índice do produto na lista
             const productId = data[productIndex].id; // obtendo o ID do produto a partir do índice
@@ -91,8 +93,20 @@ const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
               },
               h("i", { className: "demo-pli-trash fs-5" }),
             );
+            const detailsButton = h(
+              "a",
+              {
+                href: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-warning",
+                onClick: () => {
+                  console.log("Details clicked for product:", productId);
+                  onDetails(productId);
+                },
+              },
+              h("i", { className: "pli-spell-check fs-5" }),
+            );
 
-            return h("div", {}, [editButton, deleteButton]);
+            return h("div", {}, [editButton, deleteButton, detailsButton]);
           },
         },
       ],
@@ -136,7 +150,7 @@ const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
     return () => {
       grid.destroy();
     };
-  }, [data, onEdit, onDelete]);
+  }, [data, onEdit, onDelete, onDetails]);
 
   return <div ref={gridRef} id="grid-wrapper" />;
 };

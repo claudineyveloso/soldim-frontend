@@ -103,7 +103,7 @@ export const fetchProductsNoMovements = async (
 
     if (response.status !== 200) {
       throw new Error(
-        `Erro ao buscar produtos sem movimentação: ${response.statusText}`,
+        `Erro ao buscar produtos sem movimento: ${response.statusText}`,
       );
     }
 
@@ -157,3 +157,20 @@ export async function fetchProductsEmptyStock(
     };
   }
 }
+
+export const deleteProduct = async (id: number) => {
+  try {
+    const response = await fetch(`http://localhost:8080/delete_product/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao deletar o produto");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao deletar o produto:", error);
+    return false;
+  }
+};

@@ -157,7 +157,7 @@ export default function NavBar() {
                       className={`nav-link ${activeItem === "no-movement" ? "active" : ""}`}
                       onClick={() => handleItemClick("no-movement")}
                     >
-                      Sem movimentação
+                      Sem movimento
                     </Link>
                   </li>
                 </ul>
@@ -194,7 +194,7 @@ export default function NavBar() {
                       className={`nav-link ${activeItem === "sales-saller" ? "active" : ""}`}
                       onClick={() => handleItemClick("sales-saller")}
                     >
-                      Vendas por vendedor
+                      Vendas vendedor
                     </Link>
                   </li>
                   <li className="nav-item">
