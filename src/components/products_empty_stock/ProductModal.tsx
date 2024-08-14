@@ -28,11 +28,11 @@ const ProductModal: React.FC<ProductModalProps> = ({
     // Remove tudo que não é número ou vírgula (para decimais)
     const cleanValue = value.replace(/[^\d,]/g, "");
     // Substitui vírgulas por pontos para converter para float
-    const floatValue = parseFloat(cleanValue.replace(",", "."));
+    const floatValue = Number.parseFloat(cleanValue.replace(",", "."));
     // Define o estado do produto com o valor formatado
     setLocalProduct({
       ...localProduct,
-      preco: isNaN(floatValue) ? value : formatCurrency(floatValue),
+      preco: Number.isNaN(floatValue) ? value : formatCurrency(floatValue),
     });
   };
   return (

@@ -4,10 +4,13 @@ import Link from "next/link";
 import {
   fetchProductsNoMovements,
   fetchProduct,
+  deleteProduct,
 } from "@/services/productService";
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify";
 import GridTableProductsNoMovement from "@/components/products_no_movement/GridTable";
-import ProductModal from "@/components/products/ProductModal";
+import ProductModal from "@/components/products_no_movement/ProductModal";
+import DetailModal from "@/components/products_no_movement/DetailModal";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -15,14 +18,28 @@ const Products = () => {
   const modalRef = useRef(null);
   const [situation, setSituation] = useState<string>("A"); // Situação inicial definida
   const [product, setProduct] = useState({
+    id: 0,
     codigo: "",
     nome: "",
-    preco: "",
+    preco: 0,
     unidade: "",
     tipo: "P",
     situacao: "A",
-    condicao: "0",
+    condicao: 0,
     formato: "S",
+    gtin: "",
+    gtin_embalagem: "",
+    saldo_fisico_total: 0,
+    saldo_virtual_total: 0,
+    saldo_fisico: 0,
+    saldo_virtual: 0,
+    minimo: 0,
+    maximo: 0,
+    crossdocking: 0,
+    localizacao: "",
+    preco_custo: 0,
+    preco_venda: 0,
+    marca: "",
   });
 
   const getProducts = useCallback(async (situacao: string) => {
@@ -53,6 +70,7 @@ const Products = () => {
     try {
       const product = await fetchProduct(id);
       setProduct({
+        id: product.id || 0,
         codigo: product.codigo || "",
         nome: product.nome || "",
         preco: product.preco ? product.preco.toString() : "",
@@ -61,11 +79,24 @@ const Products = () => {
         situacao: product.situacao || "A",
         condicao: product.condicao || "0",
         formato: product.formato || "S",
+        gtin: product.gtin || "",
+        gtin_embalagem: product.gtin_embalagem || "",
+        saldo_fisico_total: product.saldo_fisico_total || 0,
+        saldo_virtual_total: product.saldo_virtual_total || 0,
+        saldo_fisico: product.saldo_fisico || 0,
+        saldo_virtual: product.saldo_virtual || 0,
+        minimo: product.minimo || 0,
+        maximo: product.maximo || 0,
+        crossdocking: product.crossdocking || 0,
+        localizacao: product.localizacao || "",
+        preco_custo: product.preco_custo || 0,
+        preco_venda: product.preco_venda || 0,
+        marca: product.marca || "",
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
         const modal = new window.bootstrap.Modal(
-          document.getElementById("modalProduct"),
+          document.getElementById("modalNoMovementsProduct"),
         );
         modal.show();
       }
@@ -74,23 +105,94 @@ const Products = () => {
     }
   };
 
-  const handleDelete = (id: number) => {
-    console.log("Delete clicked for product:", id);
-    // Adicione a lógica de exclusão aqui
-  };
-
-  const handleNewProduct = () => {
-    setProduct({
-      codigo: "",
-      nome: "",
-      preco: "",
-      unidade: "",
-      tipo: "P",
-      situacao: "A",
-      condicao: "0",
-      formato: "S",
+  const confirmDelete = (id: number) => {
+    Swal.fire({
+      title: "Deseja excluir este item?",
+      text: "Você não poderá reverter isso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, exclua isso!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDeleteProduct(id);
+      }
     });
   };
+
+  const handleDeleteProduct = async (id: number) => {
+    console.log("Delete result with ID:", id);
+    try {
+      const success = await deleteProduct(id);
+      if (success) {
+        toast.success("Item do Resultado da Busca deletado com sucesso");
+        await getProducts("", situation);
+      } else {
+        toast.error("Erro ao deletar resultado");
+      }
+    } catch (error) {
+      toast.error("Erro ao deletar resultado da busca");
+      console.error("Erro ao deletar resultado:", error);
+    }
+  };
+
+  const handleDetails = async (id: number) => {
+    console.log("Details clicked for product:", id);
+    const product = await fetchProduct(id);
+    console.log("Product details:", product);
+    try {
+      const product = await fetchProduct(id);
+
+      setProduct({
+        id: product.id || 0,
+        codigo: product.codigo || "",
+        nome: product.nome || "",
+        preco: product.preco || 0,
+        unidade: product.unidade || "",
+        tipo: product.tipo || "P",
+        situacao: product.situacao || "A",
+        condicao: product.condicao || 0,
+        formato: product.formato || "S",
+        gtin: product.gtin || "",
+        gtin_embalagem: product.gtin_embalagem || "",
+        saldo_fisico_total: product.saldo_fisico_total || 0,
+        saldo_virtual_total: product.saldo_virtual_total || 0,
+        saldo_fisico: product.saldo_fisico || 0,
+        saldo_virtual: product.saldo_virtual || 0,
+        minimo: product.minimo || 0,
+        maximo: product.maximo || 0,
+        crossdocking: product.crossdocking || 0,
+        localizacao: product.localizacao || "",
+        preco_custo: product.preco_custo || 0,
+        preco_venda: product.preco_venda || 0,
+        marca: product.marca || "",
+      });
+
+      if (window.bootstrap && window.bootstrap.Modal) {
+        const modal = new window.bootstrap.Modal(
+          document.getElementById("modalDetailProduct"),
+        );
+        modal.show();
+      }
+    } catch (error) {
+      console.error("Erro ao buscar produto estoque vazio:", error);
+    }
+  };
+
+  // const handleNewProduct = () => {
+  //   setProduct({
+  //     codigo: "",
+  //     nome: "",
+  //     preco: "",
+  //     unidade: "",
+  //     tipo: "P",
+  //     situacao: "A",
+  //     condicao: "0",
+  //     formato: "S",
+  //   });
+  // };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -124,7 +226,9 @@ const Products = () => {
                 </li>
               </ol>
             </nav>
-            <h1 className="page-title mb-0 mt-2">Lista de produtos</h1>
+            <h1 className="page-title mb-0 mt-2">
+              Lista de produtos sem movimento
+            </h1>
             <p className="lead">Visualizar produtos cadastrados no sistema.</p>
           </div>
         </div>
@@ -139,8 +243,8 @@ const Products = () => {
                   </h2>
                   <p className="m-0">
                     Utilize as ferramentas de busca e filtro para encontrar
-                    produtos específicos e gerenciar os produtos de forma
-                    eficiente
+                    produtos sem movimento específicos e gerenciar os produtos
+                    sem movimento de forma eficiente
                   </p>
                 </div>
 
@@ -167,7 +271,8 @@ const Products = () => {
                   <GridTableProductsNoMovement
                     data={products}
                     onEdit={handleEdit}
-                    onDelete={handleDelete}
+                    onDelete={confirmDelete}
+                    onDetails={handleDetails}
                   />
                 </div>
               </div>
@@ -175,6 +280,13 @@ const Products = () => {
           </div>
         </div>
       </section>
+      <ProductModal
+        product={product}
+        onChange={handleChange}
+        onSave={handleSaveProduct}
+        modalRef={modalRef}
+      />
+      <DetailModal product={product} modalRef={modalRef} />
     </>
   );
 };

@@ -7,6 +7,10 @@ interface DetailModalProps {
   modalRef: React.RefObject<HTMLDivElement>;
 }
 
+interface Condition {
+  condicao: 0 | 1 | 2 | 3;
+}
+
 const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
   const [localProduct, setLocalProduct] = useState({ ...product, preco: "" });
 
@@ -27,6 +31,13 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
     });
   };
 
+  const condicaoMap: Record<Condition["condicao"], string> = {
+    0: "Não especificado",
+    1: "Novo",
+    2: "Usado",
+    3: "Recondicionado",
+  };
+
   return (
     <div className="row">
       <div
@@ -41,7 +52,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Cadastrar novo produto
+                Detalhes do produto
               </h1>
               <button
                 type="button"
@@ -54,316 +65,185 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
               <div className="col-md-12 mb-3">
                 <div className="card h-100 card-none-box-shadow">
                   <div className="card-body">
-                    <h5 className="card-title">Dados básicos</h5>
+                    <div className="tab-content">
+                      <div
+                        id="_dm-coTabsBaseDetail"
+                        className="tab-pane fade active show"
+                        role="tabpanel"
+                        aria-labelledby="home-tab"
+                      >
+                        <div className="row mb-3">
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">ID: </span>
+                              {localProduct.id}
+                            </p>
+                          </div>
+                          <div className="col-md-8">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Situação: </span>
+                              {localProduct.situacao}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-12 mb-3">
+                          <p className="mb-0">
+                            <span className="d-inline h6">Nome: </span>
+                            {localProduct.nome}
+                          </p>
+                        </div>
 
-                    <form className="row g-3">
-                      <div className="tab-base">
-                        <ul
-                          className="nav nav-underline nav-component border-bottom"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className="nav-link px-3 active"
-                              data-bs-toggle="tab"
-                              data-bs-target="#_dm-coTabsBaseHome"
-                              type="button"
-                              role="tab"
-                              aria-controls="home"
-                              aria-selected="true"
-                            >
-                              Básicos
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className="nav-link px-3"
-                              data-bs-toggle="tab"
-                              data-bs-target="#_dm-coTabsBaseProfile"
-                              type="button"
-                              role="tab"
-                              aria-controls="profile"
-                              aria-selected="false"
-                            >
-                              Estoque
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className="nav-link px-3"
-                              data-bs-toggle="tab"
-                              data-bs-target="#_dm-coTabsBaseContact"
-                              type="button"
-                              role="tab"
-                              aria-controls="contact"
-                              aria-selected="false"
-                            >
-                              Vendas
-                            </button>
-                          </li>
-                        </ul>
-                        <div className="tab-content">
-                          <div
-                            id="_dm-coTabsBaseHome"
-                            className="tab-pane fade active show"
-                            role="tabpanel"
-                            aria-labelledby="home-tab"
-                          >
-                            <div className="col-12 mb-3">
-                              <label
-                                htmlFor="_dm-inputAddress"
-                                className="form-label"
-                              >
-                                Nome
-                              </label>
-                              <label className="form-label">
-                                {localProduct.nome}
-                              </label>
-                            </div>
-                            <div className="row mb-3">
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputAddress2"
-                                  className="form-label"
-                                >
-                                  Código (SKU)
-                                </label>
-                                <input
-                                  id="codigo"
-                                  name="codigo"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder=""
-                                  value={localProduct.codigo}
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputAddress2"
-                                  className="form-label"
-                                >
-                                  Preço venda
-                                </label>
-                                <input
-                                  id="preco"
-                                  name="preco"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder=""
-                                  value={localProduct.preco}
-                                  onChange={handlePriceChange}
-                                />
-                              </div>
-                            </div>
-                            <div className="row mb-3">
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputCity"
-                                  className="form-label"
-                                >
-                                  Unidade
-                                </label>
-                                <input
-                                  id="unidade"
-                                  name="unidade"
-                                  type="text"
-                                  className="form-control"
-                                  value={localProduct.unidade}
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="inputState"
-                                  className="form-label"
-                                >
-                                  Formato
-                                </label>
-                                <select
-                                  id="formato"
-                                  name="formato"
-                                  className="form-select"
-                                  value={localProduct.formato}
-                                >
-                                  <option value="S">
-                                    Simples ou com variação
-                                  </option>
-                                  <option value="E">Com composição</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div className="row mb-3">
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="inputState"
-                                  className="form-label"
-                                >
-                                  Tipo
-                                </label>
-                                <select
-                                  id="tipo"
-                                  name="tipo"
-                                  className="form-select"
-                                  value={localProduct.tipo}
-                                >
-                                  <option value="P">Produto</option>
-                                  <option value="S">Serviço</option>
-                                </select>
-                              </div>
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="inputState"
-                                  className="form-label"
-                                >
-                                  Condição
-                                </label>
-                                <select
-                                  id="condicao"
-                                  name="condicao"
-                                  className="form-select"
-                                  value={localProduct.condicao}
-                                >
-                                  <option value="0">Não especificado</option>
-                                  <option value="1">Novo</option>
-                                  <option value="2">Usado</option>
-                                  <option value="3">Recondicionado</option>
-                                </select>
-                              </div>
-                            </div>
+                        <div className="row mb-3">
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Código (SKU):{" "}
+                              </span>
+                              {localProduct.codigo}
+                            </p>
                           </div>
-                          <div
-                            id="_dm-coTabsBaseProfile"
-                            className="tab-pane fade active show"
-                            role="tabpanel"
-                            aria-labelledby="profile-tab"
-                          >
-                            <div className="row mb-3">
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputAddress2"
-                                  className="form-label"
-                                >
-                                  Mínimo
-                                </label>
-                                <input
-                                  id="codigo"
-                                  name="codigo"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder=""
-                                  value={localProduct.minimo}
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputAddress2"
-                                  className="form-label"
-                                >
-                                  Máximo
-                                </label>
-                                <input
-                                  id="preco"
-                                  name="preco"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder=""
-                                  value={localProduct.maxim}
-                                />
-                              </div>
-                            </div>
-                            <div className="row mb-3">
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputAddress2"
-                                  className="form-label"
-                                >
-                                  Crossdocking
-                                </label>
-                                <input
-                                  id="codigo"
-                                  name="codigo"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder=""
-                                  value={localProduct.crossdocking}
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputAddress2"
-                                  className="form-label"
-                                >
-                                  Localização
-                                </label>
-                                <input
-                                  id="preco"
-                                  name="preco"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder=""
-                                  value={localProduct.localizacao}
-                                  onChange={handlePriceChange}
-                                />
-                              </div>
-                            </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Preço: </span>
+                              {localProduct.preco}
+                            </p>
                           </div>
-                          <div
-                            id="_dm-coTabsBaseContact"
-                            className="tab-pane fade"
-                            role="tabpanel"
-                            aria-labelledby="contact-tab"
-                          >
-                            <div className="row mb-3">
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputAddress2"
-                                  className="form-label"
-                                >
-                                  Preço de custo:
-                                </label>
-                                <input
-                                  id="codigo"
-                                  name="codigo"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder=""
-                                  value={localProduct.preco_custo}
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label
-                                  htmlFor="_dm-inputAddress2"
-                                  className="form-label"
-                                >
-                                  Preço de venda
-                                </label>
-                                <input
-                                  id="preco"
-                                  name="preco"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder=""
-                                  value={localProduct.preco_venda}
-                                  onChange={handlePriceChange}
-                                />
-                              </div>
-                            </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Unidade: </span>
+                              {localProduct.unidade}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Formato: </span>
+                              {localProduct.formato}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Tipo: </span>
+                              {localProduct.tipo === "P"
+                                ? " - Produto"
+                                : " - Serviço"}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Condição: </span>
+                              {condicaoMap[localProduct.condicao]}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Frete grátis:{" "}
+                              </span>
+                              {localProduct.frete_gratis ? "Sim" : "Não"}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Gtin: </span>
+                              {localProduct.gtin}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Gtin Embalagem:{" "}
+                              </span>
+                              {localProduct.gtin_embalagem}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Marca: </span>
+                              {localProduct.marca}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Peso bruto: </span>
+                              {localProduct.peso_bruto}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Peso líquido:{" "}
+                              </span>
+                              {localProduct.peso_liquido}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Preço compra:{" "}
+                              </span>
+                              {localProduct.preco_compra}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Preço custo: </span>
+                              {localProduct.preco_custo}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Saldo físico:{" "}
+                              </span>
+                              {localProduct.saldo_fisico}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Saldo físico total:{" "}
+                              </span>
+                              {localProduct.saldo_fisico_total}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Saldo virtual:{" "}
+                              </span>
+                              {localProduct.saldo_virtual}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Saldo virtual total:{" "}
+                              </span>
+                              {localProduct.saldo_virtual_total}
+                            </p>
                           </div>
                         </div>
                       </div>
-
-                      <div className="modal-footer">
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          Fechar
-                        </button>
-                        <button type="button" className="btn btn-primary">
-                          Salvar
-                        </button>
-                      </div>
-                    </form>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Fechar
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
