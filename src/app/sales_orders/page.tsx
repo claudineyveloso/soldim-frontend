@@ -67,7 +67,7 @@ const ProductSalesOrders = () => {
         modal.show();
       }
     } catch (error) {
-      console.error("Erro ao buscar produto:", error);
+      console.error("Erro ao buscar produto do pedido de venda:", error);
     }
   };
 

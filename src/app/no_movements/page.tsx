@@ -70,7 +70,7 @@ const Products = () => {
         modal.show();
       }
     } catch (error) {
-      console.error("Erro ao buscar produto:", error);
+      console.error("Erro ao buscar produto sem movimento:", error);
     }
   };
 

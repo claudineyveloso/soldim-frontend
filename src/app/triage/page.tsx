@@ -71,7 +71,7 @@ const Triages = () => {
         modal.show();
       }
     } catch (error) {
-      console.error("Erro ao buscar produto:", error);
+      console.error("Erro ao buscar produto da triagem:", error);
     }
   };
 

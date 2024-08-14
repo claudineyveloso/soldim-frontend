@@ -9,6 +9,7 @@ import {
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import GridTableProductsEmptyStock from "@/components/products_empty_stock/GridTable";
+import ProductModal from "@/components/products_empty_stock/ProductModal";
 import DetailModal from "@/components/products_empty_stock/DetailModal";
 
 const Products = () => {
@@ -110,7 +111,7 @@ const Products = () => {
         modal.show();
       }
     } catch (error) {
-      console.error("Erro ao buscar produto:", error);
+      console.error("Erro ao buscar produto estoque vazio:", error);
     }
   };
 
@@ -191,7 +192,7 @@ const Products = () => {
         modal.show();
       }
     } catch (error) {
-      console.error("Erro ao buscar produto:", error);
+      console.error("Erro ao buscar produto estoque vazio:", error);
     }
   };
 
@@ -208,16 +209,17 @@ const Products = () => {
   //   });
   // };
 
-  // const handleChange = (
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  // ) => {
-  //   const { name, value } = e.target;
-  //   console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
-  //   setProduct({
-  //     ...product,
-  //     [name]: value,
-  //   });
-  // };
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
+    setProduct({
+      ...product,
+      [name]:
+        name === "preco" || name === "condicao" ? parseFloat(value) : value,
+    });
+  };
 
   const handleSaveProduct = () => {
     console.log("Salvar produto:", product);
@@ -295,6 +297,12 @@ const Products = () => {
           </div>
         </div>
       </section>
+      <ProductModal
+        product={product}
+        onChange={handleChange}
+        onSave={handleSaveProduct}
+        modalRef={modalRef}
+      />
       <DetailModal product={product} modalRef={modalRef} />
     </>
   );
