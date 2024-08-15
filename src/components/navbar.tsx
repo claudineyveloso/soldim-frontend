@@ -2,10 +2,24 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+
+const mapUserType = (type: string) => {
+  switch (type) {
+    case "S":
+      return "Super Admin";
+    case "A":
+      return "Admin";
+    case "C":
+      return "Colaborador";
+    default:
+      return "Desconhecido"; // Opcional, para lidar com casos inesperados
+  }
+};
 
 export default function NavBar() {
   const [activeItem, setActiveItem] = useState<string | null>(null);
+  const { data: session } = useSession();
 
   useEffect(() => {
     // Recuperar o estado salvo no localStorage quando o componente for montado
@@ -48,9 +62,15 @@ export default function NavBar() {
                   aria-controls="usernav"
                 >
                   <span className="dropdown-toggle d-flex justify-content-center align-items-center">
-                    <h5 className="mb-0 me-3">Claudiney Veloso</h5>
+                    <h5 className="mb-0 me-3">
+                      {session?.user?.email || "Usuário Desconhecido"}
+                    </h5>
                   </span>
-                  <small className="text-body-secondary">Administrator</small>
+                  <small className="text-body-secondary">
+                    {" "}
+                    {mapUserType(session?.user?.user_type) ||
+                      "Tipo Desconhecido"}
+                  </small>
                 </button>
                 <div id="usernav" className="nav flex-column collapse">
                   <Link
