@@ -24,6 +24,7 @@ const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/", // Redireciona para a página inicial ao invés de "/signIn"
+    signOut: "/",
   },
   providers: [
     CredentialsProvider({
