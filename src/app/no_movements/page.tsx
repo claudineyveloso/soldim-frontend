@@ -128,7 +128,7 @@ const Products = () => {
       const success = await deleteProduct(id);
       if (success) {
         toast.success("Item do Resultado da Busca deletado com sucesso");
-        await getProducts("", situation);
+        await getProducts(situation);
       } else {
         toast.error("Erro ao deletar resultado");
       }
