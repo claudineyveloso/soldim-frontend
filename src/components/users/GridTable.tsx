@@ -8,6 +8,19 @@ interface GridTableUsersProps {
   onDelete: (id: string) => void;
 }
 
+const mapUserType = (type: string) => {
+  switch (type) {
+    case "S":
+      return "Super Admin";
+    case "A":
+      return "Admin";
+    case "C":
+      return "Colaborador";
+    default:
+      return "Desconhecido"; // Opcional, para lidar com casos inesperados
+  }
+};
+
 const GridTableUsers: React.FC<GridTableUsersProps> = ({
   data,
   onEdit,
@@ -74,7 +87,7 @@ const GridTableUsers: React.FC<GridTableUsersProps> = ({
               user.email,
               user.password.replace(/./g, "*").substring(0, 20),
               user.is_active ? "Sim" : "Não",
-              user.user_type,
+              mapUserType(user.user_type),
               index, // índice
             ]),
           );
