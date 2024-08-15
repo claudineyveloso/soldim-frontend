@@ -20,6 +20,7 @@ interface Product {
 const fetchProductsInWeb = (searchTerm: string) => {
   // Lógica para buscar produtos
   console.log("Searching for:", searchTerm);
+  // Adicione a lógica de busca aqui
 };
 
 const DraftProduct = () => {
@@ -28,10 +29,9 @@ const DraftProduct = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
-  // const [requestTime, setRequestTime] = useState<number | null>(null);
-  // const [lowestPriceProduct, setLowestPriceProduct] = useState<any>(null);
+  const [requestTime, setRequestTime] = useState<number | null>(null);
 
-  const [product, setProduct] = useState({
+  const [product, setProduct] = useState<Product>({
     codigo: "",
     nome: "",
     preco: "",
@@ -42,8 +42,20 @@ const DraftProduct = () => {
     formato: "S",
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchTermChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setSearchTerm(event.target.value);
+  };
+
+  const handleProductChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target;
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: value,
+    }));
   };
 
   const getDrafts = async () => {
@@ -250,12 +262,16 @@ const DraftProduct = () => {
         link: product.unidade,
         image_url: product.formato,
         source: product.tipo,
-        source: product.condicao,
+        condition: product.condicao,
       });
 
       if (response.status === 200) {
         console.log("Draft created successfully:", response.data);
+        // Adicione lógica adicional aqui, como atualização de
         // Adicione lógica adicional aqui, como atualização de estado ou notificação do usuário
+        // Por exemplo, você pode fechar o modal após salvar:
+        setModalOpen(false);
+        getDrafts(); // Atualizar a lista de rascunhos após salvar o produto
       } else {
         console.error(
           "Failed to create draft:",
@@ -268,16 +284,16 @@ const DraftProduct = () => {
     }
   };
 
-  const handleEditClick = (rowData) => {
+  const handleEditClick = (rowData: any) => {
     setProduct({
-      codigo: rowData.cells[8].data, // Ajuste o índice conforme necessário
+      codigo: rowData.cells[7].data, // Ajuste o índice conforme necessário
       nome: rowData.cells[1].data,
       preco: rowData.cells[2].data,
-      unidade: product.unidade,
-      tipo: rowData.cells[4].data,
-      situacao: rowData.cells[5].data,
-      condicao: rowData.cells[6].data,
-      formato: rowData.cells[7].data,
+      unidade: product.unidade, // Mantém a unidade do estado atual, pode ser ajustada se necessário
+      tipo: product.tipo, // Mantém o tipo do estado atual, pode ser ajustado se necessário
+      situacao: "A", // Ajuste conforme necessário
+      condicao: product.condicao, // Mantém a condição do estado atual, pode ser ajustada se necessário
+      formato: rowData.cells[4].data,
     });
     setModalOpen(true);
   };
@@ -329,7 +345,7 @@ const DraftProduct = () => {
                       placeholder="Localizar um rascunho..."
                       aria-label="Search"
                       value={searchTerm}
-                      onChange={handleChange}
+                      onChange={handleSearchTermChange}
                     />
                     <div className="searchbox__btn-group">
                       <button
@@ -345,11 +361,12 @@ const DraftProduct = () => {
 
               <div className="row">
                 <div
-                  className="modal fade"
+                  className={`modal fade ${isModalOpen ? "show" : ""}`}
                   id="modalDraft"
                   tabIndex={-1}
                   aria-labelledby="exampleModalLabel"
-                  aria-hidden="true"
+                  aria-hidden={!isModalOpen}
+                  style={{ display: isModalOpen ? "block" : "none" }}
                 >
                   <div className="modal-dialog">
                     <div className="modal-content">
@@ -362,6 +379,7 @@ const DraftProduct = () => {
                           className="btn-close"
                           data-bs-dismiss="modal"
                           aria-label="Close"
+                          onClick={() => setModalOpen(false)}
                         ></button>
                       </div>
                       <div className="modal-body">
@@ -372,10 +390,7 @@ const DraftProduct = () => {
 
                               <form className="row g-3">
                                 <div className="col-12">
-                                  <label
-                                    htmlFor="_dm-inputAddress"
-                                    className="form-label"
-                                  >
+                                  <label htmlFor="nome" className="form-label">
                                     Nome
                                   </label>
                                   <input
@@ -385,13 +400,13 @@ const DraftProduct = () => {
                                     className="form-control"
                                     placeholder=""
                                     value={product.nome}
-                                    onChange={handleChange}
+                                    onChange={handleProductChange}
                                   />
                                 </div>
 
                                 <div className="col-md-6">
                                   <label
-                                    htmlFor="_dm-inputAddress2"
+                                    htmlFor="codigo"
                                     className="form-label"
                                   >
                                     Código (SKU)
@@ -403,15 +418,12 @@ const DraftProduct = () => {
                                     className="form-control"
                                     placeholder=""
                                     value={product.codigo}
-                                    onChange={handleChange}
+                                    onChange={handleProductChange}
                                   />
                                 </div>
 
                                 <div className="col-md-6">
-                                  <label
-                                    htmlFor="_dm-inputAddress2"
-                                    className="form-label"
-                                  >
+                                  <label htmlFor="preco" className="form-label">
                                     Preço venda
                                   </label>
                                   <input
@@ -421,13 +433,13 @@ const DraftProduct = () => {
                                     className="form-control"
                                     placeholder=""
                                     value={product.preco}
-                                    onChange={handleChange}
+                                    onChange={handleProductChange}
                                   />
                                 </div>
 
                                 <div className="col-md-6">
                                   <label
-                                    htmlFor="_dm-inputCity"
+                                    htmlFor="unidade"
                                     className="form-label"
                                   >
                                     Unidade
@@ -438,13 +450,13 @@ const DraftProduct = () => {
                                     type="text"
                                     className="form-control"
                                     value={product.unidade}
-                                    onChange={handleChange}
+                                    onChange={handleProductChange}
                                   />
                                 </div>
 
                                 <div className="col-md-6">
                                   <label
-                                    htmlFor="inputState"
+                                    htmlFor="formato"
                                     className="form-label"
                                   >
                                     Formato
@@ -454,7 +466,7 @@ const DraftProduct = () => {
                                     name="formato"
                                     className="form-select"
                                     value={product.formato}
-                                    onChange={handleChange}
+                                    onChange={handleProductChange}
                                   >
                                     <option value="S">
                                       Simples ou com variação
@@ -464,10 +476,7 @@ const DraftProduct = () => {
                                 </div>
 
                                 <div className="col-md-6">
-                                  <label
-                                    htmlFor="inputState"
-                                    className="form-label"
-                                  >
+                                  <label htmlFor="tipo" className="form-label">
                                     Tipo
                                   </label>
                                   <select
@@ -475,7 +484,7 @@ const DraftProduct = () => {
                                     name="tipo"
                                     className="form-select"
                                     value={product.tipo}
-                                    onChange={handleChange}
+                                    onChange={handleProductChange}
                                   >
                                     <option value="P">Produto</option>
                                     <option value="S">Serviço</option>
@@ -484,7 +493,7 @@ const DraftProduct = () => {
 
                                 <div className="col-md-6">
                                   <label
-                                    htmlFor="inputState"
+                                    htmlFor="condicao"
                                     className="form-label"
                                   >
                                     Condição
@@ -494,7 +503,7 @@ const DraftProduct = () => {
                                     name="condicao"
                                     className="form-select"
                                     value={product.condicao}
-                                    onChange={handleChange}
+                                    onChange={handleProductChange}
                                   >
                                     <option value="0">Não especificado</option>
                                     <option value="1">Novo</option>
@@ -508,13 +517,14 @@ const DraftProduct = () => {
                                     type="button"
                                     className="btn btn-secondary"
                                     data-bs-dismiss="modal"
+                                    onClick={() => setModalOpen(false)}
                                   >
                                     Fechar
                                   </button>
                                   <button
                                     type="button"
                                     className="btn btn-primary"
-                                    onClick={handleSaveProduct}
+                                    onClick={() => handleSaveProduct(product)}
                                   >
                                     Salvar
                                   </button>
