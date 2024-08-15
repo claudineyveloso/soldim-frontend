@@ -1,5 +1,6 @@
+"use client"; // Marcar como Client Component
+
 import Script from "next/script";
-import { getServerSession } from "next-auth";
 import "../../assets/css/bootstrap.min.css";
 import "../../assets/css/nifty.min.css";
 import "../../assets/css/custom.css";
@@ -8,21 +9,37 @@ import "../../assets/css/demo-purpose/demo-settings.min.css";
 import "../../assets/premium/icon-sets/line-icons/premium-line-icons.min.css";
 import "../../assets/css/dropzone.min.css";
 
-import { ToastContainer } from "react-toastify"; // Importando o ToastContainer
+import { SessionProvider, useSession } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Header from "@/components/header";
 import NavBar from "@/components/navbar";
 import SideBar from "@/components/sidebar";
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const session = await getServerSession();
-  console.log("esse é o valor de session", session);
+// Client-side component to manage session and render navigation conditionally
+function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession();
+  console.log("Session:", session);
+  return (
+    <div id="root" className="root mn--max tm--expanded-hd">
+      {session ? (
+        <>
+          <Header />
+          <NavBar />
+          <SideBar />
+        </>
+      ) : null}
+      {children}
+    </div>
+  );
+}
 
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" data-bs-theme="light" data-scheme="gray">
       <head>
@@ -38,16 +55,9 @@ export default async function RootLayout({
         />
       </head>
       <body className="out-quart">
-        <div id="root" className="root mn--max tm--expanded-hd">
-          {children}
-          {session && (
-            <>
-              <Header />
-              <NavBar />
-              <SideBar />
-            </>
-          )}
-        </div>
+        <SessionProvider>
+          <AuthenticatedLayout>{children}</AuthenticatedLayout>
+        </SessionProvider>
         <ToastContainer />
         <div className="scroll-container">
           <a
