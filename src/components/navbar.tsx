@@ -303,15 +303,6 @@ export default function NavBar() {
                   </span>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link href="/tables" className="nav-link mininav-toggle">
-                  <i className="demo-pli-add-user fs-5 me-2" />
-                  <span className="nav-label mininav-content ms-1">
-                    <span data-popper-arrow className="arrow" />
-                    Tabela
-                  </span>
-                </Link>
-              </li>
             </ul>
           </div>
           <div className="mainnav__categoriy py-3">
