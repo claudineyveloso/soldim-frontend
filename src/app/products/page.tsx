@@ -70,14 +70,12 @@ const Products = () => {
     setSituation(situacao);
     const response = await fetchProducts("", situacao);
     setProducts(response.products);
-    console.log("Situação:", response.products);
     //getProducts("", situacao);
   };
 
   const handleDetails = async (id: number) => {
     console.log("Details clicked for product:", id);
     const product = await fetchProduct(id);
-    console.log("Product details:", product);
     try {
       const product = await fetchProduct(id);
 
@@ -226,7 +224,6 @@ const Products = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
     setProduct({
       ...product,
       [name]:
