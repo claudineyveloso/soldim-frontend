@@ -9,31 +9,13 @@ import "../../assets/css/demo-purpose/demo-settings.min.css";
 import "../../assets/premium/icon-sets/line-icons/premium-line-icons.min.css";
 import "../../assets/css/dropzone.min.css";
 
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Header from "@/components/header";
 import NavBar from "@/components/navbar";
 import SideBar from "@/components/sidebar";
-
-// Client-side component to manage session and render navigation conditionally
-function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession();
-  console.log("Session:", session);
-  return (
-    <div id="root" className="root mn--max tm--expanded-hd">
-      {session ? (
-        <>
-          <Header />
-          <NavBar />
-          <SideBar />
-        </>
-      ) : null}
-      {children}
-    </div>
-  );
-}
 
 export default function RootLayout({
   children,
@@ -56,58 +38,63 @@ export default function RootLayout({
       </head>
       <body className="out-quart">
         <SessionProvider>
-          <AuthenticatedLayout>{children}</AuthenticatedLayout>
-        </SessionProvider>
-        <ToastContainer />
-        <div className="scroll-container">
-          <a
-            href="#root"
-            className="scroll-page ratio ratio-1x1"
-            aria-label="Scroll button"
-          >
-            <span className="visually-hidden">Scroll to top</span>
-          </a>
-        </div>
-        <div id="_dm-offcanvas" className="offcanvas" tabIndex={-1}>
-          <div className="offcanvas-header">
-            <h5 className="offcanvas-title">Offcanvas Header</h5>
-            <button
-              type="button"
-              className="btn-close btn-lg text-reset"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            />
+          <div id="root" className="root mn--max tm--expanded-hd">
+            <Header />
+            <NavBar />
+            <SideBar />
+            {children}
           </div>
-        </div>
-        <Script
-          src="/assets/vendors/popperjs/popper.min.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="/assets/vendors/bootstrap/bootstrap.min.js"
-          strategy="beforeInteractive"
-        />
-        <Script src="/assets/js/nifty.js" strategy="afterInteractive" />
-        <Script
-          src="/assets/js/demo-purpose-only.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="/assets/vendors/chart.js/chart.umd.min.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="/assets/vendors/dropzone/dropzone-min.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="/assets/pages/dashboard-1.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="/assets/pages/file-uploads.js"
-          strategy="beforeInteractive"
-        />
+          <ToastContainer />
+          <div className="scroll-container">
+            <a
+              href="#root"
+              className="scroll-page ratio ratio-1x1"
+              aria-label="Scroll button"
+            >
+              <span className="visually-hidden">Scroll to top</span>
+            </a>
+          </div>
+          <div id="_dm-offcanvas" className="offcanvas" tabIndex={-1}>
+            <div className="offcanvas-header">
+              <h5 className="offcanvas-title">Offcanvas Header</h5>
+              <button
+                type="button"
+                className="btn-close btn-lg text-reset"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+              />
+            </div>
+          </div>
+          <Script
+            src="/assets/vendors/popperjs/popper.min.js"
+            strategy="beforeInteractive"
+          />
+          <Script
+            src="/assets/vendors/bootstrap/bootstrap.min.js"
+            strategy="beforeInteractive"
+          />
+          <Script src="/assets/js/nifty.js" strategy="afterInteractive" />
+          <Script
+            src="/assets/js/demo-purpose-only.js"
+            strategy="afterInteractive"
+          />
+          <Script
+            src="/assets/vendors/chart.js/chart.umd.min.js"
+            strategy="afterInteractive"
+          />
+          <Script
+            src="/assets/vendors/dropzone/dropzone-min.js"
+            strategy="afterInteractive"
+          />
+          <Script
+            src="/assets/pages/dashboard-1.js"
+            strategy="beforeInteractive"
+          />
+          <Script
+            src="/assets/pages/file-uploads.js"
+            strategy="beforeInteractive"
+          />
+        </SessionProvider>
       </body>
     </html>
   );

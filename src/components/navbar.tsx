@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 
-const mapUserType = (type: string) => {
+const mapUserType = (type: string | undefined) => {
   switch (type) {
     case "S":
       return "Super Admin";
@@ -13,7 +13,7 @@ const mapUserType = (type: string) => {
     case "C":
       return "Colaborador";
     default:
-      return "Desconhecido"; // Opcional, para lidar com casos inesperados
+      return "Desconhecido";
   }
 };
 
@@ -33,6 +33,7 @@ export default function NavBar() {
     setActiveItem(item);
     localStorage.setItem("activeItem", item);
   };
+  console.log("Valor de session", session);
   return (
     <nav id="mainnav-container" className="mainnav">
       <div className="mainnav__inner">
@@ -67,9 +68,7 @@ export default function NavBar() {
                     </h5>
                   </span>
                   <small className="text-body-secondary">
-                    {" "}
-                    {mapUserType(session?.user?.user_type) ||
-                      "Tipo Desconhecido"}
+                    {mapUserType(session?.user?.user_type)}
                   </small>
                 </button>
                 <div id="usernav" className="nav flex-column collapse">

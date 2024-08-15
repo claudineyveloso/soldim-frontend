@@ -10,5 +10,5 @@ export default async function ServerComponent({
 }) {
   const session = await getServerSession();
 
-  return <RootLayout session={session}>{children}</RootLayout>;
+  return <RootLayout>{children}</RootLayout>;
 }
