@@ -1,22 +1,32 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { fetchUsers, fetchUser } from "@/services/userService";
+import { fetchUsers, fetchUser, createUser } from "@/services/userService";
 import Swal from "sweetalert2";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import GridTableUsers from "@/components/users/GridTable";
 import UserModal from "@/components/users/UserModal";
+
+type UserType = "S" | "A" | "C";
+
+interface UserState {
+  id: number;
+  email: string;
+  password: string;
+  is_active: boolean;
+  user_type: UserType;
+}
 
 const Users = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const modalRef = useRef(null);
-  const [user, setUser] = useState({
+  const [user, setUser] = useState<UserState>({
     id: 0,
     email: "",
     password: "",
-    is_active: 0,
-    user_type: "S",
+    is_active: true,
+    user_type: "S", // Valor inicial padrão
   });
 
   const getUsers = useCallback(async () => {
@@ -40,12 +50,13 @@ const Users = () => {
     console.log("Edit clicked for user:", id);
     try {
       const user = await fetchUser(id);
+      const user_type = (user.user_type as UserType) || "S"; // Type assertion com fallback seguro
       setUser({
         id: user.id || 0,
         email: user.email || "",
         password: user.password || "",
         is_active: user.is_active || 0,
-        user_type: user.user_type || "",
+        user_type,
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -102,8 +113,8 @@ const Users = () => {
       id: 0,
       email: "",
       password: "",
-      is_active: 0,
-      user_type: "",
+      is_active: true,
+      user_type: "S", // Valor inicial padrão
     });
   };
 
@@ -111,17 +122,38 @@ const Users = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    console.log(`Field changed: ${name}, Value: ${value}`);
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: value,
+      [name]: value as UserType, // Type assertion para user_type
     }));
   };
 
-  const handleSaveUser = () => {
-    console.log("Salvar usuário:", user);
-    // Adicione a lógica para salvar o usuário
-    // Depois de salvar, feche o modal e atualize a lista de usuários
+  const handleSaveUser = async () => {
+    // Remover o campo id se estamos criando um novo usuário
+    if (user.id === 0) {
+      const { id, ...userWithoutId } = user;
+
+      const result = await createUser(userWithoutId);
+
+      if (result) {
+        toast.success("Usuário criado com sucesso!");
+
+        if (modalRef.current) {
+          const modalElement = modalRef.current as HTMLElement;
+          const modalInstance =
+            window.bootstrap.Modal.getInstance(modalElement);
+          modalInstance?.hide();
+        }
+
+        await getUsers(); // Atualiza a lista de usuários
+      } else {
+        toast.error("Erro ao criar usuário");
+      }
+    } else {
+      console.log(
+        "Operação não suportada: Tentativa de salvar um usuário existente.",
+      );
+    }
   };
 
   const handleFocus = (

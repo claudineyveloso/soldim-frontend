@@ -8,6 +8,9 @@ import "../../assets/css/demo-purpose/demo-settings.min.css";
 import "../../assets/premium/icon-sets/line-icons/premium-line-icons.min.css";
 import "../../assets/css/dropzone.min.css";
 
+import { ToastContainer } from "react-toastify"; // Importando o ToastContainer
+import "react-toastify/dist/ReactToastify.css";
+
 import Header from "@/components/header";
 import NavBar from "@/components/navbar";
 import SideBar from "@/components/sidebar";
@@ -45,6 +48,7 @@ export default async function RootLayout({
             </>
           )}
         </div>
+        <ToastContainer />
         <div className="scroll-container">
           <a
             href="#root"
