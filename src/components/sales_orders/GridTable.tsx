@@ -4,14 +4,12 @@ import "gridjs/dist/theme/mermaid.css";
 
 interface GridTableSalesOrdersProps {
   data: any[];
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
+  onDetails: (id: number) => void;
 }
 
 const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
   data,
-  onEdit,
-  onDelete,
+  onDetails,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -66,33 +64,20 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
             const productIndex = row.cells[4].data as number; // índice do produto na lista
             const productId = data[productIndex].id; // obtendo o ID do produto a partir do índice
 
-            const editButton = h(
+            const detailsButton = h(
               "a",
               {
                 href: "#",
-                className: "btn btn-icon btn-sm btn-hover btn-primary",
+                className: "btn btn-icon btn-sm btn-hover btn-warning",
                 onClick: () => {
                   console.log("Edit clicked for product:", productId);
-                  onEdit(productId);
+                  onDetails(productId);
                 },
               },
-              h("i", { className: "demo-pli-pen-5 fs-5" }),
+              h("i", { className: "pli-spell-check fs-5" }),
             );
 
-            const deleteButton = h(
-              "a",
-              {
-                href: "#",
-                className: "btn btn-icon btn-sm btn-hover btn-danger",
-                onClick: () => {
-                  console.log("Delete clicked for product:", productId);
-                  onDelete(productId);
-                },
-              },
-              h("i", { className: "demo-pli-trash fs-5" }),
-            );
-
-            return h("div", {}, [editButton, deleteButton]);
+            return h("div", {}, [detailsButton]);
           },
         },
       ],
@@ -134,7 +119,7 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
     return () => {
       grid.destroy();
     };
-  }, [data, onEdit, onDelete]);
+  }, [data, onDetails]);
 
   return <div ref={gridRef} id="grid-wrapper" />;
 };

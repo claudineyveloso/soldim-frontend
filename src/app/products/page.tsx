@@ -75,7 +75,7 @@ const Products = () => {
 
   const handleDetails = async (id: number) => {
     console.log("Details clicked for product:", id);
-    const product = await fetchProduct(id);
+    //const product = await fetchProduct(id);
     try {
       const product = await fetchProduct(id);
 

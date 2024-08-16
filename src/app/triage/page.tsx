@@ -13,21 +13,31 @@ const Triages = () => {
   const modalRef = useRef(null);
   const [editTriageId, setEditTriageId] = useState<number | null>(null);
   const [triage, setTriage] = useState({
-    codigo: "",
-    nome: "",
-    preco: "",
-    unidade: "",
-    tipo: "P",
-    situacao: "A",
-    condicao: "0",
-    formato: "S",
+    id: "",
+    type: "",
+    grid: "",
+    sku_sap: 0,
+    sku_wms: "",
+    description: "",
+    cust_id: 0,
+    seller: "",
+    quantity_supplied: 0,
+    final_quantity: 0,
+    unitary_value: 0,
+    total_value_offered: 0,
+    final_total_value: 0,
+    category: "",
+    sub_category: "",
+    sent_to_batch: false,
+    sent_to_bling: false,
+    defect: false,
   });
+  const [situation, setSituation] = useState("A");
 
   const getTriages = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetchTriages();
-      console.log("Triages fetched:", response.triages);
       setTriages(response.triages);
     } catch (error) {
       console.error("Failed to fetch triages:", error);
@@ -40,30 +50,32 @@ const Triages = () => {
     getTriages();
   }, [getTriages]);
 
-  const handleCriterioChange = async (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const situacao = event.target.value;
-    setSituation(situacao);
-    const response = await fetchTriages();
-    setTriages(response.triages);
-  };
-
   const handleEdit = async (id: string) => {
-    console.log("Edit clicked for product:", id);
+    console.log("Edit clicked for triage:", id);
     try {
       const triage = await fetchTriage(id);
-      setProduct({
-        codigo: product.codigo || "",
-        nome: product.nome || "",
-        preco: product.preco ? product.preco.toString() : "",
-        unidade: product.unidade || "",
-        tipo: product.tipo || "P",
-        situacao: product.situacao || "A",
-        condicao: product.condicao || "0",
-        formato: product.formato || "S",
-      });
 
+      setTriage({
+        id: triage.id,
+        type: triage.type,
+        grid: triage.grid,
+        sku_sap: triage.sku_sap,
+        sku_wms: triage.sku_wms,
+        description: triage.description,
+        cust_id: triage.cust_id,
+        seller: triage.seller,
+        quantity_supplied: triage.quantity_supplied,
+        final_quantity: triage.final_quantity,
+        unitary_value: triage.unitary_value,
+        total_value_offered: triage.total_value_offered,
+        final_total_value: triage.final_total_value,
+        category: triage.category,
+        sub_category: triage.sub_category,
+        sent_to_batch: triage.sent_to_batch,
+        sent_to_bling: triage.sent_to_bling,
+        defect: triage.defect,
+      });
+      //
       if (window.bootstrap && window.bootstrap.Modal) {
         const modal = new window.bootstrap.Modal(
           document.getElementById("modalProduct"),
@@ -75,37 +87,18 @@ const Triages = () => {
     }
   };
 
-  const handleDelete = (id: string) => {
-    console.log("Delete clicked for product:", id);
-    // Adicione a lógica de exclusão aqui
-  };
-
-  const handleNewProduct = () => {
-    setTriage({
-      codigo: "",
-      nome: "",
-      preco: "",
-      unidade: "",
-      tipo: "P",
-      situacao: "A",
-      condicao: "0",
-      formato: "S",
-    });
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  const handleCriterioChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setTriage({
-      ...triage,
-    });
+    const situacao = event.target.value;
+    setSituation(situacao);
+    getTriages(); // Atualiza a lista de triagens com o novo filtro
   };
 
-  const handleSaveProduct = () => {
-    console.log("Salvar produto:", triage);
-    // Adicione a lógica para salvar o produto
-    // Depois de salvar, feche o modal e atualize a lista de produtos
+  const handleDelete = async (id: string) => {
+    console.log("Delete clicked for triage:", id);
   };
+
   return (
     <>
       <section id="content" className="content">
@@ -153,11 +146,11 @@ const Triages = () => {
                     <select
                       className="form-select w-auto"
                       aria-label="Categories"
-                      // value={situation}
-                      //onChange={handleCriterioChange}
+                      value={situation}
+                      onChange={handleCriterioChange}
                     >
                       <option value="A">Todos</option>
-                      <option value="A">Últimos incluídos</option>
+                      <option value="L">Últimos incluídos</option>
                       <option value="A">Ativos</option>
                       <option value="I">Inativos</option>
                       <option value="E">Excluídos</option>
@@ -180,4 +173,5 @@ const Triages = () => {
     </>
   );
 };
+
 export default Triages;

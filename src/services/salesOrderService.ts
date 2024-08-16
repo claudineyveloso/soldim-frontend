@@ -45,3 +45,22 @@ export async function fetchProductsSalesOrders() {
     };
   }
 }
+
+export async function fetchSalesOrder(id: number) {
+  console.log("Fetching product with id:", id);
+  try {
+    const response = await fetch(`http://localhost:8080/get_sales_order/${id}`);
+
+    if (!response.ok) {
+      throw new Error(
+        `Erro ao buscar o pedido de vendas: ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    return data || null;
+  } catch (error) {
+    console.error("Erro ao buscar pedido de vendas no Services:", error);
+    return null; // Retornar null em caso de erro
+  }
+}

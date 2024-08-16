@@ -47,6 +47,10 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
     3: "Recondicionado",
   };
 
+  const condicaoLabel =
+    condicaoMap[localProduct.condicao as Condition["condicao"]] ||
+    "Desconhecido";
+
   return (
     <div className="row">
       <div
@@ -142,7 +146,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
                           <div className="col-md-4">
                             <p className="mb-0">
                               <span className="d-inline h6">Condição: </span>
-                              {condicaoMap[localProduct.condicao]}
+                              {condicaoLabel}
                             </p>
                           </div>
                         </div>

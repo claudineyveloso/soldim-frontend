@@ -47,7 +47,7 @@ const GridTableTriages: React.FC<GridTableTriagesProps> = ({
           name: "Ações",
           width: "140px",
           formatter: (_, row) => {
-            const triageIndex = row.cells[3].data as string; // índice do produto na lista
+            const triageIndex = row.cells[3].data as number; // índice do produto na lista
             const triageId = data[triageIndex].id; // obtendo o ID do produto a partir do índice
 
             const editButton = h(

@@ -17,10 +17,11 @@ const ClientScripts = () => {
 
     (async () => {
       try {
-        const bootstrapModule = await import('bootstrap/dist/js/bootstrap.bundle.min.js');
+        // const bootstrapModule = await import('bootstrap/dist/js/bootstrap.bundle.min.js');
+        const bootstrapModule = require("bootstrap/dist/js/bootstrap.bundle.min.js");
         window.bootstrap = bootstrapModule.default;
       } catch (err) {
-        console.error('Error loading bootstrap:', err);
+        console.error("Error loading bootstrap:", err);
       }
     })();
 
@@ -54,3 +55,4 @@ const ClientScripts = () => {
 };
 
 export default ClientScripts;
+

@@ -2,13 +2,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import {
-  fetchProductsSalesOrders,
   fetchSalesOrders,
+  fetchSalesOrder,
 } from "@/services/salesOrderService";
-
 import Swal from "sweetalert2";
 import GridTableSalesOrders from "@/components/sales_orders/GridTable";
-
 import ProductModal from "@/components/products/ProductModal";
 
 const ProductSalesOrders = () => {
@@ -18,14 +16,17 @@ const ProductSalesOrders = () => {
   const modalRef = useRef(null);
   const [editSalesOrderId, setEditSalesOrderId] = useState<number | null>(null);
   const [salesOrder, setSalesOrder] = useState({
-    codigo: "",
-    nome: "",
-    preco: "",
-    unidade: "",
-    tipo: "P",
-    situacao: "A",
-    condicao: "0",
-    formato: "S",
+    id: 0,
+    numero: 0,
+    numeroloja: "",
+    data: "",
+    datasaida: "",
+    dataprevista: "",
+    totalprodutos: 0,
+    totaldescontos: 0,
+    situation_id: 0,
+    store_id: 0,
+    contact_id: 0,
   });
 
   const getSalesOrders = useCallback(async () => {
@@ -45,66 +46,36 @@ const ProductSalesOrders = () => {
     getSalesOrders();
   }, [getSalesOrders]);
 
-  const handleEdit = async (id: number) => {
-    console.log("Edit clicked for product:", id);
+  const handleDetails = async (id: number) => {
+    console.log("Details clicked for product:", id);
     try {
-      const product = await fetchProduct(id);
+      const product = await fetchSalesOrder(id);
+
       setSalesOrder({
-        codigo: product.codigo || "",
-        nome: product.nome || "",
-        preco: product.preco ? product.preco.toString() : "",
-        unidade: product.unidade || "",
-        tipo: product.tipo || "P",
-        situacao: product.situacao || "A",
-        condicao: product.condicao || "0",
-        formato: product.formato || "S",
+        id: product.id || "",
+        numero: product.numero || "",
+        numeroloja: product.numeroloja || 0,
+        data: product.data || "",
+        datasaida: product.datasaida || "P",
+        dataprevista: product.dataprevista || "A",
+        totalprodutos: product.totalprodutos || 0,
+        totaldescontos: product.totaldescontos || "S",
+        situation_id: product.situation_id || 0,
+        store_id: product.store_id || 0,
+        contact_id: product.contact_id || 0,
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
         const modal = new window.bootstrap.Modal(
-          document.getElementById("modalProduct"),
+          document.getElementById("modalDetailProduct"),
         );
         modal.show();
       }
     } catch (error) {
-      console.error("Erro ao buscar produto do pedido de venda:", error);
+      console.error("Erro ao buscar produto:", error);
     }
   };
 
-  const handleDelete = (id: number) => {
-    console.log("Delete clicked for product:", id);
-    // Adicione a lógica de exclusão aqui
-  };
-
-  const handleNewProduct = () => {
-    setProduct({
-      codigo: "",
-      nome: "",
-      preco: "",
-      unidade: "",
-      tipo: "P",
-      situacao: "A",
-      condicao: "0",
-      formato: "S",
-    });
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
-    setProduct({
-      ...product,
-      [name]: value,
-    });
-  };
-
-  const handleSaveProduct = () => {
-    console.log("Salvar produto:", product);
-    // Adicione a lógica para salvar o produto
-    // Depois de salvar, feche o modal e atualize a lista de produtos
-  };
   return (
     <>
       <section id="content" className="content">
@@ -114,7 +85,7 @@ const ProductSalesOrders = () => {
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
                   <Link href="/dashboard">Home</Link>
-                </li>{" "}
+                </li>
                 <li className="breadcrumb-item active" aria-current="page">
                   Vendas
                 </li>
@@ -162,8 +133,7 @@ const ProductSalesOrders = () => {
                 <div className="row">
                   <GridTableSalesOrders
                     data={salesOrders}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
+                    onDetails={handleDetails}
                   />
                 </div>
               </div>
@@ -174,4 +144,5 @@ const ProductSalesOrders = () => {
     </>
   );
 };
+
 export default ProductSalesOrders;

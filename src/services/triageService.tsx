@@ -1,10 +1,10 @@
 import axios from "axios";
 
-interface FetchProductsResponse {
+interface FetchProductsTriageResponse {
   triages: any[];
 }
 
-export async function fetchTriages(): Promise<FetchProductsResponse> {
+export async function fetchTriages(): Promise<FetchProductsTriageResponse> {
   console.log("Fetching triages with nome:");
   try {
     const response = await axios.get("http://localhost:8080/get_triages", {
@@ -24,28 +24,21 @@ export async function fetchTriages(): Promise<FetchProductsResponse> {
   }
 }
 
-export async function fetchTriage(id: string): Promise<FetchProductsResponse> {
+export async function fetchTriage(id: string) {
+  console.log("Fetching product with id:", id);
   try {
-    const response = await axios.get<FetchProductsResponse>(
-      `http://localhost:8080/get_triage/${id}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
+    const response = await fetch(`http://localhost:8080/get_triage/${id}`);
 
-    // Verificação de status HTTP para erros
-    if (response.status !== 200) {
-      throw new Error(`Erro ao buscar a triagem: ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(
+        `Erro ao buscar o produto da triagem: ${response.statusText}`,
+      );
     }
 
-    const data = response.data;
-    return data || { triages: [] };
+    const data = await response.json();
+    return data || null;
   } catch (error) {
-    console.error("Erro ao buscar triagem:", error);
-    return {
-      triages: [],
-    };
+    console.error("Erro ao buscar produto da triagem no Services:", error);
+    return null; // Retornar null em caso de erro
   }
 }
