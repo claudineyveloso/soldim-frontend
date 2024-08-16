@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
+import { AuthWrapper } from "@/components/AuthWrapper";
 import axios from "axios";
 import { fetchDrafts } from "@/services/draftService";
 
@@ -299,253 +300,277 @@ const DraftProduct = () => {
   };
 
   return (
-    <section id="content" className="content">
-      <div className="content__header content__boxed overlapping">
-        <div className="content__wrap">
-          <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link href="/dashboard">Home</Link>
-              </li>
-              <li className="breadcrumb-item active" aria-current="page">
-                Rascunhos de Produtos
-              </li>
-            </ol>
-          </nav>
-          <h1 className="page-title mb-0 mt-2">
-            Lista de rascunho de produtos
-          </h1>
-          <p className="lead">
-            Visualizar, adicionar, editar e excluir coletas cadastrados no
-            sistema.
-          </p>
-        </div>
-      </div>
-      <div className="content__boxed">
-        <div className="content__wrap">
-          <div className="card mb-3">
-            <div className="card-body">
-              <div className="mb-3">
-                <h2>Rascunho de Produtos</h2>
-                <p className="m-0">
-                  Utilize as ferramentas de busca e filtro para encontrar
-                  rascunhos específicos e gerenciar seus perfis de forma
-                  eficiente
-                </p>
-              </div>
-              <div className="row">
-                <div className="col-md-8 offset-md-2 mb-3">
-                  <form
-                    className="searchbox input-group"
-                    onSubmit={handleSubmit}
-                  >
-                    <input
-                      className="searchbox__input form-control form-control-lg"
-                      type="search"
-                      placeholder="Localizar um rascunho..."
-                      aria-label="Search"
-                      value={searchTerm}
-                      onChange={handleSearchTermChange}
-                    />
-                    <div className="searchbox__btn-group">
-                      <button
-                        className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
-                        type="submit"
+    <>
+      <AuthWrapper>
+        <section id="content" className="content">
+          <div className="content__header content__boxed overlapping">
+            <div className="content__wrap">
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link href="/dashboard">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Rascunhos de Produtos
+                  </li>
+                </ol>
+              </nav>
+              <h1 className="page-title mb-0 mt-2">
+                Lista de rascunho de produtos
+              </h1>
+              <p className="lead">
+                Visualizar, adicionar, editar e excluir coletas cadastrados no
+                sistema.
+              </p>
+            </div>
+          </div>
+          <div className="content__boxed">
+            <div className="content__wrap">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <div className="mb-3">
+                    <h2>Rascunho de Produtos</h2>
+                    <p className="m-0">
+                      Utilize as ferramentas de busca e filtro para encontrar
+                      rascunhos específicos e gerenciar seus perfis de forma
+                      eficiente
+                    </p>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-8 offset-md-2 mb-3">
+                      <form
+                        className="searchbox input-group"
+                        onSubmit={handleSubmit}
                       >
-                        <i className="demo-pli-magnifi-glass"></i>
-                      </button>
+                        <input
+                          className="searchbox__input form-control form-control-lg"
+                          type="search"
+                          placeholder="Localizar um rascunho..."
+                          aria-label="Search"
+                          value={searchTerm}
+                          onChange={handleSearchTermChange}
+                        />
+                        <div className="searchbox__btn-group">
+                          <button
+                            className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
+                            type="submit"
+                          >
+                            <i className="demo-pli-magnifi-glass"></i>
+                          </button>
+                        </div>
+                      </form>
                     </div>
-                  </form>
-                </div>
-              </div>
+                  </div>
 
-              <div className="row">
-                <div
-                  className={`modal fade ${isModalOpen ? "show" : ""}`}
-                  id="modalDraft"
-                  tabIndex={-1}
-                  aria-labelledby="exampleModalLabel"
-                  aria-hidden={!isModalOpen}
-                  style={{ display: isModalOpen ? "block" : "none" }}
-                >
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="exampleModalLabel">
-                          Cadastrar novo produto
-                        </h1>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                          onClick={() => setModalOpen(false)}
-                        ></button>
-                      </div>
-                      <div className="modal-body">
-                        <div className="col-md-12 mb-3">
-                          <div className="card h-100 card-none-box-shadow">
-                            <div className="card-body">
-                              <h5 className="card-title">Dados básicos</h5>
+                  <div className="row">
+                    <div
+                      className={`modal fade ${isModalOpen ? "show" : ""}`}
+                      id="modalDraft"
+                      tabIndex={-1}
+                      aria-labelledby="exampleModalLabel"
+                      aria-hidden={!isModalOpen}
+                      style={{ display: isModalOpen ? "block" : "none" }}
+                    >
+                      <div className="modal-dialog">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h1
+                              className="modal-title fs-5"
+                              id="exampleModalLabel"
+                            >
+                              Cadastrar novo produto
+                            </h1>
+                            <button
+                              type="button"
+                              className="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                              onClick={() => setModalOpen(false)}
+                            ></button>
+                          </div>
+                          <div className="modal-body">
+                            <div className="col-md-12 mb-3">
+                              <div className="card h-100 card-none-box-shadow">
+                                <div className="card-body">
+                                  <h5 className="card-title">Dados básicos</h5>
 
-                              <form className="row g-3">
-                                <div className="col-12">
-                                  <label htmlFor="nome" className="form-label">
-                                    Nome
-                                  </label>
-                                  <input
-                                    id="nome"
-                                    name="nome"
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    value={product.nome}
-                                    onChange={handleProductChange}
-                                  />
+                                  <form className="row g-3">
+                                    <div className="col-12">
+                                      <label
+                                        htmlFor="nome"
+                                        className="form-label"
+                                      >
+                                        Nome
+                                      </label>
+                                      <input
+                                        id="nome"
+                                        name="nome"
+                                        type="text"
+                                        className="form-control"
+                                        placeholder=""
+                                        value={product.nome}
+                                        onChange={handleProductChange}
+                                      />
+                                    </div>
+
+                                    <div className="col-md-6">
+                                      <label
+                                        htmlFor="codigo"
+                                        className="form-label"
+                                      >
+                                        Código (SKU)
+                                      </label>
+                                      <input
+                                        id="codigo"
+                                        name="codigo"
+                                        type="text"
+                                        className="form-control"
+                                        placeholder=""
+                                        value={product.codigo}
+                                        onChange={handleProductChange}
+                                      />
+                                    </div>
+
+                                    <div className="col-md-6">
+                                      <label
+                                        htmlFor="preco"
+                                        className="form-label"
+                                      >
+                                        Preço venda
+                                      </label>
+                                      <input
+                                        id="preco"
+                                        name="preco"
+                                        type="text"
+                                        className="form-control"
+                                        placeholder=""
+                                        value={product.preco}
+                                        onChange={handleProductChange}
+                                      />
+                                    </div>
+
+                                    <div className="col-md-6">
+                                      <label
+                                        htmlFor="unidade"
+                                        className="form-label"
+                                      >
+                                        Unidade
+                                      </label>
+                                      <input
+                                        id="unidade"
+                                        name="unidade"
+                                        type="text"
+                                        className="form-control"
+                                        value={product.unidade}
+                                        onChange={handleProductChange}
+                                      />
+                                    </div>
+
+                                    <div className="col-md-6">
+                                      <label
+                                        htmlFor="formato"
+                                        className="form-label"
+                                      >
+                                        Formato
+                                      </label>
+                                      <select
+                                        id="formato"
+                                        name="formato"
+                                        className="form-select"
+                                        value={product.formato}
+                                        onChange={handleProductChange}
+                                      >
+                                        <option value="S">
+                                          Simples ou com variação
+                                        </option>
+                                        <option value="E">
+                                          Com composição
+                                        </option>
+                                      </select>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                      <label
+                                        htmlFor="tipo"
+                                        className="form-label"
+                                      >
+                                        Tipo
+                                      </label>
+                                      <select
+                                        id="tipo"
+                                        name="tipo"
+                                        className="form-select"
+                                        value={product.tipo}
+                                        onChange={handleProductChange}
+                                      >
+                                        <option value="P">Produto</option>
+                                        <option value="S">Serviço</option>
+                                      </select>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                      <label
+                                        htmlFor="condicao"
+                                        className="form-label"
+                                      >
+                                        Condição
+                                      </label>
+                                      <select
+                                        id="condicao"
+                                        name="condicao"
+                                        className="form-select"
+                                        value={product.condicao}
+                                        onChange={handleProductChange}
+                                      >
+                                        <option value="0">
+                                          Não especificado
+                                        </option>
+                                        <option value="1">Novo</option>
+                                        <option value="2">Usado</option>
+                                        <option value="3">
+                                          Recondicionado
+                                        </option>
+                                      </select>
+                                    </div>
+
+                                    <div className="modal-footer">
+                                      <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        data-bs-dismiss="modal"
+                                        onClick={() => setModalOpen(false)}
+                                      >
+                                        Fechar
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        onClick={() =>
+                                          handleSaveProduct(product)
+                                        }
+                                      >
+                                        Salvar
+                                      </button>
+                                    </div>
+                                  </form>
                                 </div>
-
-                                <div className="col-md-6">
-                                  <label
-                                    htmlFor="codigo"
-                                    className="form-label"
-                                  >
-                                    Código (SKU)
-                                  </label>
-                                  <input
-                                    id="codigo"
-                                    name="codigo"
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    value={product.codigo}
-                                    onChange={handleProductChange}
-                                  />
-                                </div>
-
-                                <div className="col-md-6">
-                                  <label htmlFor="preco" className="form-label">
-                                    Preço venda
-                                  </label>
-                                  <input
-                                    id="preco"
-                                    name="preco"
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    value={product.preco}
-                                    onChange={handleProductChange}
-                                  />
-                                </div>
-
-                                <div className="col-md-6">
-                                  <label
-                                    htmlFor="unidade"
-                                    className="form-label"
-                                  >
-                                    Unidade
-                                  </label>
-                                  <input
-                                    id="unidade"
-                                    name="unidade"
-                                    type="text"
-                                    className="form-control"
-                                    value={product.unidade}
-                                    onChange={handleProductChange}
-                                  />
-                                </div>
-
-                                <div className="col-md-6">
-                                  <label
-                                    htmlFor="formato"
-                                    className="form-label"
-                                  >
-                                    Formato
-                                  </label>
-                                  <select
-                                    id="formato"
-                                    name="formato"
-                                    className="form-select"
-                                    value={product.formato}
-                                    onChange={handleProductChange}
-                                  >
-                                    <option value="S">
-                                      Simples ou com variação
-                                    </option>
-                                    <option value="E">Com composição</option>
-                                  </select>
-                                </div>
-
-                                <div className="col-md-6">
-                                  <label htmlFor="tipo" className="form-label">
-                                    Tipo
-                                  </label>
-                                  <select
-                                    id="tipo"
-                                    name="tipo"
-                                    className="form-select"
-                                    value={product.tipo}
-                                    onChange={handleProductChange}
-                                  >
-                                    <option value="P">Produto</option>
-                                    <option value="S">Serviço</option>
-                                  </select>
-                                </div>
-
-                                <div className="col-md-6">
-                                  <label
-                                    htmlFor="condicao"
-                                    className="form-label"
-                                  >
-                                    Condição
-                                  </label>
-                                  <select
-                                    id="condicao"
-                                    name="condicao"
-                                    className="form-select"
-                                    value={product.condicao}
-                                    onChange={handleProductChange}
-                                  >
-                                    <option value="0">Não especificado</option>
-                                    <option value="1">Novo</option>
-                                    <option value="2">Usado</option>
-                                    <option value="3">Recondicionado</option>
-                                  </select>
-                                </div>
-
-                                <div className="modal-footer">
-                                  <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    data-bs-dismiss="modal"
-                                    onClick={() => setModalOpen(false)}
-                                  >
-                                    Fechar
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary"
-                                    onClick={() => handleSaveProduct(product)}
-                                  >
-                                    Salvar
-                                  </button>
-                                </div>
-                              </form>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  <h3 className="h4">{description}</h3>
+                  <div id="_dm-gridjsSorting" ref={containerRef}></div>
                 </div>
               </div>
-
-              <h3 className="h4">{description}</h3>
-              <div id="_dm-gridjsSorting" ref={containerRef}></div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      </AuthWrapper>
+    </>
   );
 };
 

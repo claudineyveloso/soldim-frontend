@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { AuthWrapper } from "@/components/AuthWrapper";
 import {
   fetchProductsNoMovements,
   fetchProduct,
@@ -213,80 +214,84 @@ const Products = () => {
 
   return (
     <>
-      <section id="content" className="content">
-        <div className="content__header content__boxed overlapping">
-          <div className="content__wrap">
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link href="/dashboard">Home</Link>
-                </li>
-                <li className="breadcrumb-item active" aria-current="page">
-                  Produtos
-                </li>
-              </ol>
-            </nav>
-            <h1 className="page-title mb-0 mt-2">
-              Lista de produtos sem movimento
-            </h1>
-            <p className="lead">Visualizar produtos cadastrados no sistema.</p>
+      <AuthWrapper>
+        <section id="content" className="content">
+          <div className="content__header content__boxed overlapping">
+            <div className="content__wrap">
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link href="/dashboard">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Produtos
+                  </li>
+                </ol>
+              </nav>
+              <h1 className="page-title mb-0 mt-2">
+                Lista de produtos sem movimento
+              </h1>
+              <p className="lead">
+                Visualizar produtos cadastrados no sistema.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="content__boxed">
-          <div className="content__wrap">
-            <div className="card mb-3">
-              <div className="card-body">
-                <div className="mb-3">
-                  <h2>
-                    Produtos - <small>Estoque de itens</small>
-                  </h2>
-                  <p className="m-0">
-                    Utilize as ferramentas de busca e filtro para encontrar
-                    produtos sem movimento específicos e gerenciar os produtos
-                    sem movimento de forma eficiente
-                  </p>
-                </div>
-
-                <div className="d-flex flex-wrap align-items-end justify-content-end gap-2 mb-3 pb-3">
-                  <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
-                    <div className="text-center mb-2 mb-md-0">
-                      Somente por Situação
-                    </div>
-                    <select
-                      className="form-select w-auto"
-                      aria-label="Categories"
-                      value={situation}
-                      onChange={handleCriterioChange}
-                    >
-                      <option value="A">Todos</option>
-                      <option value="A">Últimos incluídos</option>
-                      <option value="A">Ativos</option>
-                      <option value="I">Inativos</option>
-                      <option value="E">Excluídos</option>
-                    </select>
+          <div className="content__boxed">
+            <div className="content__wrap">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <div className="mb-3">
+                    <h2>
+                      Produtos - <small>Estoque de itens</small>
+                    </h2>
+                    <p className="m-0">
+                      Utilize as ferramentas de busca e filtro para encontrar
+                      produtos sem movimento específicos e gerenciar os produtos
+                      sem movimento de forma eficiente
+                    </p>
                   </div>
-                </div>
-                <div className="row">
-                  <GridTableProductsNoMovement
-                    data={products}
-                    onEdit={handleEdit}
-                    onDelete={confirmDelete}
-                    onDetails={handleDetails}
-                  />
+
+                  <div className="d-flex flex-wrap align-items-end justify-content-end gap-2 mb-3 pb-3">
+                    <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
+                      <div className="text-center mb-2 mb-md-0">
+                        Somente por Situação
+                      </div>
+                      <select
+                        className="form-select w-auto"
+                        aria-label="Categories"
+                        value={situation}
+                        onChange={handleCriterioChange}
+                      >
+                        <option value="A">Todos</option>
+                        <option value="A">Últimos incluídos</option>
+                        <option value="A">Ativos</option>
+                        <option value="I">Inativos</option>
+                        <option value="E">Excluídos</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <GridTableProductsNoMovement
+                      data={products}
+                      onEdit={handleEdit}
+                      onDelete={confirmDelete}
+                      onDetails={handleDetails}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <ProductModal
-        product={product}
-        onChange={handleChange}
-        onSave={handleSaveProduct}
-        modalRef={modalRef}
-      />
-      <DetailModal product={product} modalRef={modalRef} />
+        </section>
+        <ProductModal
+          product={product}
+          onChange={handleChange}
+          onSave={handleSaveProduct}
+          modalRef={modalRef}
+        />
+        <DetailModal product={product} modalRef={modalRef} />
+      </AuthWrapper>
     </>
   );
 };

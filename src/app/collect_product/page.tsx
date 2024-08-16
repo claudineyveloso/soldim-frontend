@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { AuthWrapper } from "@/components/AuthWrapper";
 import {
   fetchSearchesResult,
   fetchSearchResult,
@@ -204,106 +205,110 @@ const CollectProduct = () => {
 
   return (
     <>
-      <ToastContainer />
-      <section id="content" className="content">
-        <div className="content__header content__boxed overlapping">
-          <div className="content__wrap">
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link href="/dashboard">Home</Link>
-                </li>
-                <li className="breadcrumb-item active" aria-current="page">
-                  Produtos
-                </li>
-              </ol>
-            </nav>
-            <h1 className="page-title mb-0 mt-2">Lista de produtos</h1>
-            <p className="lead">Visualizar produtos cadastrados no sistema.</p>
+      <AuthWrapper>
+        <ToastContainer />
+        <section id="content" className="content">
+          <div className="content__header content__boxed overlapping">
+            <div className="content__wrap">
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link href="/dashboard">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Produtos
+                  </li>
+                </ol>
+              </nav>
+              <h1 className="page-title mb-0 mt-2">Lista de produtos</h1>
+              <p className="lead">
+                Visualizar produtos cadastrados no sistema.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="content__boxed">
-          <div className="content__wrap">
-            <div className="card mb-3">
-              <div className="card-body">
-                <div className="mb-3">
-                  <h2>
-                    Produtos - <small>Estoque de itens</small>
-                  </h2>
-                  <p className="m-0">
-                    Utilize as ferramentas de busca e filtro para encontrar
-                    produtos específicos e gerenciar os produtos de forma
-                    eficiente
-                  </p>
-                </div>
+          <div className="content__boxed">
+            <div className="content__wrap">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <div className="mb-3">
+                    <h2>
+                      Produtos - <small>Estoque de itens</small>
+                    </h2>
+                    <p className="m-0">
+                      Utilize as ferramentas de busca e filtro para encontrar
+                      produtos específicos e gerenciar os produtos de forma
+                      eficiente
+                    </p>
+                  </div>
 
-                <div className="justify-content-center">
-                  <div className="flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
-                    <div className="row">
-                      <div className="col-md-8 offset-md-2 mb-3">
-                        <form
-                          className="searchbox input-group"
-                          onSubmit={onFormSubmit}
-                        >
-                          <input
-                            className="searchbox__input form-control form-control-lg"
-                            type="search"
-                            placeholder="Localizar um produto na web..."
-                            aria-label="Search"
-                            value={searchTerm}
-                            onChange={handleChange}
-                            onKeyDown={handleKeyDown}
-                          />
-                          <div className="searchbox__btn-group">
-                            <button
-                              className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
-                              type="submit"
-                            >
-                              <i className="demo-pli-magnifi-glass"></i>
-                            </button>
-                          </div>
-                        </form>
-
-                        <div className="d-flex flex-wrap align-items-end justify-content-center gap-2 mt-3 pb-3">
-                          <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
-                            <div className="text-center mb-2 mb-md-0">
-                              Somente por fonte:
+                  <div className="justify-content-center">
+                    <div className="flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
+                      <div className="row">
+                        <div className="col-md-8 offset-md-2 mb-3">
+                          <form
+                            className="searchbox input-group"
+                            onSubmit={onFormSubmit}
+                          >
+                            <input
+                              className="searchbox__input form-control form-control-lg"
+                              type="search"
+                              placeholder="Localizar um produto na web..."
+                              aria-label="Search"
+                              value={searchTerm}
+                              onChange={handleChange}
+                              onKeyDown={handleKeyDown}
+                            />
+                            <div className="searchbox__btn-group">
+                              <button
+                                className="searchbox__btn btn btn-icon bg-transparent shadow-none border-0 btn-sm"
+                                type="submit"
+                              >
+                                <i className="demo-pli-magnifi-glass"></i>
+                              </button>
                             </div>
-                            <select
-                              className="form-select w-auto"
-                              aria-label="Categories"
-                              onChange={handleSourceChange}
-                            >
-                              <option value="">Todas</option>
-                              {sources.map((source) => (
-                                <option
-                                  key={source.source}
-                                  value={source.source}
-                                >
-                                  {source.source}
-                                </option>
-                              ))}
-                            </select>
+                          </form>
+
+                          <div className="d-flex flex-wrap align-items-end justify-content-center gap-2 mt-3 pb-3">
+                            <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
+                              <div className="text-center mb-2 mb-md-0">
+                                Somente por fonte:
+                              </div>
+                              <select
+                                className="form-select w-auto"
+                                aria-label="Categories"
+                                onChange={handleSourceChange}
+                              >
+                                <option value="">Todas</option>
+                                {sources.map((source) => (
+                                  <option
+                                    key={source.source}
+                                    value={source.source}
+                                  >
+                                    {source.source}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="row">
-                  <GridTableCollectProducts
-                    data={collects}
-                    onNewSearch={newSearch}
-                    onDraftProduct={draftProduct}
-                    onDelete={confirmDelete}
-                  />
+                  <div className="row">
+                    <GridTableCollectProducts
+                      data={collects}
+                      onNewSearch={newSearch}
+                      onDraftProduct={draftProduct}
+                      onDelete={confirmDelete}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AuthWrapper>
     </>
   );
 };

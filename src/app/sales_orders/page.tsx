@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { AuthWrapper } from "@/components/AuthWrapper";
 import {
   fetchSalesOrders,
   fetchSalesOrder,
@@ -78,69 +79,73 @@ const ProductSalesOrders = () => {
 
   return (
     <>
-      <section id="content" className="content">
-        <div className="content__header content__boxed overlapping">
-          <div className="content__wrap">
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link href="/dashboard">Home</Link>
-                </li>
-                <li className="breadcrumb-item active" aria-current="page">
-                  Vendas
-                </li>
-              </ol>
-            </nav>
-            <h1 className="page-title mb-0 mt-2">Lista de pedidos de vendas</h1>
-            <p className="lead">
-              Visualizar pedidos de vendas cadastrados no sistema.
-            </p>
+      <AuthWrapper>
+        <section id="content" className="content">
+          <div className="content__header content__boxed overlapping">
+            <div className="content__wrap">
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link href="/dashboard">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Vendas
+                  </li>
+                </ol>
+              </nav>
+              <h1 className="page-title mb-0 mt-2">
+                Lista de pedidos de vendas
+              </h1>
+              <p className="lead">
+                Visualizar pedidos de vendas cadastrados no sistema.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="content__boxed">
-          <div className="content__wrap">
-            <div className="card mb-3">
-              <div className="card-body">
-                <div className="mb-3">
-                  <h2>
-                    Vendas - <small>Pedidos de vendas</small>
-                  </h2>
-                  <p className="m-0">
-                    Utilize as ferramentas de busca e filtro para encontrar
-                    pedidos de vendas específicos e gerenciar os pedidos de
-                    vendas de forma eficiente
-                  </p>
-                </div>
-
-                <div className="d-flex flex-wrap align-items-end justify-content-end gap-2 mb-3 pb-3">
-                  <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
-                    <div className="text-center mb-2 mb-md-0">
-                      Somente por Situação
-                    </div>
-                    <select
-                      className="form-select w-auto"
-                      aria-label="Categories"
-                    >
-                      <option value="A">Todos</option>
-                      <option value="A">Últimos incluídos</option>
-                      <option value="A">Ativos</option>
-                      <option value="I">Inativos</option>
-                      <option value="E">Excluídos</option>
-                    </select>
+          <div className="content__boxed">
+            <div className="content__wrap">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <div className="mb-3">
+                    <h2>
+                      Vendas - <small>Pedidos de vendas</small>
+                    </h2>
+                    <p className="m-0">
+                      Utilize as ferramentas de busca e filtro para encontrar
+                      pedidos de vendas específicos e gerenciar os pedidos de
+                      vendas de forma eficiente
+                    </p>
                   </div>
-                </div>
-                <div className="row">
-                  <GridTableSalesOrders
-                    data={salesOrders}
-                    onDetails={handleDetails}
-                  />
+
+                  <div className="d-flex flex-wrap align-items-end justify-content-end gap-2 mb-3 pb-3">
+                    <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
+                      <div className="text-center mb-2 mb-md-0">
+                        Somente por Situação
+                      </div>
+                      <select
+                        className="form-select w-auto"
+                        aria-label="Categories"
+                      >
+                        <option value="A">Todos</option>
+                        <option value="A">Últimos incluídos</option>
+                        <option value="A">Ativos</option>
+                        <option value="I">Inativos</option>
+                        <option value="E">Excluídos</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <GridTableSalesOrders
+                      data={salesOrders}
+                      onDetails={handleDetails}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AuthWrapper>
     </>
   );
 };

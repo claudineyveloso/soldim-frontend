@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { AuthWrapper } from "@/components/AuthWrapper";
 import { fetchUsers, fetchUser, createUser } from "@/services/userService";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
@@ -166,71 +167,75 @@ const Users = () => {
 
   return (
     <>
-      <section id="content" className="content">
-        <div className="content__header content__boxed overlapping">
-          <div className="content__wrap">
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link href="/dashboard">Home</Link>
-                </li>
-                <li className="breadcrumb-item active" aria-current="page">
-                  Usuários
-                </li>
-              </ol>
-            </nav>
-            <h1 className="page-title mb-0 mt-2">Lista de usuários</h1>
-            <p className="lead">Visualizar usuários cadastrados no sistema.</p>
+      <AuthWrapper>
+        <section id="content" className="content">
+          <div className="content__header content__boxed overlapping">
+            <div className="content__wrap">
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link href="/dashboard">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Usuários
+                  </li>
+                </ol>
+              </nav>
+              <h1 className="page-title mb-0 mt-2">Lista de usuários</h1>
+              <p className="lead">
+                Visualizar usuários cadastrados no sistema.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="content__boxed">
-          <div className="content__wrap">
-            <div className="card mb-3">
-              <div className="card-body">
-                <div className="mb-3">
-                  <h2>
-                    Usuários - <small>Estoque de itens</small>
-                  </h2>
-                  <p className="m-0">
-                    Utilize as ferramentas de busca e filtro para encontrar
-                    usuários específicos e gerenciar os usuários de forma
-                    eficiente
-                  </p>
-                </div>
+          <div className="content__boxed">
+            <div className="content__wrap">
+              <div className="card mb-3">
+                <div className="card-body">
+                  <div className="mb-3">
+                    <h2>
+                      Usuários - <small>Estoque de itens</small>
+                    </h2>
+                    <p className="m-0">
+                      Utilize as ferramentas de busca e filtro para encontrar
+                      usuários específicos e gerenciar os usuários de forma
+                      eficiente
+                    </p>
+                  </div>
 
-                <div className="d-flex flex-wrap align-items-end justify-content-end gap-2 mb-3 pb-3">
-                  <button
-                    type="button"
-                    className="btn btn-primary hstack gap-2 align-self-center"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalUser"
-                    onClick={handleNewUser}
-                  >
-                    <i className="demo-psi-add fs-5" />
-                    <span className="vr" />
-                    Novo usuário
-                  </button>
-                </div>
-                <div className="row">
-                  <GridTableUsers
-                    data={users || []}
-                    onEdit={handleEdit}
-                    onDelete={confirmDelete}
-                  />
+                  <div className="d-flex flex-wrap align-items-end justify-content-end gap-2 mb-3 pb-3">
+                    <button
+                      type="button"
+                      className="btn btn-primary hstack gap-2 align-self-center"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalUser"
+                      onClick={handleNewUser}
+                    >
+                      <i className="demo-psi-add fs-5" />
+                      <span className="vr" />
+                      Novo usuário
+                    </button>
+                  </div>
+                  <div className="row">
+                    <GridTableUsers
+                      data={users || []}
+                      onEdit={handleEdit}
+                      onDelete={confirmDelete}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      <UserModal
-        user={user}
-        onChange={handleChange}
-        onSave={handleSaveUser}
-        modalRef={modalRef}
-        onFocus={handleFocus}
-      />
+        </section>
+        <UserModal
+          user={user}
+          onChange={handleChange}
+          onSave={handleSaveUser}
+          modalRef={modalRef}
+          onFocus={handleFocus}
+        />
+      </AuthWrapper>
     </>
   );
 };
