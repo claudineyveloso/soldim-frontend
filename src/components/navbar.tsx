@@ -416,7 +416,10 @@ export default function NavBar() {
               </li>
             </ul>
           </div>
-          <div className="mainnav__widget">
+          {/*Depois essa Div abaixo deve ser colocada novamente para ser apresentada*/}
+          {/*Then this Div below must be placed again to be displayed*/}
+
+          <div className="mainnav__widget d-none">
             <div className="mininav-toggle text-center py-2 d-mn-min">
               <i className="demo-pli-monitor-2" />
             </div>
@@ -468,7 +471,8 @@ export default function NavBar() {
             </div>
           </div>
         </div>
-        <div className="mainnav__bottom-content border-top pb-2">
+        {/*Then this Div below must be placed again to be displayed*/}
+        <div className="mainnav__bottom-content border-top pb-2 d-none">
           <ul id="mainnav" className="mainnav__menu nav flex-column">
             <li className="nav-item has-sub">
               <Link
