@@ -120,10 +120,11 @@ export default function NavBar() {
                 <Link
                   href="#"
                   className={`mininav-toggle nav-link ${
-                    (activeItem === "diary" || activeItem === "monthly") &&
-                    isNavExpanded["dashboard"]
+                    isNavExpanded["dashboard"] ? "collapse show" : "collapsed"
+                  } ${
+                    activeItem === "diary" || activeItem === "monthly"
                       ? "active"
-                      : "collapsed"
+                      : ""
                   }`}
                   onClick={() => toggleNav("dashboard")}
                 >
@@ -168,12 +169,13 @@ export default function NavBar() {
                 <Link
                   href="#"
                   className={`mininav-toggle nav-link ${
-                    (activeItem === "product-stock" ||
-                      activeItem === "suggestion" ||
-                      activeItem === "no-movement") &&
-                    isNavExpanded["products"]
+                    isNavExpanded["products"] ? "collapse show" : "collapsed"
+                  } ${
+                    activeItem === "product-stock" ||
+                    activeItem === "suggestion" ||
+                    activeItem === "no-movement"
                       ? "active"
-                      : "collapsed"
+                      : ""
                   }`}
                   onClick={() => toggleNav("products")}
                 >
@@ -226,22 +228,25 @@ export default function NavBar() {
                 <Link
                   href="#"
                   className={`mininav-toggle nav-link ${
-                    (activeItem === "sales-order" ||
-                      activeItem === "sales-seller" ||
-                      activeItem === "sales-channel" ||
-                      activeItem === "stock-forecast") &&
-                    isNavExpanded["sales-orders"]
-                      ? "active"
+                    isNavExpanded["sales_orders"]
+                      ? "collapse show"
                       : "collapsed"
+                  } ${
+                    activeItem === "sales-order" ||
+                    activeItem === "sales-seller" ||
+                    activeItem === "sales-channel" ||
+                    activeItem === "stock-forecast"
+                      ? "active"
+                      : ""
                   }`}
-                  onClick={() => toggleNav("sales-orders")}
+                  onClick={() => toggleNav("sales_orders")}
                 >
                   <i className="pli-handshake fs-5 me-2"></i>
                   <span className="nav-label ms-1">Negociação</span>
                 </Link>
                 <ul
                   className={`mininav-content nav collapse ${
-                    isNavExpanded["sales-orders"] ? "show" : ""
+                    isNavExpanded["sales_orders"] ? "show" : ""
                   }`}
                 >
                   <li data-popper-arrow className="arrow"></li>
@@ -292,19 +297,22 @@ export default function NavBar() {
                 <Link
                   href="#"
                   className={`mininav-toggle nav-link ${
-                    (activeItem === "researches" || activeItem === "storage") &&
-                    isNavExpanded["storageProducts"]
-                      ? "active"
+                    isNavExpanded["storage_products"]
+                      ? "collapse show"
                       : "collapsed"
+                  } ${
+                    activeItem === "researches" || activeItem === "storage"
+                      ? "active"
+                      : ""
                   }`}
-                  onClick={() => toggleNav("storageProducts")}
+                  onClick={() => toggleNav("storage_products")}
                 >
                   <i className="pli-arrow-loop fs-5 me-2"></i>
                   <span className="nav-label ms-1">Armazenamento</span>
                 </Link>
                 <ul
                   className={`mininav-content nav collapse ${
-                    isNavExpanded["storageProducts"] ? "show" : ""
+                    isNavExpanded["storage_products"] ? "show" : ""
                   }`}
                 >
                   <li data-popper-arrow className="arrow"></li>
@@ -338,19 +346,22 @@ export default function NavBar() {
                 <Link
                   href="#"
                   className={`mininav-toggle nav-link ${
-                    (activeItem === "batch" || activeItem === "triageImport") &&
-                    isNavExpanded["batchProducts"]
-                      ? "active"
+                    isNavExpanded["batch_products"]
+                      ? "collapse show"
                       : "collapsed"
+                  } ${
+                    activeItem === "batch" || activeItem === "triageImport"
+                      ? "active"
+                      : ""
                   }`}
-                  onClick={() => toggleNav("batchProducts")}
+                  onClick={() => toggleNav("batch_products")}
                 >
                   <i className="pli-arrow-loop fs-5 me-2"></i>
                   <span className="nav-label ms-1">Triagem</span>
                 </Link>
                 <ul
-                  className={`mininav-content nav collapsed ${
-                    isNavExpanded["batchProducts"] ? "show" : ""
+                  className={`mininav-content nav collapse ${
+                    isNavExpanded["batch_products"] ? "show" : ""
                   }`}
                 >
                   <li data-popper-arrow className="arrow"></li>
