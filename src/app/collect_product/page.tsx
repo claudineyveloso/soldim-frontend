@@ -9,6 +9,9 @@ import {
   deleteSearchResult,
   fetchSearchesResultSource,
 } from "@/services/searchResultService";
+
+import { fetchLastSearch } from "@/services/searchService";
+
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import GridTableCollectProducts from "@/components/collect_product/GridTable";
@@ -47,7 +50,8 @@ const CollectProduct = () => {
 
   useEffect(() => {
     const fetchSources = async () => {
-      const fixedSearchID = "53282568-ffdb-47f1-89ac-ab5dba2a1c26";
+      const lastSearchID = await fetchLastSearch();
+      const fixedSearchID = lastSearchID.id;
       const result = await fetchSearchesResultSource(fixedSearchID);
       console.log("Fetched sources:", result);
       setSources(result);

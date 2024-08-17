@@ -62,6 +62,66 @@ export const deleteDraft = async (id: string) => {
   }
 };
 
+export const deleteDraftsBySearchID = async (id: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/delete_drafts_by_search_id/${id}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Erro ao deletar rascunho por search_id");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao deletar rascunho por search_id:", error);
+    return false;
+  }
+};
+
+export async function fetchDraft(id: string) {
+  console.log("Fetching product with id:", id);
+  try {
+    const response = await fetch(`http://localhost:8080/get_draft/${id}`);
+
+    if (!response.ok) {
+      throw new Error(
+        `Erro ao buscar o rascunho do produto: ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    return data || null;
+  } catch (error) {
+    console.error("Erro ao buscar rascunho do produto no Services:", error);
+    return null; // Retornar null em caso de erro
+  }
+}
+
+export async function fetchDraftsBySearchID(id: string) {
+  console.log("Fetching product with id:", id);
+  try {
+    const response = await fetch(
+      `http://localhost:8080/get_drafts_by_search_id/${id}`,
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Erro ao buscar o rascunho do produto: ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    return data || null;
+  } catch (error) {
+    console.error("Erro ao buscar rascunho do produto no Services:", error);
+    return null; // Retornar null em caso de erro
+  }
+}
+
 export const updateDraft = async (
   id: string,
   updatedDraft: {

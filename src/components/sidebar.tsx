@@ -1,5 +1,11 @@
+import React, { useState } from "react";
 import Image from "next/image";
 export default function SideBar() {
+  const [isChecked, setIsChecked] = useState<boolean>(true);
+
+  const handleToggle = () => {
+    setIsChecked(!isChecked);
+  };
   return (
     <aside className="sidebar">
       <div className="sidebar__inner scrollable-content">
@@ -8,7 +14,7 @@ export default function SideBar() {
             type="button"
             className="sidebar-toggler btn-close btn-lg rounded-circle"
             aria-label="Close"
-          ></button>
+          />
           <p className="m-0 text-danger fw-bold">&lt;= Close the sidebar</p>
         </div>
         <div className="sidebar__wrap">
@@ -78,7 +84,7 @@ export default function SideBar() {
                 </div>
                 <div className="flex-grow-1 ">
                   <a
-                    href="#"
+                    href="#root"
                     className="h6 d-block mb-0 stretched-link text-decoration-none"
                   >
                     Stephen Tran
@@ -98,7 +104,7 @@ export default function SideBar() {
                 </div>
                 <div className="flex-grow-1 ">
                   <a
-                    href="#"
+                    href="#root"
                     className="h6 d-block mb-0 stretched-link text-decoration-none"
                   >
                     Betty Murphy
@@ -118,7 +124,7 @@ export default function SideBar() {
                 </div>
                 <div className="flex-grow-1 ">
                   <a
-                    href="#"
+                    href="#root"
                     className="h6 d-block mb-0 stretched-link text-decoration-none"
                   >
                     Brittany Meyer
@@ -138,7 +144,7 @@ export default function SideBar() {
                 </div>
                 <div className="flex-grow-1 ">
                   <a
-                    href="#"
+                    href="#root"
                     className="h6 d-block mb-0 stretched-link text-decoration-none"
                   >
                     Jack George
@@ -153,20 +159,32 @@ export default function SideBar() {
               Friends <span className="badge bg-success ms-auto">587 +</span>
             </h5>
             <div className="list-group list-group-borderless">
-              <a href="#" className="list-group-item list-group-item-action">
-                <span className="d-inline-block bg-success rounded-circle p-1 me-2"></span>
+              <a
+                href="#root"
+                className="list-group-item list-group-item-action"
+              >
+                <span className="d-inline-block bg-success rounded-circle p-1 me-2" />
                 Joey K. Greyson
               </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <span className="d-inline-block bg-info rounded-circle p-1 me-2"></span>
+              <a
+                href="#root"
+                className="list-group-item list-group-item-action"
+              >
+                <span className="d-inline-block bg-info rounded-circle p-1 me-2" />
                 Andrea Branden
               </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <span className="d-inline-block bg-warning rounded-circle p-1 me-2"></span>
+              <a
+                href="#root"
+                className="list-group-item list-group-item-action"
+              >
+                <span className="d-inline-block bg-warning rounded-circle p-1 me-2" />
                 Johny Juan
               </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <span className="d-inline-block bg-secondary rounded-circle p-1 me-2"></span>
+              <a
+                href="#root"
+                className="list-group-item list-group-item-action"
+              >
+                <span className="d-inline-block bg-secondary rounded-circle p-1 me-2" />
                 Susan Sun
               </a>
             </div>
@@ -204,26 +222,38 @@ export default function SideBar() {
             </div>
             <h5 className="mt-5 px-3">Additional Actions</h5>
             <div className="list-group list-group-borderless">
-              <a href="#" className="list-group-item list-group-item-action">
-                <i className="demo-pli-information me-2 fs-5"></i>
+              <a
+                href="#root"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="demo-pli-information me-2 fs-5" />
                 Services Information
               </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <i className="demo-pli-mine me-2 fs-5"></i>
+              <a
+                href="#root"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="demo-pli-mine me-2 fs-5" />
                 Usage
               </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <i className="demo-pli-credit-card-2 me-2 fs-5"></i>
+              <a
+                href="#root"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="demo-pli-credit-card-2 me-2 fs-5" />
                 Payment Options
               </a>
-              <a href="#" className="list-group-item list-group-item-action">
-                <i className="demo-pli-support me-2 fs-5"></i>
+              <a
+                href="#root"
+                className="list-group-item list-group-item-action"
+              >
+                <i className="demo-pli-support me-2 fs-5" />
                 Messages Center
               </a>
             </div>
             <div className="px-3 mt-5 text-center">
               <div className="mb-3">
-                <i className="demo-pli-old-telephone display-4 text-primary"></i>
+                <i className="demo-pli-old-telephone display-4 text-primary" />
               </div>
               <p>Tem alguma dúvida ?</p>
               <p className="h5 mb-0"> (415) 234-53454 </p>
@@ -253,7 +283,8 @@ export default function SideBar() {
                       id="_dm-sbPersonalStatus"
                       className="form-check-input"
                       type="checkbox"
-                      checked
+                      checked={isChecked}
+                      onChange={handleToggle}
                     />
                   </div>
                 </div>
@@ -317,7 +348,8 @@ export default function SideBar() {
                     id="_dm-sbOnlineStatus"
                     className="form-check-input"
                     type="checkbox"
-                    checked
+                    checked={isChecked}
+                    onChange={handleToggle}
                   />
                 </div>
               </div>
@@ -333,7 +365,8 @@ export default function SideBar() {
                     id="_dm-sbMuteNotifications"
                     className="form-check-input"
                     type="checkbox"
-                    checked
+                    checked={isChecked}
+                    onChange={handleToggle}
                   />
                 </div>
               </div>
@@ -349,7 +382,8 @@ export default function SideBar() {
                     id="_dm-sbMyDevicesName"
                     className="form-check-input"
                     type="checkbox"
-                    checked
+                    checked={isChecked}
+                    onChange={handleToggle}
                   />
                 </div>
               </div>
