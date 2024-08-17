@@ -44,7 +44,7 @@ export default function NavBar() {
     }));
   };
 
-  console.log("Valor de session", session);
+  // console.log("Valor de session", session);
   return (
     <nav id="mainnav-container" className="mainnav">
       <div className="mainnav__inner">
@@ -128,7 +128,7 @@ export default function NavBar() {
                   }`}
                   onClick={() => toggleNav("dashboard")}
                 >
-                  <i className="pli-statistic fs-5 me-2"></i>
+                  <i className="pli-statistic fs-5 me-2" />
                   <span className="nav-label ms-1">Dashboard</span>
                 </Link>
 
@@ -137,7 +137,7 @@ export default function NavBar() {
                     isNavExpanded["dashboard"] ? "show" : ""
                   }`}
                 >
-                  <li data-popper-arrow className="arrow"></li>
+                  <li data-popper-arrow className="arrow" />
                   <li className="nav-item">
                     <Link
                       href="/dashboard"
@@ -179,7 +179,7 @@ export default function NavBar() {
                   }`}
                   onClick={() => toggleNav("products")}
                 >
-                  <i className="pli-checkout fs-5 me-2"></i>
+                  <i className="pli-checkout fs-5 me-2" />
                   <span className="nav-label ms-1">Consumo</span>
                 </Link>
                 <ul
@@ -187,7 +187,7 @@ export default function NavBar() {
                     isNavExpanded["products"] ? "show" : ""
                   }`}
                 >
-                  <li data-popper-arrow className="arrow"></li>
+                  <li data-popper-arrow className="arrow" />
                   <li className="nav-item">
                     <Link
                       href="/products"
@@ -241,7 +241,7 @@ export default function NavBar() {
                   }`}
                   onClick={() => toggleNav("sales_orders")}
                 >
-                  <i className="pli-handshake fs-5 me-2"></i>
+                  <i className="pli-handshake fs-5 me-2" />
                   <span className="nav-label ms-1">Negociação</span>
                 </Link>
                 <ul
@@ -249,7 +249,7 @@ export default function NavBar() {
                     isNavExpanded["sales_orders"] ? "show" : ""
                   }`}
                 >
-                  <li data-popper-arrow className="arrow"></li>
+                  <li data-popper-arrow className="arrow" />
                   <li className="nav-item">
                     <Link
                       href="/sales_orders"
@@ -307,7 +307,7 @@ export default function NavBar() {
                   }`}
                   onClick={() => toggleNav("storage_products")}
                 >
-                  <i className="pli-arrow-loop fs-5 me-2"></i>
+                  <i className="pli-arrow-loop fs-5 me-2" />
                   <span className="nav-label ms-1">Armazenamento</span>
                 </Link>
                 <ul
@@ -315,7 +315,7 @@ export default function NavBar() {
                     isNavExpanded["storage_products"] ? "show" : ""
                   }`}
                 >
-                  <li data-popper-arrow className="arrow"></li>
+                  <li data-popper-arrow className="arrow" />
                   <li className="nav-item">
                     <Link
                       href="/search"
@@ -356,7 +356,7 @@ export default function NavBar() {
                   }`}
                   onClick={() => toggleNav("batch_products")}
                 >
-                  <i className="pli-arrow-loop fs-5 me-2"></i>
+                  <i className="pli-arrow-loop fs-5 me-2" />
                   <span className="nav-label ms-1">Triagem</span>
                 </Link>
                 <ul
@@ -364,7 +364,7 @@ export default function NavBar() {
                     isNavExpanded["batch_products"] ? "show" : ""
                   }`}
                 >
-                  <li data-popper-arrow className="arrow"></li>
+                  <li data-popper-arrow className="arrow" />
                   <li className="nav-item">
                     <Link
                       href="/file_upload"
@@ -442,7 +442,7 @@ export default function NavBar() {
                       aria-valuenow={35}
                       aria-valuemin={0}
                       aria-valuemax={100}
-                    ></div>
+                    />
                   </div>
                 </li>
                 <li className="list-group-item text-reset">
@@ -459,7 +459,7 @@ export default function NavBar() {
                       aria-valuenow={73}
                       aria-valuemin={0}
                       aria-valuemax={100}
-                    ></div>
+                    />
                   </div>
                 </li>
               </ul>
