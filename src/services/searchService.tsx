@@ -1,7 +1,9 @@
 // services/searchService.ts
+import baseURL from "@/utils/config";
+
 export const fetchSearches = async () => {
   try {
-    const response = await fetch("http://localhost:8080/get_searches");
+    const response = await fetch(`${baseURL}/get_searches`);
     if (!response.ok) {
       throw new Error("Erro ao buscar as pequisas");
     }
@@ -15,7 +17,7 @@ export const fetchSearches = async () => {
 
 export const fetchLastSearch = async () => {
   try {
-    const response = await fetch("http://localhost:8080/get_last_search");
+    const response = await fetch(`${baseURL}/get_last_search`);
     if (!response.ok) {
       throw new Error("Erro ao buscar a última pequisas");
     }
@@ -30,7 +32,7 @@ export const fetchLastSearch = async () => {
 export async function fetchSearch(id: string) {
   console.log("Fetching search with id:", id);
   try {
-    const response = await fetch(`http://localhost:8080/get_search/${id}`);
+    const response = await fetch(`${baseURL}/get_search/${id}`);
 
     if (!response.ok) {
       throw new Error(
@@ -48,7 +50,7 @@ export async function fetchSearch(id: string) {
 
 export const deleteSearch = async (id: string) => {
   try {
-    const response = await fetch(`http://localhost:8080/delete_search/${id}`, {
+    const response = await fetch(`${baseURL}/delete_search/${id}`, {
       method: "DELETE",
     });
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 import Link from "next/link";
+import baseURL from "@/utils/config";
 import { AuthWrapper } from "@/components/AuthWrapper";
 import axios from "axios";
 import { fetchDrafts } from "@/services/draftService";
@@ -233,7 +234,7 @@ const DraftProduct = () => {
 
     // Chamar a API para criar a busca
     try {
-      const response = await axios.post("http://localhost:8080/create_draft", {
+      const response = await axios.post(`${baseURL}/create_draft`, {
         description: searchTerm,
       });
       console.log("Draft created:", response.data);
@@ -256,7 +257,7 @@ const DraftProduct = () => {
     console.log("Product data:", product);
 
     try {
-      const response = await axios.post("http://localhost:8080/create_draft", {
+      const response = await axios.post(`${baseURL}/create_draft`, {
         product_id: product.codigo,
         description: product.nome,
         price: product.preco,
@@ -268,9 +269,6 @@ const DraftProduct = () => {
 
       if (response.status === 200) {
         console.log("Draft created successfully:", response.data);
-        // Adicione lógica adicional aqui, como atualização de
-        // Adicione lógica adicional aqui, como atualização de estado ou notificação do usuário
-        // Por exemplo, você pode fechar o modal após salvar:
         setModalOpen(false);
         getDrafts(); // Atualizar a lista de rascunhos após salvar o produto
       } else {

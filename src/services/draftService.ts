@@ -1,7 +1,9 @@
+import baseURL from "@/utils/config";
+
 // services/draftService.ts
 export const fetchDrafts = async () => {
   try {
-    const response = await fetch("http://localhost:8080/get_drafts");
+    const response = await fetch(`${baseURL}/get_drafts`);
     if (!response.ok) {
       throw new Error("Erro ao buscar rascunhos");
     }
@@ -25,7 +27,7 @@ export const createDraft = async (draft: {
   updated_at: string;
 }) => {
   try {
-    const response = await fetch("http://localhost:8080/create_draft", {
+    const response = await fetch(`${baseURL}/create_draft`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +49,7 @@ export const createDraft = async (draft: {
 
 export const deleteDraft = async (id: string) => {
   try {
-    const response = await fetch(`http://localhost:8080/delete_draft/${id}`, {
+    const response = await fetch(`${baseURL}/delete_draft/${id}`, {
       method: "DELETE",
     });
 
@@ -65,7 +67,7 @@ export const deleteDraft = async (id: string) => {
 export const deleteDraftsBySearchID = async (id: string) => {
   try {
     const response = await fetch(
-      `http://localhost:8080/delete_drafts_by_search_id/${id}`,
+      `${baseURL}/delete_drafts_by_search_id/${id}`,
       {
         method: "DELETE",
       },
@@ -85,7 +87,7 @@ export const deleteDraftsBySearchID = async (id: string) => {
 export async function fetchDraft(id: string) {
   console.log("Fetching product with id:", id);
   try {
-    const response = await fetch(`http://localhost:8080/get_draft/${id}`);
+    const response = await fetch(`${baseURL}/get_draft/${id}`);
 
     if (!response.ok) {
       throw new Error(
@@ -104,9 +106,7 @@ export async function fetchDraft(id: string) {
 export async function fetchDraftsBySearchID(id: string) {
   console.log("Fetching product with id:", id);
   try {
-    const response = await fetch(
-      `http://localhost:8080/get_drafts_by_search_id/${id}`,
-    );
+    const response = await fetch(`${baseURL}/get_drafts_by_search_id/${id}`);
 
     if (!response.ok) {
       throw new Error(
@@ -137,7 +137,7 @@ export const updateDraft = async (
   },
 ) => {
   try {
-    const response = await fetch(`http://localhost:8080/update_draft/${id}`, {
+    const response = await fetch(`${baseURL}/update_draft/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

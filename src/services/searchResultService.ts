@@ -1,5 +1,6 @@
 // services/searchService.ts
 
+import baseURL from "@/utils/config";
 import axios from "axios";
 
 interface SearchResultSource {
@@ -15,17 +16,14 @@ export async function fetchSearchesResult(
   source: string = "",
 ): Promise<FetchSearchesResultResponse> {
   try {
-    const response = await axios.get(
-      "http://localhost:8080/get_searches_result",
-      {
-        params: {
-          source: source,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await axios.get(`${baseURL}/get_searches_result`, {
+      params: {
+        source: source,
       },
-    );
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     // Verificar o status da resposta
     if (response.status !== 200) {
@@ -59,7 +57,7 @@ export async function fetchSearchesResultSource(
 ): Promise<SearchResultSource[]> {
   try {
     const response = await axios.get(
-      `http://localhost:8080/get_search_result_sources/${searchID}`,
+      `${baseURL}/get_search_result_sources/${searchID}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -85,12 +83,9 @@ export async function fetchSearchesResultSource(
 
 export const deleteSearchResult = async (id: string) => {
   try {
-    const response = await fetch(
-      `http://localhost:8080/delete_search_result/${id}`,
-      {
-        method: "DELETE",
-      },
-    );
+    const response = await fetch(`${baseURL}/delete_search_result/${id}`, {
+      method: "DELETE",
+    });
 
     if (!response.ok) {
       throw new Error("Erro ao deletar resultado da busca");
@@ -106,7 +101,7 @@ export const deleteSearchResult = async (id: string) => {
 export const fetchSearchResult = async (searchResultID: string) => {
   try {
     const response = await fetch(
-      `http://localhost:8080/get_search_result/${searchResultID}`,
+      `${baseURL}/get_search_result/${searchResultID}`,
     );
     if (!response.ok) {
       throw new Error("Erro ao buscar o resultado da busca");

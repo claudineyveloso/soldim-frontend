@@ -39,7 +39,6 @@ const handler = NextAuth({
           if (!credentials) {
             return null;
           }
-
           const response = await axios.post<LoginResponse>(`${baseURL}/login`, {
             email: credentials.email,
             password: credentials.password,

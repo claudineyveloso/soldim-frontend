@@ -1,4 +1,5 @@
 import axios from "axios";
+import baseURL from "@/utils/config";
 
 interface FetchProductsTriageResponse {
   triages: any[];
@@ -7,7 +8,7 @@ interface FetchProductsTriageResponse {
 export async function fetchTriages(): Promise<FetchProductsTriageResponse> {
   console.log("Fetching triages with nome:");
   try {
-    const response = await axios.get("http://localhost:8080/get_triages", {
+    const response = await axios.get(`${baseURL}/get_triages`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -27,7 +28,7 @@ export async function fetchTriages(): Promise<FetchProductsTriageResponse> {
 export async function fetchTriage(id: string) {
   console.log("Fetching product with id:", id);
   try {
-    const response = await fetch(`http://localhost:8080/get_triage/${id}`);
+    const response = await fetch(`${baseURL}/get_triage/${id}`);
 
     if (!response.ok) {
       throw new Error(

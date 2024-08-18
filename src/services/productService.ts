@@ -1,6 +1,6 @@
 // services/productService.ts
-
 import axios from "axios";
+import baseURL from "@/utils/config";
 
 interface FetchProductsResponse {
   products: any[];
@@ -12,7 +12,7 @@ export async function fetchProducts(
 ): Promise<FetchProductsResponse> {
   console.log("Fetching products with nome:", nome, "situacao:", situacao);
   try {
-    const response = await axios.get("http://localhost:8080/get_products", {
+    const response = await axios.get(`${baseURL}/get_products`, {
       params: {
         nome: nome,
         situacao: situacao,
@@ -42,7 +42,7 @@ export async function fetchProducts(
 export async function fetchProduct(id: number) {
   console.log("Fetching product with id:", id);
   try {
-    const response = await fetch(`http://localhost:8080/get_product/${id}`);
+    const response = await fetch(`${baseURL}/get_product/${id}`);
 
     if (!response.ok) {
       throw new Error(`Erro ao buscar o produto: ${response.statusText}`);
@@ -67,7 +67,7 @@ export async function fetchProductsByPage(
   );
   try {
     const response = await fetch(
-      `http://localhost:8080/get_products?nome=${nome}&situacao=${situacao}`,
+      `${baseURL}/get_products?nome=${nome}&situacao=${situacao}`,
     );
     if (!response.ok) {
       throw new Error("Erro ao buscar os produtos");
@@ -90,18 +90,15 @@ export const fetchProductsNoMovements = async (
     situacao,
   );
   try {
-    const response = await axios.get(
-      `http://localhost:8080/get_products_no_movements`,
-      {
-        params: {
-          nome: nome,
-          situacao: situacao,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await axios.get(`${baseURL}/get_products_no_movements`, {
+      params: {
+        nome: nome,
+        situacao: situacao,
       },
-    );
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (response.status !== 200) {
       throw new Error(
@@ -130,18 +127,15 @@ export async function fetchProductsEmptyStock(
     situacao,
   );
   try {
-    const response = await axios.get(
-      `http://localhost:8080/get_products_empty_stock`,
-      {
-        params: {
-          nome: nome,
-          situacao: situacao,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await axios.get(`${baseURL}/get_products_empty_stock`, {
+      params: {
+        nome: nome,
+        situacao: situacao,
       },
-    );
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (response.status !== 200) {
       throw new Error(
@@ -162,7 +156,7 @@ export async function fetchProductsEmptyStock(
 
 export const deleteProduct = async (id: number) => {
   try {
-    const response = await fetch(`http://localhost:8080/delete_product/${id}`, {
+    const response = await fetch(`${baseURL}/delete_product/${id}`, {
       method: "DELETE",
     });
 

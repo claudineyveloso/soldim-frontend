@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
+import baseURL from "@/utils/config";
 import { AuthWrapper } from "@/components/AuthWrapper";
 import {
   fetchSearchesResult,
@@ -149,7 +150,7 @@ const CollectProduct = () => {
         Swal.fire({
           icon: "success",
           title: "Rascunho criado com sucesso!",
-          text: `O rascunho do produto foi criado com sucesso.`,
+          text: "O rascunho do produto foi criado com sucesso.",
         });
       } else {
         console.error("Erro ao criar rascunho");
@@ -176,7 +177,7 @@ const CollectProduct = () => {
       containerRef.current.classList.add("d-none");
     }
     try {
-      const response = await axios.post("http://localhost:8080/create_search", {
+      const response = await axios.post(`${baseURL}/create_search`, {
         description,
       });
 

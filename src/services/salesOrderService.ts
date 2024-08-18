@@ -1,10 +1,12 @@
 import SalesOrders from "@/app/sales_orders/page";
+import baseURL from "@/utils/config";
+
 import axios from "axios";
 
 export async function fetchSalesOrders(nome: string = "") {
   console.log("Fetching sales orders with nome:", nome, "situacao:");
   try {
-    const response = await axios.get("http://localhost:8080/get_sales_orders", {
+    const response = await axios.get(`${baseURL}/get_sales_orders`, {
       params: {
         nome: nome,
       },
@@ -26,14 +28,11 @@ export async function fetchSalesOrders(nome: string = "") {
 
 export async function fetchProductsSalesOrders() {
   try {
-    const response = await axios.get(
-      "http://localhost:8080/get_products_sales_orders",
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await axios.get(`${baseURL}/get_products_sales_orders`, {
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
     console.log("Fetching products sales orders", response.data);
     return {
       salesOrders: response.data,
@@ -49,7 +48,7 @@ export async function fetchProductsSalesOrders() {
 export async function fetchSalesOrder(id: number) {
   console.log("Fetching product with id:", id);
   try {
-    const response = await fetch(`http://localhost:8080/get_sales_order/${id}`);
+    const response = await fetch(`${baseURL}/get_sales_order/${id}`);
 
     if (!response.ok) {
       throw new Error(
