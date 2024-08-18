@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import baseURL from "@/utils/config";
 import axios from "axios";
 
 // Interface para a resposta do login
@@ -39,13 +40,10 @@ const handler = NextAuth({
             return null;
           }
 
-          const response = await axios.post<LoginResponse>(
-            "http://localhost:8080/login",
-            {
-              email: credentials.email,
-              password: credentials.password,
-            },
-          );
+          const response = await axios.post<LoginResponse>(`${baseURL}/login`, {
+            email: credentials.email,
+            password: credentials.password,
+          });
 
           if (response.status === 200 && response.data.token) {
             // Retorne um objeto que corresponda ao tipo User esperado
