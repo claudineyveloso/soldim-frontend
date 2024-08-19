@@ -39,6 +39,7 @@ const Searches = () => {
       }
     } catch (error) {
       console.error("Failed to fetch search:", error);
+      setSearches([]);
     } finally {
       setLoading(false);
     }

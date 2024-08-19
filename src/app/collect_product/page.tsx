@@ -51,14 +51,19 @@ const CollectProduct = () => {
 
   useEffect(() => {
     const fetchSources = async () => {
-      const lastSearchID = await fetchLastSearch();
-      const fixedSearchID = lastSearchID.id;
-      const result = await fetchSearchesResultSource(fixedSearchID);
-      console.log("Fetched sources:", result);
-      if (result) {
-        setSources(result);
-      } else {
-        setSources([]);
+      try {
+        const lastSearchID = await fetchLastSearch();
+        const fixedSearchID = lastSearchID.id;
+        const result = await fetchSearchesResultSource(fixedSearchID);
+        console.log("Fetched sources:", result);
+        if (result) {
+          setSources(result);
+        } else {
+          setSources([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch sources:", error);
+        setSources([]); // Opcional: Definir como vazio em caso de erro também
       }
     };
 
