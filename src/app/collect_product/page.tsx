@@ -55,7 +55,11 @@ const CollectProduct = () => {
       const fixedSearchID = lastSearchID.id;
       const result = await fetchSearchesResultSource(fixedSearchID);
       console.log("Fetched sources:", result);
-      setSources(result);
+      if (result) {
+        setSources(result);
+      } else {
+        setSources([]);
+      }
     };
 
     fetchSources();

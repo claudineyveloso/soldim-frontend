@@ -35,7 +35,11 @@ const ProductSalesOrders = () => {
       setLoading(true);
       const response = await fetchSalesOrders();
       console.log("Sales Orders fetched:", response.salesOrders);
-      setSalesOrders(response.salesOrders);
+      if (response && response.salesOrders) {
+        setSalesOrders(response.salesOrders);
+      } else {
+        setSalesOrders([]);
+      }
     } catch (error) {
       console.error("Failed to fetch products:", error);
     } finally {

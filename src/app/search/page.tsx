@@ -32,7 +32,11 @@ const Searches = () => {
     try {
       setLoading(true);
       const response = await fetchSearches();
-      setSearches(response);
+      if (response) {
+        setSearches(response);
+      } else {
+        setSearches([]);
+      }
     } catch (error) {
       console.error("Failed to fetch search:", error);
     } finally {
