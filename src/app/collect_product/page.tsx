@@ -74,7 +74,11 @@ const CollectProduct = () => {
     try {
       setLoading(true);
       const response = await fetchSearchesResult(source);
-      setCollects(response.searchesResult);
+      if (response && response.searchesResult) {
+        setCollects(response.searchesResult);
+      } else {
+        setCollects([]);
+      }
     } catch (error) {
       console.error("Failed to fetch collect products:", error);
     } finally {
