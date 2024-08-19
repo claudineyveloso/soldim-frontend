@@ -47,7 +47,11 @@ const Products = () => {
     try {
       setLoading(true);
       const response = await fetchProductsNoMovements("", situacao);
-      setProducts(response.products);
+      if (response && response.products) {
+        setProducts(response.products);
+      } else {
+        setProducts([]);
+      }
     } catch (error) {
       console.error("Failed to fetch products:", error);
     } finally {
