@@ -32,8 +32,8 @@ const Searches = () => {
     try {
       setLoading(true);
       const response = await fetchSearches();
-      if (response) {
-        setSearches(response);
+      if (response && response.searches) {
+        setSearches(response.searches);
       } else {
         setSearches([]);
       }
