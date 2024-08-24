@@ -8,6 +8,7 @@ import "../../assets/css/demo-purpose/demo-icons.min.css";
 import "../../assets/css/demo-purpose/demo-settings.min.css";
 import "../../assets/premium/icon-sets/line-icons/premium-line-icons.min.css";
 import "../../assets/css/dropzone.min.css";
+import "../../assets/vendors/spinkit/spinkit.min.css";
 
 import { SessionProvider, useSession } from "next-auth/react";
 import { ToastContainer } from "react-toastify";

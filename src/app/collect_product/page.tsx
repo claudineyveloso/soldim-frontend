@@ -29,15 +29,15 @@ const CollectProduct = () => {
   const modalRef = useRef(null);
   const [editCollectId, setEditCollectId] = useState<number | null>(null);
   const [sources, setSources] = useState<any[]>([]);
-  const [description, setDescription] = useState("Resultado");
+  const [spin, setSpin] = useState(false);
   const [requestTime, setRequestTime] = useState<number | null>(null);
-  const [lowestPriceProduct, setLowestPriceProduct] = useState<any>(null);
+  //const [lowestPriceProduct, setLowestPriceProduct] = useState<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [deleteSearchResultId, setDeleteSearchResultId] = useState<string>("");
-  const [draftSearchResultId, setDraftSearchResultId] = useState<string>("");
-  const [descriptionNewSearchResult, setDescriptionNewSearchResult] =
-    useState("");
+  //const [deleteSearchResultId, setDeleteSearchResultId] = useState<string>("");
+  //const [draftSearchResultId, setDraftSearchResultId] = useState<string>("");
+  //const [descriptionNewSearchResult, setDescriptionNewSearchResult] =
+  useState("");
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -183,9 +183,9 @@ const CollectProduct = () => {
   };
 
   const handleSubmit = async (description: string) => {
-    setDescription("Aguardando o resultado...");
+    setSpin(true);
     const startTime = new Date().getTime();
-    fetchProductsInWeb(description);
+    //fetchProductsInWeb(description);
     if (containerRef.current) {
       containerRef.current.classList.add("d-none");
     }
@@ -193,22 +193,17 @@ const CollectProduct = () => {
       const response = await axios.post(`${baseURL}/create_search`, {
         description,
       });
-
-      if (response.data && Array.isArray(response.data)) {
-        const productWithLowestPrice = response.data.reduce(
-          (lowest, product) =>
-            product.price < lowest.price ? product : lowest,
-          response.data[0],
-        );
-        setLowestPriceProduct(productWithLowestPrice);
-      }
+      console.log("Search created:", response);
+      const result: FetchSearchesResultResponse = await fetchSearchesResult("");
+      setCollects(result.searchesResult);
+      console.log("Searches result:", result);
     } catch (error) {
       console.error("Error creating search:", error);
     } finally {
       const endTime = new Date().getTime();
       const duration = (endTime - startTime) / 1000;
       setRequestTime(duration);
-      setDescription("Resultado");
+      setSpin(false);
       if (containerRef.current) {
         containerRef.current.classList.remove("d-none");
       }
@@ -313,6 +308,15 @@ const CollectProduct = () => {
                       </div>
                     </div>
                   </div>
+                  {spin && (
+                    <div className="d-flex justify-content-center">
+                      <div className="sk-flow">
+                        <div className="sk-flow-dot"></div>
+                        <div className="sk-flow-dot"></div>
+                        <div className="sk-flow-dot"></div>
+                      </div>
+                    </div>
+                  )}
                   <div className="row">
                     <GridTableCollectProducts
                       data={collects}
