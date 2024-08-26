@@ -128,7 +128,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Unidade
                               </label>
                               <input
-                                id="preco"
+                                id="unidade"
                                 name="unidade"
                                 type="text"
                                 className="form-control"
@@ -207,8 +207,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Mínimo
                               </label>
                               <input
-                                id="codigo"
-                                name="codigo"
+                                id="minimo"
+                                name="minimo"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
@@ -224,8 +224,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Máximo
                               </label>
                               <input
-                                id="codigo"
-                                name="codigo"
+                                id="maximo"
+                                name="maximo"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
@@ -241,8 +241,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Crossdocking
                               </label>
                               <input
-                                id="codigo"
-                                name="codigo"
+                                id="crossdocking"
+                                name="crossdocking"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
@@ -260,8 +260,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Localização
                               </label>
                               <input
-                                id="codigo"
-                                name="codigo"
+                                id="localizacao"
+                                name="localizacao"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
@@ -277,8 +277,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Preço de custo
                               </label>
                               <input
-                                id="codigo"
-                                name="codigo"
+                                id="preco_custo"
+                                name="preco_custo"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
@@ -294,8 +294,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Preço de venda
                               </label>
                               <input
-                                id="codigo"
-                                name="codigo"
+                                id="preco_venda"
+                                name="preco_venda"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
