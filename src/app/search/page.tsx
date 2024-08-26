@@ -18,15 +18,17 @@ import { ToastContainer, toast } from "react-toastify";
 import { AuthWrapper } from "@/components/AuthWrapper";
 import GridTableSearches from "@/components/searches/GridTable";
 
+import SearchModal from "@/components/searches/SearchModal";
+
 const Searches = () => {
   const [searches, setSearches] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const containerRef = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState<any>({
     description: "",
     created_at: "",
   });
+
+  const modalRef = useRef(null);
 
   const getSearches = useCallback(async () => {
     try {
@@ -38,7 +40,7 @@ const Searches = () => {
         setSearches([]);
       }
     } catch (error) {
-      console.error("Failed to fetch search:", error);
+      console.error("Failed to fetch searches:", error);
       setSearches([]);
     } finally {
       setLoading(false);
@@ -46,34 +48,13 @@ const Searches = () => {
   }, []);
 
   useEffect(() => {
-    const getSearches = async () => {
-      try {
-        const data = await fetchSearches();
-        console.log("Fetched searches:", data); // Verifique os dados recebidos
-        setSearches(data);
-      } catch (error) {
-        console.error("Failed to fetch searches:", error);
-      }
-    };
-    getSearches();
-  }, []);
-
-  useEffect(() => {
     getSearches();
   }, [getSearches]);
 
-  useEffect(() => {}, []);
-  const editSearch = (id: string) => {
-    console.log("Edit search with ID:", id);
-    // Implementar lógica para editar usuário
-  };
-
   const handleDetails = async (id: string) => {
     console.log("Details clicked for search:", id);
-    //const product = await fetchProduct(id);
     try {
       const search = await fetchSearch(id);
-
       setSearch({
         id: search.id || 0,
         description: search.description || "",
@@ -81,7 +62,7 @@ const Searches = () => {
 
       if (window.bootstrap && window.bootstrap.Modal) {
         const modal = new window.bootstrap.Modal(
-          document.getElementById("modalDetailProduct"),
+          document.getElementById("modalSearch"),
         );
         modal.show();
       }
@@ -96,12 +77,12 @@ const Searches = () => {
       const search = await fetchSearch(id);
       setSearch({
         id: search.id || 0,
-        codigo: search.description || "",
+        description: search.description || "",
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
         const modal = new window.bootstrap.Modal(
-          document.getElementById("modalProduct"),
+          document.getElementById("modalSearch"),
         );
         modal.show();
       }
@@ -142,6 +123,31 @@ const Searches = () => {
       toast.error("Erro ao deletar resultado da busca");
       console.error("Erro ao deletar resultado:", error);
     }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setSearch({
+      ...search,
+      [name]: value,
+    });
+  };
+
+  const handleSaveSearch = () => {
+    console.log("Salvar produto:", search);
+    // Adicione a lógica para salvar o produto
+    // Feche o modal após salvar o produto
+    if (modalRef.current) {
+      const modalInstance = window.bootstrap.Modal.getInstance(
+        modalRef.current,
+      );
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+    getSearches(); // Atualize a lista de produtos
   };
 
   return (
@@ -194,16 +200,13 @@ const Searches = () => {
             </div>
           </div>
         </section>
-        {/*
 
         <SearchModal
           search={search}
           onChange={handleChange}
-          onSave={handleSaveProduct}
+          onSave={handleSaveSearch}
           modalRef={modalRef}
         />
-        <DetailModal search={search} modalRef={modalRef} />
-        */}
       </AuthWrapper>
     </>
   );

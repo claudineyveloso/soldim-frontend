@@ -32,7 +32,7 @@ const GridTableSearches: React.FC<GridTableSearchesProps> = ({
           id: "created_at",
           name: "Criado em:",
 
-          width: "120px",
+          width: "110px",
           formatter: (cell: string) => {
             const date = new Date(cell);
             return date.toLocaleDateString("pt-BR", {
@@ -45,7 +45,7 @@ const GridTableSearches: React.FC<GridTableSearchesProps> = ({
         {
           id: "acoes",
           name: "Ações",
-          width: "130px",
+          width: "110px",
           formatter: (_, row) => {
             const searchIndex = row.cells[2].data as number; // índice do produto na lista
             const searchId = data[searchIndex].id; // obtendo o ID do produto a partir do índice

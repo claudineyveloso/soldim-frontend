@@ -128,7 +128,7 @@ const DraftProduct = () => {
             ]);
           },
         },
-        { name: "Preço", width: "100px" },
+        { name: "Preço", width: "120px" },
         { name: "Promoção", width: "120px" },
         { name: "Criado em:", width: "120px" },
         { name: "Source", hidden: true }, // Coluna oculta para armazenar a fonte

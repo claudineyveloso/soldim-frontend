@@ -264,6 +264,7 @@ const CollectProduct = () => {
                             onSubmit={onFormSubmit}
                           >
                             <input
+                              name="description"
                               className="searchbox__input form-control form-control-lg"
                               type="search"
                               placeholder="Localizar um produto na web..."
