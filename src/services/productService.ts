@@ -170,3 +170,66 @@ export const deleteProduct = async (id: number) => {
     return false;
   }
 };
+
+export const createProduct = async (product: any) => {
+  try {
+    const response = await fetch(`${baseURL}/create_product_bling`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    });
+
+    if (!response.ok) {
+      let errorMessage = "Erro ao criar o produto";
+
+      const contentType = response.headers.get("Content-Type");
+
+      if (contentType && contentType.includes("application/json")) {
+        try {
+          const errorResponse = await response.json();
+          errorMessage = errorResponse.message || errorMessage;
+        } catch (jsonError) {
+          console.error("Erro ao decodificar JSON:", jsonError);
+          errorMessage = "Resposta da API não é um JSON válido.";
+        }
+      } else {
+        const errorText = await response.text();
+        errorMessage = errorText || errorMessage;
+      }
+
+      console.error("Erro ao criar o produto:", errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao criar o produto:", error);
+    return false;
+  }
+};
+
+export const updateProduct = async (product: any) => {
+  try {
+    const response = await fetch(
+      `${baseURL}/update_product_bling?productID=${product.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Erro ao atualizar o produto");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao atualizar o produto:", error);
+    return false;
+  }
+};

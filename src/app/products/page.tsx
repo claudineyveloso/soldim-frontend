@@ -5,6 +5,7 @@ import {
   fetchProducts,
   fetchProduct,
   deleteProduct,
+  createProduct,
 } from "@/services/productService";
 
 import { AuthWrapper } from "@/components/AuthWrapper";
@@ -17,6 +18,7 @@ import DetailModal from "@/components/products/DetailModal";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
+  const [newProduct, setNewProduct] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const modalRef = useRef(null);
   // const [editProductId, setEditProductId] = useState<number | null>(null);
@@ -204,6 +206,7 @@ const Products = () => {
   };
 
   const handleNewProduct = () => {
+    setNewProduct(true);
     setProduct({
       nome: "",
       codigo: "",
@@ -244,10 +247,31 @@ const Products = () => {
 
   const handleSaveProduct = () => {
     console.log("Salvar produto:", product);
-    // Adicione a lógica para salvar o produto
-    // Depois de salvar, feche o modal e atualize a lista de produtos
+    if (newProduct) {
+      handleCreateProduct();
+    }
   };
 
+  const handleCreateProduct = async () => {
+    try {
+      const success = await createProduct(product);
+      if (success) {
+        toast.success("Produto criado com sucesso");
+        await getProducts("", situation);
+        if (window.bootstrap && window.bootstrap.Modal) {
+          const modal = new window.bootstrap.Modal(
+            document.getElementById("modalProduct"),
+          );
+          modal.hide();
+        }
+      } else {
+        toast.error("Erro ao criar produto");
+      }
+    } catch (error) {
+      toast.error("Erro ao criar produto");
+      console.error("Erro ao criar produto:", error);
+    }
+  };
   return (
     <>
       <AuthWrapper>
