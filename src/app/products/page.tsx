@@ -6,6 +6,7 @@ import {
   fetchProduct,
   deleteProduct,
   createProduct,
+  updateProduct,
 } from "@/services/productService";
 
 import { AuthWrapper } from "@/components/AuthWrapper";
@@ -48,6 +49,12 @@ const Products = () => {
     linkExterno: "",
     observacoes: "",
     descricaoEmbalagemDiscreta: "",
+    estoque: {
+      minimo: 0,
+      maximo: 0,
+      crossdocking: 0,
+      localizacao: "",
+    },
   });
 
   const getProducts = useCallback(
@@ -113,6 +120,12 @@ const Products = () => {
         linkExterno: product.linkExtorno || "",
         observacoes: product.observacoes || "",
         descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
+        estoque: {
+          minimo: product.estoque.minimo || 0,
+          maximo: product.estoque.maximo || 0,
+          crossdocking: product.estoque.crossdocking || 0,
+          localizacao: product.estoque.localizacao || "",
+        },
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -154,6 +167,12 @@ const Products = () => {
         linkExterno: product.linkExtorno || "",
         observacoes: product.observacoes || "",
         descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
+        estoque: {
+          minimo: product.estoque.minimo || 0,
+          maximo: product.estoque.maximo || 0,
+          crossdocking: product.estoque.crossdocking || 0,
+          localizacao: product.estoque.localizacao || "",
+        },
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -231,6 +250,12 @@ const Products = () => {
       linkExterno: "",
       observacoes: "",
       descricaoEmbalagemDiscreta: "",
+      estoque: {
+        minimo: 0,
+        maximo: 0,
+        crossdocking: 0,
+        localizacao: "",
+      },
     });
   };
 
@@ -238,17 +263,33 @@ const Products = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    setProduct({
-      ...product,
-      [name]:
-        name === "preco" || name === "condicao" ? parseFloat(value) : value,
-    });
+
+    if (name.startsWith("estoque.")) {
+      const field = name.split(".")[1];
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        estoque: {
+          ...prevProduct.estoque,
+          [field]:
+            field === "minimo" || field === "maximo" || field === "crossdocking"
+              ? parseFloat(value)
+              : value,
+        },
+      }));
+    } else {
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        [name]:
+          name === "preco" || name === "condicao" ? parseFloat(value) : value,
+      }));
+    }
   };
 
   const handleSaveProduct = () => {
-    console.log("Salvar produto:", product);
     if (newProduct) {
       handleCreateProduct();
+    } else {
+      handleUpdateProduct();
     }
   };
 
@@ -272,6 +313,28 @@ const Products = () => {
       console.error("Erro ao criar produto:", error);
     }
   };
+
+  const handleUpdateProduct = async () => {
+    try {
+      const success = await updateProduct(product);
+      if (success) {
+        toast.success("Produto atualizado com sucesso");
+        await getProducts("", situation);
+        if (window.bootstrap && window.bootstrap.Modal) {
+          const modal = new window.bootstrap.Modal(
+            document.getElementById("modalProduct"),
+          );
+          modal.hide();
+        }
+      } else {
+        toast.error("Erro ao atualizar produto");
+      }
+    } catch (error) {
+      toast.error("Erro ao atualizar produto");
+      console.error("Erro ao atualizar produto:", error);
+    }
+  };
+
   return (
     <>
       <AuthWrapper>

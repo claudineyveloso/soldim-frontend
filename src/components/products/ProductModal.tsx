@@ -2,8 +2,42 @@
 import React, { useState, useEffect } from "react";
 import formatCurrency from "../shared/formatCurrency";
 
+interface Product {
+  nome: string;
+  codigo: string;
+  preco: number;
+  tipo: string;
+  situacao: string;
+  formato: string;
+  descricaoCurta: string;
+  dataValidade: string;
+  unidade: string;
+  pesoLiquido: number;
+  pesoBruto: number;
+  volumes: number;
+  itensPorCaixa: number;
+  gtin: string;
+  gtinEmbalagem: string;
+  tipoProducao: string;
+  condicao: number;
+  freteGratis: boolean;
+  marca: string;
+  descricaoComplementar: string;
+  linkExterno: string;
+  observacoes: string;
+  descricaoEmbalagemDiscreta: string;
+  estoque: Estoque;
+}
+
+interface Estoque {
+  minimo: number;
+  maximo: number;
+  crossdocking: number;
+  localizacao: string;
+}
+
 interface ProductModalProps {
-  product: any;
+  product: Product;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
@@ -17,23 +51,83 @@ const ProductModal: React.FC<ProductModalProps> = ({
   onSave,
   modalRef,
 }) => {
-  const [localProduct, setLocalProduct] = useState({ ...product, preco: "" });
+  const [localProduct, setLocalProduct] = useState<Product>({
+    ...product,
+    preco: 0,
+    estoque: product.estoque || {
+      minimo: 0,
+      maximo: 0,
+      crossdocking: 0,
+      localizacao: "",
+    },
+  });
 
   useEffect(() => {
-    setLocalProduct({ ...product, preco: formatCurrency(product.preco) });
+    // Garantir que estoque seja sempre um objeto com valores definidos
+    const updatedEstoque = {
+      minimo: product.estoque?.minimo || 0,
+      maximo: product.estoque?.maximo || 0,
+      crossdocking: product.estoque?.crossdocking || 0,
+      localizacao: product.estoque?.localizacao || "",
+    };
+
+    // Atualiza o estado local com o produto atualizado
+    setLocalProduct((prev) => ({
+      ...prev,
+      ...product,
+      preco: product.preco,
+      estoque: updatedEstoque,
+    }));
   }, [product]);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    // Remove tudo que não é número ou vírgula (para decimais)
-    const cleanValue = value.replace(/[^\d,]/g, "");
-    // Substitui vírgulas por pontos para converter para float
-    const floatValue = Number.parseFloat(cleanValue.replace(",", "."));
-    // Define o estado do produto com o valor formatado
-    setLocalProduct({
-      ...localProduct,
-      preco: Number.isNaN(floatValue) ? value : formatCurrency(floatValue),
-    });
+    // Remove caracteres não numéricos, mas mantém vírgulas e pontos
+    const cleanValue = value.replace(/[^\d.,]/g, "");
+    // Substitui vírgulas por pontos para conversão para número
+    const floatValue = parseFloat(cleanValue.replace(",", "."));
+
+    // Atualiza o estado com o valor numérico
+    setLocalProduct((prevProduct) => ({
+      ...prevProduct,
+      preco: isNaN(floatValue) ? prevProduct.preco : floatValue,
+    }));
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    console.log(`Field: ${name}, Value: ${value}`);
+
+    if (name.startsWith("estoque.")) {
+      const nestedField = name.replace("estoque.", "") as keyof Estoque;
+
+      setLocalProduct((prevProduct) => {
+        const updatedEstoque = {
+          ...prevProduct.estoque,
+          [nestedField]: isNaN(Number(value)) ? value : Number(value), // Convert to number if possible
+        };
+
+        product.estoque.minimo = updatedEstoque.minimo;
+        product.estoque.maximo = updatedEstoque.maximo;
+        product.estoque.crossdocking = updatedEstoque.crossdocking;
+        product.estoque.localizacao = updatedEstoque.localizacao;
+
+        return {
+          ...prevProduct,
+          estoque: updatedEstoque,
+        };
+      });
+    } else {
+      setLocalProduct((prevProduct) => {
+        console.log(`Updated Field: ${name}, Value: ${value}`);
+
+        return {
+          ...prevProduct,
+          [name]: value,
+        };
+      });
+    }
   };
 
   return (
@@ -207,13 +301,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Mínimo
                               </label>
                               <input
-                                id="minimo"
-                                name="minimo"
+                                id="estoque.minimo"
+                                name="estoque.minimo"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.minimo}
-                                onChange={onChange}
+                                value={localProduct.estoque.minimo}
+                                onChange={handleInputChange}
                               />
                             </div>
                             <div className="col-md-4">
@@ -224,13 +318,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Máximo
                               </label>
                               <input
-                                id="maximo"
-                                name="maximo"
+                                id="estoque.maximo"
+                                name="estoque.maximo"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.minimo}
-                                onChange={onChange}
+                                value={localProduct.estoque.maximo}
+                                onChange={handleInputChange}
                               />
                             </div>
                             <div className="col-md-4">
@@ -241,13 +335,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Crossdocking
                               </label>
                               <input
-                                id="crossdocking"
-                                name="crossdocking"
+                                id="estoque.crossdocking"
+                                name="estoque.crossdocking"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.crossdocking}
-                                onChange={onChange}
+                                value={localProduct.estoque.crossdocking}
+                                onChange={handleInputChange}
                               />
                             </div>
                           </div>
@@ -260,13 +354,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 Localização
                               </label>
                               <input
-                                id="localizacao"
-                                name="localizacao"
+                                id="estoque.localizacao"
+                                name="estoque.localizacao"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.localizacao}
-                                onChange={onChange}
+                                value={localProduct.estoque.localizacao}
+                                onChange={handleInputChange}
                               />
                             </div>
                             <div className="col-md-4">
@@ -282,7 +376,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.minimo}
                                 onChange={onChange}
                               />
                             </div>
@@ -299,7 +392,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.crossdocking}
                                 onChange={onChange}
                               />
                             </div>
