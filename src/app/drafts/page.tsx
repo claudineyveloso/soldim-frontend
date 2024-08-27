@@ -17,14 +17,14 @@ import GridTableDrafts from "@/components/drafts/GridTable";
 import DraftModal from "@/components/drafts/DraftModal";
 
 interface Draft {
-  codigo: string;
-  nome: string;
-  preco: number;
-  unidade: string;
-  tipo: string;
-  situacao: string;
-  condicao: number;
-  formato: string;
+  id: string;
+  image_url: string;
+  description: string;
+  source: string;
+  price: number;
+  promotion: boolean;
+  link: string;
+  search_id: string;
 }
 
 const Drafts = () => {
@@ -34,14 +34,14 @@ const Drafts = () => {
   const [situation, setSituation] = useState<string>("");
 
   const [draft, setDraft] = useState<Draft>({
-    codigo: "",
-    nome: "",
-    preco: 0,
-    unidade: "",
-    tipo: "",
-    situacao: "A",
-    condicao: 0,
-    formato: "S",
+    id: "",
+    image_url: "",
+    description: "",
+    source: "",
+    price: 0,
+    promotion: false,
+    link: "",
+    search_id: "",
   });
   const [product, setProduct] = useState({
     nome: "",
@@ -101,14 +101,14 @@ const Drafts = () => {
     try {
       const draft = await fetchDraft(id);
       setDraft({
-        codigo: draft.codigo || "",
-        nome: draft.nome || "",
-        preco: draft.preco || 0,
-        unidade: draft.unidade || "",
-        tipo: draft.tipo || "",
-        situacao: draft.situacao || "",
-        condicao: draft.condicao || 0,
-        formato: draft.formato || "",
+        id: draft.id || "",
+        image_url: draft.image_url || "",
+        description: draft.description || "",
+        source: draft.source || "",
+        price: draft.price || 0,
+        promotion: draft.promotion || false,
+        link: draft.link || "",
+        search_id: draft.search_id || "",
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -122,7 +122,7 @@ const Drafts = () => {
     }
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     console.log("Delete clicked for product:", id);
     // Adicione a lógica de exclusão aqui
   };
@@ -161,20 +161,48 @@ const Drafts = () => {
   };
 
   const handleNewProduct = () => {
-    setNewProduct(true);
     setDraft({
-      codigo: "",
-      nome: "",
-      preco: 0,
-      unidade: "",
-      tipo: "",
-      situacao: "A",
-      condicao: 0,
-      formato: "S",
+      id: "",
+      image_url: "",
+      description: "",
+      source: "",
+      price: 0,
+      promotion: false,
+      link: "",
+      search_id: "",
     });
   };
 
   const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    // Verifica se o nome do campo é 'price' e converte o valor para número
+    const newValue = name === "price" ? parseFloat(value) : value;
+
+    console.log(`Field name: ${name}`);
+    console.log(`Field value: ${value}`);
+    console.log(`Converted value (if applicable): ${newValue}`);
+
+    // Atualiza o estado draft com o novo valor
+    setDraft((prevDraft) => ({
+      ...prevDraft,
+      [name]: newValue,
+    }));
+  };
+
+  const handleChangeFFF = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setDraft((prevDraft) => ({
+      ...prevDraft,
+      [name]: name === "price" ? parseFloat(value) : value,
+    }));
+  };
+
+  const handleChangeXXX = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
@@ -200,16 +228,60 @@ const Drafts = () => {
     }
   };
 
-  const handleSaveProduct = () => {
+  const handleSaveDraft = () => {
     handleUpdateDraft();
   };
 
   const handleUpdateDraft = async () => {
     try {
-      const success = await updateDraft(draft);
+      // Certifique-se de que 'draft' contém todos os campos necessários
+      console.log("Draft to update:", draft); // Adicione este log
+      const draftToUpdate = {
+        id: draft.id,
+        image_url: draft.image_url,
+        description: draft.description,
+        source: draft.source,
+        price: draft.price,
+        promotion: draft.promotion,
+        link: draft.link,
+        search_id: draft.search_id,
+      };
+
+      console.log("Draft to update (formatted):", draftToUpdate); // Adicione este log
+
+      // Passa o draftToUpdate completo para a função updateDraft
+      const success = await updateDraft(draftToUpdate);
+
+      if (success) {
+        toast.success("Produto atualizado com sucesso");
+        await getDrafts(); // Atualiza a lista de drafts
+        if (window.bootstrap && window.bootstrap.Modal) {
+          const modal = new window.bootstrap.Modal(
+            document.getElementById("modalDraft"),
+          );
+          modal.hide();
+        }
+      } else {
+        toast.error("Erro ao atualizar produto");
+      }
+    } catch (error) {
+      toast.error("Erro ao atualizar produto");
+      console.error("Erro ao atualizar produto:", error);
+    }
+  };
+
+  const handleUpdateDraftXXX = async () => {
+    try {
+      const draftToUpdate = {
+        ...draft,
+        price: draft.price, // Convertendo o preço para string
+      };
+
+      const success = await updateDraft(draftToUpdate);
       if (success) {
         toast.success("Produto atualizado com sucesso");
         await getDrafts();
+
         if (window.bootstrap && window.bootstrap.Modal) {
           const modal = new window.bootstrap.Modal(
             document.getElementById("modalProduct"),
@@ -278,7 +350,7 @@ const Drafts = () => {
         <DraftModal
           draft={draft}
           onChange={handleChange}
-          onSave={handleSaveProduct}
+          onSave={handleSaveDraft}
           modalRef={modalRef}
         />
       </AuthWrapper>

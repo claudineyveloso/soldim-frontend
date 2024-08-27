@@ -20,7 +20,7 @@ export const createDraft = async (draft: {
   description: string;
   source: string;
   price: string;
-  promotion: string;
+  promotion: boolean;
   link: string;
   search_id: string;
   created_at: string;
@@ -122,37 +122,36 @@ export async function fetchDraftsBySearchID(id: string) {
   }
 }
 
-export const updateDraft = async (
-  id: string,
-  updatedDraft: {
-    image_url?: string;
-    description?: string;
-    source?: string;
-    price?: string;
-    promotion?: string;
-    link?: string;
-    search_id?: string;
-    created_at?: string;
-    updated_at?: string;
-  },
-) => {
+export const updateDraft = async (draft: {
+  id: string;
+  image_url: string;
+  description: string;
+  source: string;
+  price: number;
+  promotion: boolean;
+  link: string;
+  search_id: string;
+}) => {
   try {
-    const response = await fetch(`${baseURL}/update_draft/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${baseURL}/update_draft?draftID=${draft.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(draft),
       },
-      body: JSON.stringify(updatedDraft),
-    });
+    );
 
     if (!response.ok) {
+      console.error("Failed response:", await response.text());
       throw new Error("Erro ao atualizar rascunho");
     }
-
-    const data = await response.json();
-    return data;
+    console.log("Draft updated successfully."); // Log de sucesso
+    return true;
   } catch (error) {
     console.error("Erro ao atualizar rascunho:", error);
-    return null;
+    return false;
   }
 };
