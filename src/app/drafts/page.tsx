@@ -122,6 +122,53 @@ const Drafts = () => {
     }
   };
 
+  const handleSendToBling = async (id: string) => {
+    console.log("Send clicked for product:", id);
+    try {
+      const draft = await fetchDraft(id);
+      const product = {
+        nome: draft.description,
+        codigo: draft.codigo || "",
+        preco: draft.price || 0,
+        tipo: draft.tipo || "P",
+        situacao: draft.situacao || "A",
+        formato: draft.formato || "S",
+        descricaoCurta: draft.descriptionCurta || "",
+        dataValidade: draft.Validade || "",
+        unidade: draft.unidade || "UN",
+        pesoLiquido: draft.pesoLiquido || 0,
+        pesoBruto: draft.pesoBruto || 0,
+        volumes: draft.volumes || 0,
+        itensPorCaixa: draft.itensPorCaixa || 0,
+        gtin: draft.gtin || "",
+        gtinEmbalagem: draft.gtinEmbalagem || "",
+        tipoProducao: draft.tipoProducao || "P",
+        condicao: draft.condicao || 0,
+        freteGratis: draft.freteGratis || false,
+        marca: draft.marca || "",
+        descricaoComplementar: draft.descricaoComplementar || "",
+        linkExterno: draft.linkExterno || "",
+        observacoes: draft.observacoes || "",
+        descricaoEmbalagemDiscreta: draft.descricaoEmbalagemDiscreta || "",
+        estoque: {
+          minimo: draft.estoque?.minimo || 0,
+          maximo: draft.estoque?.maximo || 0,
+          crossdocking: draft.estoque?.crossdocking || 0,
+          localizacao: draft.estoque?.localizacao || "",
+        },
+      };
+      const success = await createProduct(product);
+      if (success) {
+        const deleteDraftSuccess = await deleteDraft(id);
+        toast.success("Produto enviado para o Bling com sucesso");
+      } else {
+        toast.error("Erro ao enviar produto para o Bling");
+      }
+    } catch (error) {
+      console.error("Erro ao enviar produto para o Bling:", error);
+    }
+  };
+
   const handleDelete = (id: string) => {
     console.log("Delete clicked for product:", id);
     // Adicione a lógica de exclusão aqui
@@ -140,6 +187,23 @@ const Drafts = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         handleDeleteProduct(id);
+      }
+    });
+  };
+
+  const confirmSendToBling = (id: string) => {
+    Swal.fire({
+      title: "Deseja realmente enviar para a Bling?",
+      text: "Você não poderá reverter isso!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, enviar!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleSendToBling(id);
       }
     });
   };
@@ -345,6 +409,7 @@ const Drafts = () => {
                       data={drafts}
                       onEdit={handleEdit}
                       onDelete={confirmDelete}
+                      onSendToBling={confirmSendToBling}
                     />
                   </div>
                 </div>

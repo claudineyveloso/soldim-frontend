@@ -4,22 +4,46 @@ import formatCurrency from "../shared/formatCurrency";
 
 interface Draft {
   id: string;
+  codigo: string;
+  tipo: string;
+  situacao: string;
+  formato: string;
   image_url: string;
   description: string;
+  dataValidade: string;
+  unidade: string;
+  pesoLiquido: number;
+  pesoBruto: number;
+  volumes: number;
+  itensPorCaixa: number;
+  gtin: string;
+  gtinEmbalagem: string;
+  tipoProducao: string;
+  condicao: number;
+  freteGratis: boolean;
+  marca: string;
+  descricaoComplementar: string;
+  linkExterno: string;
+  observacoes: string;
+  descricaoEmbalagemDiscreta: string;
   source: string;
   price: number;
   promotion: boolean;
   link: string;
   search_id: string;
-  unidade?: string;
-  codigo?: string;
-  formato?: string;
-  tipo?: string;
-  condicao?: string;
-  minimo?: string;
-  maximo?: string;
-  crossdocking?: string;
-  localizacao?: string;
+  estoque: {
+    minimo: number;
+    maximo: number;
+    crossdocking: number;
+    localizacao: string;
+  };
+}
+
+interface Estoque {
+  minimo: number;
+  maximo: number;
+  crossdocking: number;
+  localizacao: string;
 }
 
 interface DraftModalProps {
@@ -40,6 +64,12 @@ const ProductModal: React.FC<DraftModalProps> = ({
   const [localDraft, setLocalDraft] = useState<Draft>({
     ...draft,
     price: 0, // Inicializa como string para suportar entrada de texto
+    estoque: draft.estoque || {
+      minimo: 0,
+      maximo: 0,
+      crossdocking: 0,
+      localizacao: "",
+    },
   });
 
   useEffect(() => {
@@ -69,6 +99,42 @@ const ProductModal: React.FC<DraftModalProps> = ({
     }));
     if (onChange) {
       onChange(event);
+    }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    console.log(`Field: ${name}, Value: ${value}`);
+
+    if (name.startsWith("estoque.")) {
+      const nestedField = name.replace("estoque.", "") as keyof Estoque;
+
+      setLocalDraft((prevProduct) => {
+        const updatedEstoque = {
+          ...prevProduct.estoque,
+          [nestedField]: isNaN(Number(value)) ? value : Number(value), // Convert to number if possible
+        };
+
+        draft.estoque.minimo = updatedEstoque.minimo;
+        draft.estoque.maximo = updatedEstoque.maximo;
+        draft.estoque.crossdocking = updatedEstoque.crossdocking;
+        draft.estoque.localizacao = updatedEstoque.localizacao;
+
+        return {
+          ...prevProduct,
+          estoque: updatedEstoque,
+        };
+      });
+    } else {
+      setLocalDraft((prevProduct) => {
+        console.log(`Updated Field: ${name}, Value: ${value}`);
+
+        return {
+          ...prevProduct,
+          [name]: value,
+        };
+      });
     }
   };
 
@@ -213,6 +279,165 @@ const ProductModal: React.FC<DraftModalProps> = ({
                               </select>
                             </div>
                           </div>
+                          <div className="row mb-3">
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Volumes
+                              </label>
+                              <input
+                                id="gtin"
+                                name="gtin"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localDraft.volumes}
+                                onChange={onChange}
+                              />
+                            </div>
+
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Gtin
+                              </label>
+                              <input
+                                id="gtin"
+                                name="gtin"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localDraft.gtin}
+                                onChange={onChange}
+                              />
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Gtin Embalagem
+                              </label>
+                              <input
+                                id="gtinEmbalagem"
+                                name="gtinEmbalagem"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localDraft.gtinEmbalagem}
+                                onChange={onChange}
+                              />
+                            </div>
+                          </div>
+                          <div className="row mb-3">
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Mínimo
+                              </label>
+                              <input
+                                id="estoque.minimo"
+                                name="estoque.minimo"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localDraft.estoque?.minimo || 0}
+                                onChange={handleInputChange}
+                              />
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Máximo
+                              </label>
+                              <input
+                                id="estoque.maximo"
+                                name="estoque.maximo"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localDraft.estoque?.maximo || 0}
+                                onChange={handleInputChange}
+                              />
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Crossdocking
+                              </label>
+                              <input
+                                id="estoque.crossdocking"
+                                name="estoque.crossdocking"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localDraft.estoque?.crossdocking || 0}
+                                onChange={handleInputChange}
+                              />
+                            </div>
+                          </div>
+                          <div className="row mb-3">
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Localização
+                              </label>
+                              <input
+                                id="estoque.localizacao"
+                                name="estoque.localizacao"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localDraft.estoque?.localizacao || ""}
+                                onChange={handleInputChange}
+                              />
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Preço de custo
+                              </label>
+                              <input
+                                id="preco_custo"
+                                name="preco_custo"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                onChange={onChange}
+                              />
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Preço de venda
+                              </label>
+                              <input
+                                id="preco_venda"
+                                name="preco_venda"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                onChange={onChange}
+                              />
+                            </div>
+                          </div>
+
                           {/* Outras colunas omitidas para brevidade */}
                         </div>
                       </div>

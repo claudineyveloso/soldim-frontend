@@ -6,22 +6,26 @@ interface GridTableDraftsProps {
   data: any[];
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onSendToBling: (id: string) => void;
 }
 
 const GridTableDrafts: React.FC<GridTableDraftsProps> = ({
   data,
   onEdit,
   onDelete,
+  onSendToBling,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
   const handleEditRef = useRef(onEdit);
   const handleDeleteRef = useRef(onDelete);
+  const handleSendToBlingRef = useRef(onSendToBling);
 
   useEffect(() => {
     handleEditRef.current = onEdit;
     handleDeleteRef.current = onDelete;
-  }, [onEdit, onDelete]);
+    handleSendToBlingRef.current = onSendToBling;
+  }, [onEdit, onDelete, onSendToBling]);
 
   useEffect(() => {
     if (data.length === 0) return; // Não renderizar o grid se não houver dados
@@ -97,8 +101,20 @@ const GridTableDrafts: React.FC<GridTableDraftsProps> = ({
               },
               h("i", { className: "demo-pli-trash fs-5" }),
             );
+            const sendToBlingButton = h(
+              "a",
+              {
+                href: "#",
+                className: "btn btn-icon btn-sm btn-hover btn-success",
+                onClick: () => {
+                  console.log("Send clicked for draft:", draftId);
+                  handleSendToBlingRef.current(draftId);
+                },
+              },
+              h("i", { className: "demo-pli-share fs-5" }),
+            );
 
-            return h("div", {}, [editButton, deleteButton]);
+            return h("div", {}, [editButton, deleteButton, sendToBlingButton]);
           },
         },
       ],
