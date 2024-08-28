@@ -17,6 +17,16 @@ const GridTableSearches: React.FC<GridTableSearchesProps> = ({
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
+  const handleEditRef = useRef(onEdit);
+  const handleDeleteRef = useRef(onDelete);
+  const handleDetailsRef = useRef(onDetails);
+
+  useEffect(() => {
+    handleEditRef.current = onEdit;
+    handleDeleteRef.current = onDelete;
+    handleDetailsRef.current = onDetails;
+  }, [onEdit, onDelete, onDetails]);
+
   useEffect(() => {
     if (data.length === 0) return; // Não renderizar o grid se não houver dados
 
@@ -57,7 +67,7 @@ const GridTableSearches: React.FC<GridTableSearchesProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-primary",
                 onClick: () => {
                   console.log("Edit clicked for search:", searchId);
-                  onEdit(searchId);
+                  handleEditRef.current(searchId);
                 },
               },
               h("i", { className: "demo-pli-pen-5 fs-5" }),
@@ -70,7 +80,7 @@ const GridTableSearches: React.FC<GridTableSearchesProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for search:", searchId);
-                  onDelete(searchId);
+                  handleDeleteRef.current(searchId);
                 },
               },
               h("i", { className: "demo-pli-trash fs-5" }),
@@ -83,7 +93,7 @@ const GridTableSearches: React.FC<GridTableSearchesProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-warning",
                 onClick: () => {
                   console.log("Details clicked for search:", searchId);
-                  onDetails(searchId);
+                  handleDetailsRef.current(searchId);
                 },
               },
               h("i", { className: "pli-spell-check fs-5" }),
@@ -129,7 +139,7 @@ const GridTableSearches: React.FC<GridTableSearchesProps> = ({
     return () => {
       grid.destroy();
     };
-  }, [data, onEdit, onDelete, onDetails]);
+  }, [data]);
 
   return <div ref={gridRef} id="grid-wrapper" />;
 };

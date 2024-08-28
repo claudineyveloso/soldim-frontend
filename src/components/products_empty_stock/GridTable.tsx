@@ -17,6 +17,16 @@ const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
+  const handleEditRef = useRef(onEdit);
+  const handleDeleteRef = useRef(onDelete);
+  const handleDetailsRef = useRef(onDetails);
+
+  useEffect(() => {
+    handleEditRef.current = onEdit;
+    handleDeleteRef.current = onDelete;
+    handleDetailsRef.current = onDetails;
+  }, [onEdit, onDelete, onDetails]);
+
   useEffect(() => {
     if (data.length === 0) return; // Não renderizar o grid se não houver dados
 
@@ -75,7 +85,7 @@ const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-primary",
                 onClick: () => {
                   console.log("Edit clicked for product:", productId);
-                  onEdit(productId);
+                  handleEditRef.current(productId);
                 },
               },
               h("i", { className: "demo-pli-pen-5 fs-5" }),
@@ -88,7 +98,7 @@ const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for product:", productId);
-                  onDelete(productId);
+                  handleDeleteRef.current(productId);
                 },
               },
               h("i", { className: "demo-pli-trash fs-5" }),
@@ -100,7 +110,7 @@ const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-warning",
                 onClick: () => {
                   console.log("Details clicked for product:", productId);
-                  onDetails(productId);
+                  handleDetailsRef.current(productId);
                 },
               },
               h("i", { className: "pli-spell-check fs-5" }),
@@ -150,7 +160,7 @@ const GridTableProductsEmptyStock: React.FC<GridTableProductsProps> = ({
     return () => {
       grid.destroy();
     };
-  }, [data, onEdit, onDelete, onDetails]);
+  }, [data]);
 
   return <div ref={gridRef} id="grid-wrapper" />;
 };

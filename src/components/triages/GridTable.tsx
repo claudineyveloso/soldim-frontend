@@ -17,6 +17,16 @@ const GridTableTriages: React.FC<GridTableTriagesProps> = ({
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
+  const handleEditRef = useRef(onEdit);
+  const handleDeleteRef = useRef(onDelete);
+  const handleDetailsRef = useRef(onDetails);
+
+  useEffect(() => {
+    handleEditRef.current = onEdit;
+    handleDeleteRef.current = onDelete;
+    handleDetailsRef.current = onDetails;
+  }, [onEdit, onDelete, onDetails]);
+
   useEffect(() => {
     if (data.length === 0) return; // Não renderizar o grid se não houver dados
 
@@ -57,7 +67,7 @@ const GridTableTriages: React.FC<GridTableTriagesProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-primary",
                 onClick: () => {
                   console.log("Edit clicked for product:", triageId);
-                  onEdit(triageId);
+                  handleEditRef.current(triageId);
                 },
               },
               h("i", { className: "demo-pli-pen-5 fs-5" }),
@@ -70,7 +80,7 @@ const GridTableTriages: React.FC<GridTableTriagesProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for product:", triageId);
-                  onDelete(triageId);
+                  handleDeleteRef.current(triageId);
                 },
               },
               h("i", { className: "demo-pli-trash fs-5" }),
@@ -83,7 +93,7 @@ const GridTableTriages: React.FC<GridTableTriagesProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Details clicked for product:", triageId);
-                  onDetails(triageId);
+                  handleDetailsRef.current(triageId);
                 },
               },
               h("i", { className: "pli-spell-check fs-5" }),
@@ -130,7 +140,7 @@ const GridTableTriages: React.FC<GridTableTriagesProps> = ({
     return () => {
       grid.destroy();
     };
-  }, [data, onEdit, onDelete, onDetails]);
+  }, [data]);
 
   return <div ref={gridRef} id="grid-wrapper" />;
 };

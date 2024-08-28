@@ -28,6 +28,14 @@ const GridTableUsers: React.FC<GridTableUsersProps> = ({
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
+  const handleEditRef = useRef(onEdit);
+  const handleDeleteRef = useRef(onDelete);
+
+  useEffect(() => {
+    handleEditRef.current = onEdit;
+    handleDeleteRef.current = onDelete;
+  }, [onEdit, onDelete]);
+
   useEffect(() => {
     if (data.length === 0) return; // Não renderizar o grid se não houver dados
 
@@ -57,7 +65,7 @@ const GridTableUsers: React.FC<GridTableUsersProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-primary",
                 onClick: () => {
                   console.log("Edit clicked for product:", userId);
-                  onEdit(userId);
+                  handleEditRef.current(userId);
                 },
               },
               h("i", { className: "demo-pli-pen-5 fs-5" }),
@@ -70,7 +78,7 @@ const GridTableUsers: React.FC<GridTableUsersProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for product:", userId);
-                  onDelete(userId);
+                  handleDeleteRef.current(userId);
                 },
               },
               h("i", { className: "demo-pli-trash fs-5" }),
@@ -118,7 +126,7 @@ const GridTableUsers: React.FC<GridTableUsersProps> = ({
     return () => {
       grid.destroy();
     };
-  }, [data, onEdit, onDelete]);
+  }, [data]);
 
   return <div ref={gridRef} id="grid-wrapper" />;
 };

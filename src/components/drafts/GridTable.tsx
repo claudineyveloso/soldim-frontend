@@ -15,6 +15,14 @@ const GridTableDrafts: React.FC<GridTableDraftsProps> = ({
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
+  const handleEditRef = useRef(onEdit);
+  const handleDeleteRef = useRef(onDelete);
+
+  useEffect(() => {
+    handleEditRef.current = onEdit;
+    handleDeleteRef.current = onDelete;
+  }, [onEdit, onDelete]);
+
   useEffect(() => {
     if (data.length === 0) return; // Não renderizar o grid se não houver dados
 
@@ -71,7 +79,7 @@ const GridTableDrafts: React.FC<GridTableDraftsProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-primary",
                 onClick: () => {
                   console.log("Edit clicked for draft:", draftId);
-                  onEdit(draftId);
+                  handleEditRef.current(draftId);
                 },
               },
               h("i", { className: "demo-pli-pen-5 fs-5" }),
@@ -84,7 +92,7 @@ const GridTableDrafts: React.FC<GridTableDraftsProps> = ({
                 className: "btn btn-icon btn-sm btn-hover btn-danger",
                 onClick: () => {
                   console.log("Delete clicked for draft:", draftId);
-                  onDelete(draftId);
+                  handleDeleteRef.current(draftId);
                 },
               },
               h("i", { className: "demo-pli-trash fs-5" }),
@@ -132,7 +140,7 @@ const GridTableDrafts: React.FC<GridTableDraftsProps> = ({
     return () => {
       grid.destroy();
     };
-  }, [data, onEdit, onDelete]);
+  }, [data]);
 
   return <div ref={gridRef} id="grid-wrapper" />;
 };
