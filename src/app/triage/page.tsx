@@ -2,10 +2,16 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { AuthWrapper } from "@/components/AuthWrapper";
-import { fetchTriages, fetchTriage } from "@/services/triageService";
+import {
+  fetchTriages,
+  fetchTriage,
+  updateTriage,
+} from "@/services/triageService";
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify";
+
 import GridTableTriages from "@/components/triages/GridTable";
-import ProductModal from "@/components/products/ProductModal";
+import TriageModal from "@/components/triages/TriageModal";
 
 const Triages = () => {
   const [triages, setTriages] = useState<any[]>([]);
@@ -100,6 +106,77 @@ const Triages = () => {
     console.log("Delete clicked for triage:", id);
   };
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    // Verifica se o nome do campo é 'price' e converte o valor para número
+    const newValue = name === "price" ? parseFloat(value) : value;
+
+    console.log(`Field name: ${name}`);
+    console.log(`Field value: ${value}`);
+    console.log(`Converted value (if applicable): ${newValue}`);
+
+    // Atualiza o estado draft com o novo valor
+    setTriage((prevTriage) => ({
+      ...prevTriage,
+      [name]: newValue,
+    }));
+  };
+
+  const handleSaveDraft = () => {
+    handleUpdateDraft();
+  };
+
+  const handleUpdateDraft = async () => {
+    try {
+      // Certifique-se de que 'draft' contém todos os campos necessários
+      console.log("Draft to update:", triage); // Adicione este log
+      const triageToUpdate = {
+        id: triage.id,
+        type: triage.type,
+        grid: triage.grid,
+        sku_sap: triage.sku_sap,
+        sku_wms: triage.sku_wms,
+        description: triage.description,
+        cust_id: triage.cust_id,
+        seller: triage.seller,
+        quantity_supplied: triage.quantity_supplied,
+        final_quantity: triage.final_quantity,
+        unitary_value: triage.unitary_value,
+        total_value_offered: triage.total_value_offered,
+        final_total_value: triage.final_total_value,
+        category: triage.category,
+        sub_category: triage.sub_category,
+        sent_to_batch: triage.sent_to_batch,
+        sent_to_bling: triage.sent_to_bling,
+        defect: triage.defect,
+      };
+
+      console.log("Draft to update (formatted):", triageToUpdate); // Adicione este log
+
+      // Passa o draftToUpdate completo para a função updateDraft
+      const success = await updateTriage(triageToUpdate);
+
+      if (success) {
+        toast.success("Produto atualizado com sucesso");
+        await getTriages(); // Atualiza a lista de drafts
+        if (window.bootstrap && window.bootstrap.Modal) {
+          const modal = new window.bootstrap.Modal(
+            document.getElementById("modalDraft"),
+          );
+          modal.hide();
+        }
+      } else {
+        toast.error("Erro ao atualizar produto");
+      }
+    } catch (error) {
+      toast.error("Erro ao atualizar produto");
+      console.error("Erro ao atualizar produto:", error);
+    }
+  };
+
   return (
     <>
       <AuthWrapper>
@@ -172,6 +249,12 @@ const Triages = () => {
             </div>
           </div>
         </section>
+        <TriageModal
+          triage={triage}
+          onChange={handleChange}
+          onSave={handleSaveDraft}
+          modalRef={modalRef}
+        />
       </AuthWrapper>
     </>
   );

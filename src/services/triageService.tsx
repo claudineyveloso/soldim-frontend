@@ -43,3 +43,27 @@ export async function fetchTriage(id: string) {
     return null; // Retornar null em caso de erro
   }
 }
+
+export const updateTriage = async (triage: any) => {
+  try {
+    const response = await fetch(
+      `${baseURL}/update_product_bling?productID=${triage.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(triage),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Erro ao atualizar a triagem");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao atualizar a triagem:", error);
+    return false;
+  }
+};

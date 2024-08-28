@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import formatCurrency from "../shared/formatCurrency";
 
-interface ProductModalProps {
-  product: any;
+interface TriageModalProps {
+  triage: any;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
@@ -11,17 +11,17 @@ interface ProductModalProps {
   modalRef: React.RefObject<HTMLDivElement>;
 }
 
-const ProductModal: React.FC<ProductModalProps> = ({
-  product,
+const TriageModal: React.FC<TriageModalProps> = ({
+  triage,
   onChange,
   onSave,
   modalRef,
 }) => {
-  const [localProduct, setLocalProduct] = useState({ ...product, preco: "" });
+  const [localProduct, setLocalProduct] = useState({ ...triage, preco: "" });
 
   useEffect(() => {
-    setLocalProduct({ ...product, preco: formatCurrency(product.preco) });
-  }, [product]);
+    setLocalProduct({ ...triage, preco: formatCurrency(triage.preco) });
+  }, [triage]);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -335,4 +335,4 @@ const ProductModal: React.FC<ProductModalProps> = ({
   );
 };
 
-export default ProductModal;
+export default TriageModal;

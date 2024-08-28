@@ -255,11 +255,16 @@ const Drafts = () => {
       if (success) {
         toast.success("Produto atualizado com sucesso");
         await getDrafts(); // Atualiza a lista de drafts
-        if (window.bootstrap && window.bootstrap.Modal) {
-          const modal = new window.bootstrap.Modal(
-            document.getElementById("modalDraft"),
-          );
-          modal.hide();
+        const modalElement = document.getElementById("modalDraft");
+        if (modalElement && window.bootstrap && window.bootstrap.Modal) {
+          const modalInstance =
+            window.bootstrap.Modal.getInstance(modalElement);
+          if (modalInstance) {
+            modalInstance.hide();
+          } else {
+            const newModalInstance = new window.bootstrap.Modal(modalElement);
+            newModalInstance.hide();
+          }
         }
       } else {
         toast.error("Erro ao atualizar produto");

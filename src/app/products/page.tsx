@@ -121,10 +121,10 @@ const Products = () => {
         observacoes: product.observacoes || "",
         descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
         estoque: {
-          minimo: product.estoque.minimo || 0,
-          maximo: product.estoque.maximo || 0,
-          crossdocking: product.estoque.crossdocking || 0,
-          localizacao: product.estoque.localizacao || "",
+          minimo: product.estoque?.minimo || 0,
+          maximo: product.estoque?.maximo || 0,
+          crossdocking: product.estoque?.crossdocking || 0,
+          localizacao: product.estoque?.localizacao || "",
         },
       });
 
@@ -143,43 +143,57 @@ const Products = () => {
     console.log("Edit clicked for product:", id);
     try {
       const product = await fetchProduct(id);
-      setProduct({
-        nome: product.nome || "",
-        codigo: product.codigo || "",
-        preco: product.preco || 0,
-        tipo: product.tipo || "P",
-        situacao: product.situacao || "A",
-        formato: product.format || "S",
-        descricaoCurta: product.descricaoCurta || "",
-        dataValidade: product.dataValidade || "",
-        unidade: product.unidade || "UN",
-        pesoLiquido: product.pesoLiquido || 0,
-        pesoBruto: product.pesoBruto || 0,
-        volumes: product.volumes || 0,
-        itensPorCaixa: product.itensPorCaixa || 0,
-        gtin: product.gtin || "",
-        gtinEmbalagem: product.gtinEmbalagem || "",
-        tipoProducao: product.tipoProducao || "P",
-        condicao: product.condicao || "P",
-        freteGratis: product.freteGratis || false,
-        marca: product.marca || "",
-        descricaoComplementar: product.descricaoComplementar || "",
-        linkExterno: product.linkExtorno || "",
-        observacoes: product.observacoes || "",
-        descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
-        estoque: {
-          minimo: product.estoque.minimo || 0,
-          maximo: product.estoque.maximo || 0,
-          crossdocking: product.estoque.crossdocking || 0,
-          localizacao: product.estoque.localizacao || "",
-        },
-      });
+      console.log("Value of Product:", product);
+      if (product) {
+        setProduct({
+          nome: product.nome || "",
+          codigo: product.codigo || "",
+          preco: product.preco || 0,
+          tipo: product.tipo || "P",
+          situacao: product.situacao || "A",
+          formato: product.format || "S",
+          descricaoCurta: product.descricaoCurta || "",
+          dataValidade: product.dataValidade || "",
+          unidade: product.unidade || "UN",
+          pesoLiquido: product.pesoLiquido || 0,
+          pesoBruto: product.pesoBruto || 0,
+          volumes: product.volumes || 0,
+          itensPorCaixa: product.itensPorCaixa || 0,
+          gtin: product.gtin || "",
+          gtinEmbalagem: product.gtinEmbalagem || "",
+          tipoProducao: product.tipoProducao || "P",
+          condicao: product.condicao || "P",
+          freteGratis: product.freteGratis || false,
+          marca: product.marca || "",
+          descricaoComplementar: product.descricaoComplementar || "",
+          linkExterno: product.linkExtorno || "",
+          observacoes: product.observacoes || "",
+          descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
+          estoque: {
+            minimo: product.estoque?.minimo || 0,
+            maximo: product.estoque?.maximo || 0,
+            crossdocking: product.estoque?.crossdocking || 0,
+            localizacao: product.estoque?.localizacao || "",
+          },
+        });
 
-      if (window.bootstrap && window.bootstrap.Modal) {
-        const modal = new window.bootstrap.Modal(
-          document.getElementById("modalProduct"),
-        );
-        modal.show();
+        const modalElement = document.getElementById("modalProduct");
+        if (modalElement && window.bootstrap && window.bootstrap.Modal) {
+          const modalInstance =
+            window.bootstrap.Modal.getInstance(modalElement);
+          if (modalInstance) {
+            modalInstance.show();
+          } else {
+            const newModalInstance = new window.bootstrap.Modal(modalElement);
+            newModalInstance.show();
+          }
+        } else {
+          console.error(
+            "Modal element not found or Bootstrap Modal is not available.",
+          );
+        }
+      } else {
+        console.error("Produto não encontrado ou erro ao buscar produto.");
       }
     } catch (error) {
       console.error("Erro ao buscar produto:", error);

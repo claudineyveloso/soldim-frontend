@@ -205,44 +205,43 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
                               {localProduct.preco_compra}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-4 mb-2">
                             <p className="mb-0">
                               <span className="d-inline h6">Preço custo: </span>
                               {localProduct.preco_custo}
                             </p>
                           </div>
+                          <hr />
                           <div className="col-md-4">
                             <p className="mb-0">
                               <span className="d-inline h6">
-                                Saldo físico:{" "}
+                                Estoque mínimo:{" "}
                               </span>
-                              {localProduct.saldo_fisico}
+                              {localProduct.estoque.minimo}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Estoque máximo:{" "}
+                              </span>
+                              {localProduct.estoque.maximo}
+                            </p>
+                          </div>
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Crossdocking:{" "}
+                              </span>
+                              {localProduct.estoque.crossdocking}
                             </p>
                           </div>
                         </div>
                         <div className="row mb-3">
                           <div className="col-md-4">
                             <p className="mb-0">
-                              <span className="d-inline h6">
-                                Saldo físico total:{" "}
-                              </span>
-                              {localProduct.saldo_fisico_total}
-                            </p>
-                          </div>
-                          <div className="col-md-4">
-                            <p className="mb-0">
-                              <span className="d-inline h6">
-                                Saldo virtual:{" "}
-                              </span>
-                              {localProduct.saldo_virtual}
-                            </p>
-                          </div>
-                          <div className="col-md-4">
-                            <p className="mb-0">
-                              <span className="d-inline h6">
-                                Saldo virtual total:{" "}
-                              </span>
-                              {localProduct.saldo_virtual_total}
+                              <span className="d-inline h6">Localização: </span>
+                              {localProduct.estoque.localizacao}
                             </p>
                           </div>
                         </div>

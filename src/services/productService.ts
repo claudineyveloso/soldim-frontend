@@ -43,7 +43,6 @@ export async function fetchProduct(id: number) {
   console.log("Fetching product with id:", id);
   try {
     const response = await fetch(`${baseURL}/get_product/${id}`);
-
     if (!response.ok) {
       throw new Error(`Erro ao buscar o produto: ${response.statusText}`);
     }
