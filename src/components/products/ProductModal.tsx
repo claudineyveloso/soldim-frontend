@@ -298,6 +298,59 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 htmlFor="inputState"
                                 className="form-label"
                               >
+                                Volumes
+                              </label>
+                              <input
+                                id="volumes"
+                                name="volumes"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localProduct.volumes}
+                                onChange={handleInputChange}
+                              />
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Gtin
+                              </label>
+                              <input
+                                id="gtin"
+                                name="gtin"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localProduct.gtin}
+                                onChange={onChange}
+                              />
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Gtin Embalagem
+                              </label>
+                              <input
+                                id="gtinEmbalagem"
+                                name="gtinEmbalagem"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localProduct.gtinEmbalagem}
+                                onChange={onChange}
+                              />
+                            </div>
+                          </div>
+                          <div className="row mb-3">
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
                                 Mínimo
                               </label>
                               <input

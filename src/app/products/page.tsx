@@ -26,6 +26,7 @@ const Products = () => {
   const [situation, setSituation] = useState<string>("");
   //const [sources, setSources] = useState<any[]>([]);
   const [product, setProduct] = useState({
+    id: 0,
     nome: "",
     codigo: "",
     preco: 0,
@@ -97,6 +98,7 @@ const Products = () => {
       const product = await fetchProduct(id);
 
       setProduct({
+        id: product.id || 0,
         nome: product.nome || "",
         codigo: product.codigo || "",
         preco: product.preco || 0,
@@ -113,7 +115,7 @@ const Products = () => {
         gtin: product.gtin || "",
         gtinEmbalagem: product.gtinEmbalagem || "",
         tipoProducao: product.tipoProducao || "P",
-        condicao: product.condicao || "P",
+        condicao: product.condicao || 0,
         freteGratis: product.freteGratis || false,
         marca: product.marca || "",
         descricaoComplementar: product.descricaoComplementar || "",
@@ -142,10 +144,12 @@ const Products = () => {
   const handleEdit = async (id: number) => {
     console.log("Edit clicked for product:", id);
     try {
+      setNewProduct(false);
       const product = await fetchProduct(id);
       console.log("Value of Product:", product);
       if (product) {
         setProduct({
+          id: product.id,
           nome: product.nome || "",
           codigo: product.codigo || "",
           preco: product.preco || 0,
@@ -162,7 +166,7 @@ const Products = () => {
           gtin: product.gtin || "",
           gtinEmbalagem: product.gtinEmbalagem || "",
           tipoProducao: product.tipoProducao || "P",
-          condicao: product.condicao || "P",
+          condicao: product.condicao || 0,
           freteGratis: product.freteGratis || false,
           marca: product.marca || "",
           descricaoComplementar: product.descricaoComplementar || "",
@@ -241,6 +245,7 @@ const Products = () => {
   const handleNewProduct = () => {
     setNewProduct(true);
     setProduct({
+      id: 0,
       nome: "",
       codigo: "",
       preco: 0,
@@ -309,6 +314,10 @@ const Products = () => {
 
   const handleCreateProduct = async () => {
     try {
+      console.log(
+        "Creating product with data:",
+        JSON.stringify(product, null, 2),
+      );
       const success = await createProduct(product);
       if (success) {
         toast.success("Produto criado com sucesso");
