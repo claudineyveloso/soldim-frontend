@@ -2,8 +2,10 @@ import baseURL from "@/utils/config";
 
 // services/draftService.ts
 export const fetchDrafts = async () => {
+  console.log("Buscando rascunhos...", baseURL);
   try {
     const response = await fetch(`${baseURL}/get_drafts`);
+    console.log("Resposta da requisição:", response);
     if (!response.ok) {
       throw new Error("Erro ao buscar rascunhos");
     }

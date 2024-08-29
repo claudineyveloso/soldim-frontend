@@ -71,7 +71,7 @@ const GridTableDrafts: React.FC<GridTableDraftsProps> = ({
         {
           id: "acoes",
           name: "Ações",
-          width: "120px",
+          width: "130px",
           formatter: (_, row) => {
             const draftIndex = row.cells[4].data as number; // índice do rascunho na lista
             const draftId = data[draftIndex].id; // obtendo o ID do rascunho a partir do índice

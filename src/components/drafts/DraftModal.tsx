@@ -63,7 +63,7 @@ const ProductModal: React.FC<DraftModalProps> = ({
 }) => {
   const [localDraft, setLocalDraft] = useState<Draft>({
     ...draft,
-    price: 0, // Inicializa como string para suportar entrada de texto
+    price: typeof draft.price === "number" ? draft.price : 0,
     estoque: draft.estoque || {
       minimo: 0,
       maximo: 0,
@@ -81,8 +81,63 @@ const ProductModal: React.FC<DraftModalProps> = ({
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+
+    // Substitui vírgulas e pontos por pontos para garantir a consistência
+    const cleanValue = value.replace(/[^\d.,]/g, ""); // Remove caracteres não numéricos e mantém pontos e vírgulas
+    const normalizedValue = cleanValue.replace(/,/g, "."); // Substitui vírgulas por pontos
+
+    // Converte para número, utilizando ponto como separador decimal
+    const floatValue = parseFloat(normalizedValue);
+
+    // Define o valor como string, usando ponto como separador decimal
+    const newValue = isNaN(floatValue) ? "0" : normalizedValue;
+
+    // Atualiza o estado local com o novo preço
+    setLocalDraft({
+      ...localDraft,
+      price: floatValue,
+    });
+
+    // Atualiza o evento onChange com o valor formatado como string
+    onChange({
+      ...event,
+      target: {
+        ...event.target,
+        value: newValue,
+        name: "price",
+      },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  const handlePriceChangeTTT = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    const cleanValue = value.replace(/[^\d,]/g, ""); // Remove caracteres não numéricos
+    const floatValue = parseFloat(cleanValue.replace(",", "."));
+
+    const newValue = isNaN(floatValue) ? "0" : floatValue.toString(); // Converte o número para string
+
+    // Atualiza o estado local com o novo preço
+    setLocalDraft({
+      ...localDraft,
+      price: parseFloat(newValue),
+    });
+
+    // Atualiza o evento onChange com o valor formatado como string
+    onChange({
+      ...event,
+      target: {
+        ...event.target,
+        value: newValue,
+        name: "price",
+      },
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  const handlePriceChangeAAA = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
     const cleanValue = value.replace(/[^\d,]/g, ""); // Limpa o valor
     const floatValue = parseFloat(cleanValue.replace(",", "."));
+
     setLocalDraft({
       ...localDraft,
       price: isNaN(floatValue) ? 0 : floatValue,
@@ -209,7 +264,11 @@ const ProductModal: React.FC<DraftModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localDraft.price.toString()}
+                                value={
+                                  localDraft.price !== undefined
+                                    ? localDraft.price.toString()
+                                    : ""
+                                }
                                 onChange={handlePriceChange}
                               />
                             </div>

@@ -75,7 +75,7 @@ const Drafts = () => {
     itensPorCaixa: 0,
     gtin: "",
     gtinEmbalagem: "",
-    tipoProducao: "",
+    tipoProducao: "P",
     condicao: 0,
     freteGratis: false,
     marca: "",
@@ -157,9 +157,9 @@ const Drafts = () => {
       setDraft({
         id: draft.id || "",
         codigo: draft.codigo || "",
-        tipo: draft.tipo || "p",
-        situacao: draft.situacao || "a",
-        formato: draft.formato || "s",
+        tipo: draft.tipo || "P",
+        situacao: draft.situacao || "A",
+        formato: draft.formato || "S",
         image_url: draft.image_url || "",
         description: draft.description || "",
         dataValidade: draft.dataValidade || null,
@@ -170,7 +170,7 @@ const Drafts = () => {
         itensPorCaixa: draft.itensPorCaixa || 0,
         gtin: draft.gtin || "",
         gtinEmbalagem: draft.gtinEmbalagem || "",
-        tipoProducao: draft.tipoProducao || "p",
+        tipoProducao: draft.tipoProducao || "P",
         condicao: draft.condicao || 0,
         freteGratis: draft.fretegratis || false,
         marca: draft.marca || "",
@@ -239,20 +239,26 @@ const Drafts = () => {
         },
       };
       const success = await createProduct(product);
+      console.log("Product sent to bling:", product);
       if (success) {
-        const deleteDraftSuccess = await deleteDraft(id);
         toast.success("Produto enviado para o Bling com sucesso");
       } else {
         toast.error("Erro ao enviar produto para o Bling");
       }
     } catch (error) {
       console.error("Erro ao enviar produto para o Bling:", error);
+    } finally {
+      try {
+        const deleteDraftSuccess = await deleteDraft(id);
+        if (deleteDraftSuccess) {
+          console.log("Draft deleted successfully");
+        } else {
+          console.error("Erro ao deletar o draft");
+        }
+      } catch (deleteError) {
+        console.error("Erro ao deletar o draft:", deleteError);
+      }
     }
-  };
-
-  const handleDelete = (id: string) => {
-    console.log("Delete clicked for product:", id);
-    // Adicione a lógica de exclusão aqui
   };
 
   const confirmDelete = (id: string) => {
@@ -372,8 +378,10 @@ const Drafts = () => {
 
       // Passa o draftToUpdate completo para a função updateDraft
       const success = await updateDraft(draftToUpdate);
+      console.log("Update success:", success); // Verifica o resultado da atualização
 
       if (success) {
+        console.log("Draft atualizado com sucesso");
         toast.success("Produto atualizado com sucesso");
         await getDrafts(); // Atualiza a lista de drafts
         const modalElement = document.getElementById("modalDraft");
