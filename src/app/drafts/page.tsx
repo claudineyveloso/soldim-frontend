@@ -18,13 +18,39 @@ import DraftModal from "@/components/drafts/DraftModal";
 
 interface Draft {
   id: string;
+  codigo: string;
+  tipo: string;
+  situacao: string;
+  formato: string;
   image_url: string;
   description: string;
+  dataValidade: string;
+  unidade: string;
+  pesoLiquido: number;
+  pesoBruto: number;
+  volumes: number;
+  itensPorCaixa: number;
+  gtin: string;
+  gtinEmbalagem: string;
+  tipoProducao: string;
+  condicao: number;
+  freteGratis: boolean;
+  marca: string;
+  descricaoComplementar: string;
+  linkExterno: string;
+  observacoes: string;
+  descricaoEmbalagemDiscreta: string;
   source: string;
   price: number;
   promotion: boolean;
   link: string;
   search_id: string;
+  estoque: {
+    minimo: number;
+    maximo: number;
+    crossdocking: number;
+    localizacao: string;
+  };
 }
 
 const Drafts = () => {
@@ -35,14 +61,41 @@ const Drafts = () => {
 
   const [draft, setDraft] = useState<Draft>({
     id: "",
+    codigo: "",
+    tipo: "P",
+    situacao: "A",
+    formato: "S",
     image_url: "",
     description: "",
+    dataValidade: "",
+    unidade: "UN",
+    pesoLiquido: 0,
+    pesoBruto: 0,
+    volumes: 0,
+    itensPorCaixa: 0,
+    gtin: "",
+    gtinEmbalagem: "",
+    tipoProducao: "",
+    condicao: 0,
+    freteGratis: false,
+    marca: "",
+    descricaoComplementar: "",
+    linkExterno: "",
+    observacoes: "",
+    descricaoEmbalagemDiscreta: "",
     source: "",
     price: 0,
     promotion: false,
     link: "",
     search_id: "",
+    estoque: {
+      minimo: 0,
+      maximo: 0,
+      crossdocking: 0,
+      localizacao: "",
+    },
   });
+
   const [product, setProduct] = useState({
     nome: "",
     codigo: "",
@@ -50,6 +103,7 @@ const Drafts = () => {
     tipo: "P",
     situacao: "A",
     formato: "S",
+    image_url: "",
     descricaoCurta: "",
     dataValidade: "",
     unidade: "UN",
@@ -102,13 +156,39 @@ const Drafts = () => {
       const draft = await fetchDraft(id);
       setDraft({
         id: draft.id || "",
+        codigo: draft.codigo || "",
+        tipo: draft.tipo || "p",
+        situacao: draft.situacao || "a",
+        formato: draft.formato || "s",
         image_url: draft.image_url || "",
         description: draft.description || "",
+        dataValidade: draft.dataValidade || null,
+        unidade: draft.unidade || "un",
+        pesoLiquido: draft.pesoLiquido || 0,
+        pesoBruto: draft.pesoBruto || 0,
+        volumes: draft.volumes || 0,
+        itensPorCaixa: draft.itensPorCaixa || 0,
+        gtin: draft.gtin || "",
+        gtinEmbalagem: draft.gtinEmbalagem || "",
+        tipoProducao: draft.tipoProducao || "p",
+        condicao: draft.condicao || 0,
+        freteGratis: draft.fretegratis || false,
+        marca: draft.marca || "",
+        descricaoComplementar: draft.descricaoComplementar || "",
+        linkExterno: draft.linkExterno || "",
+        observacoes: draft.observacoes || "",
+        descricaoEmbalagemDiscreta: draft.descricaoEmbalagemDiscreta || "",
         source: draft.source || "",
         price: draft.price || 0,
         promotion: draft.promotion || false,
         link: draft.link || "",
         search_id: draft.search_id || "",
+        estoque: {
+          minimo: draft.estoque?.minimo || 0,
+          maximo: draft.estoque?.maximo || 0,
+          crossdocking: draft.estoque?.crossdocking || 0,
+          localizacao: draft.estoque?.localizacao || "",
+        },
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -118,7 +198,7 @@ const Drafts = () => {
         modal.show();
       }
     } catch (error) {
-      console.error("Erro ao buscar produto:", error);
+      console.error("Erro ao buscar o rascunho do produto:", error);
     }
   };
 
@@ -133,6 +213,7 @@ const Drafts = () => {
         tipo: draft.tipo || "P",
         situacao: draft.situacao || "A",
         formato: draft.formato || "S",
+        image_url: draft.image_url || "",
         descricaoCurta: draft.descriptionCurta || "",
         dataValidade: draft.Validade || "",
         unidade: draft.unidade || "UN",
@@ -216,25 +297,12 @@ const Drafts = () => {
         toast.success("Item do Resultado da Busca deletado com sucesso");
         await getDrafts();
       } else {
-        toast.error("Erro ao deletar resultado");
+        toast.error("Erro ao deletar o rascunho do produto");
       }
     } catch (error) {
-      toast.error("Erro ao deletar resultado da busca");
-      console.error("Erro ao deletar resultado:", error);
+      toast.error("Erro ao deletar o rascunho do produto");
+      console.error("Erro ao deletar o rascunho do produto:", error);
     }
-  };
-
-  const handleNewProduct = () => {
-    setDraft({
-      id: "",
-      image_url: "",
-      description: "",
-      source: "",
-      price: 0,
-      promotion: false,
-      link: "",
-      search_id: "",
-    });
   };
 
   const handleChange = (
@@ -256,42 +324,6 @@ const Drafts = () => {
     }));
   };
 
-  const handleChangeFFF = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    setDraft((prevDraft) => ({
-      ...prevDraft,
-      [name]: name === "price" ? parseFloat(value) : value,
-    }));
-  };
-
-  const handleChangeXXX = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-
-    if (name.startsWith("estoque.")) {
-      const field = name.split(".")[1];
-      setProduct((prevProduct) => ({
-        ...prevProduct,
-        estoque: {
-          ...prevProduct.estoque,
-          [field]:
-            field === "minimo" || field === "maximo" || field === "crossdocking"
-              ? parseFloat(value)
-              : value,
-        },
-      }));
-    } else {
-      setDraft((prevProduct) => ({
-        ...prevProduct,
-        [name]:
-          name === "preco" || name === "condicao" ? parseFloat(value) : value,
-      }));
-    }
-  };
-
   const handleSaveDraft = () => {
     handleUpdateDraft();
   };
@@ -302,13 +334,38 @@ const Drafts = () => {
       console.log("Draft to update:", draft); // Adicione este log
       const draftToUpdate = {
         id: draft.id,
+        codigo: draft.codigo,
+        tipo: draft.tipo,
+        situacao: draft.situacao,
+        formato: draft.formato,
         image_url: draft.image_url,
         description: draft.description,
+        dataValidade: draft.dataValidade,
+        pesoLiquido: draft.pesoLiquido,
+        pesoBruto: draft.pesoBruto,
+        volumes: Number(draft.volumes),
+        itensPorCaixa: draft.itensPorCaixa,
+        gtin: draft.gtin,
+        gtinEmbalagem: draft.gtinEmbalagem,
+        tipoProducao: draft.tipoProducao,
+        condicao: draft.condicao,
+        freteGratis: draft.freteGratis,
+        marca: draft.marca,
+        descricaoComplementar: draft.descricaoComplementar,
+        linkExterno: draft.linkExterno,
+        observacoes: draft.observacoes,
+        descricaoEmbalagemDiscreta: draft.descricaoEmbalagemDiscreta,
         source: draft.source,
         price: draft.price,
         promotion: draft.promotion,
         link: draft.link,
         search_id: draft.search_id,
+        estoque: {
+          minimo: draft.estoque.minimo,
+          maximo: draft.estoque.maximo,
+          crossdocking: draft.estoque.crossdocking,
+          localizacao: draft.estoque.localizacao,
+        },
       };
 
       console.log("Draft to update (formatted):", draftToUpdate); // Adicione este log
@@ -331,38 +388,11 @@ const Drafts = () => {
           }
         }
       } else {
-        toast.error("Erro ao atualizar produto");
+        toast.error("Erro ao atualizar o rascunho do produto");
       }
     } catch (error) {
-      toast.error("Erro ao atualizar produto");
-      console.error("Erro ao atualizar produto:", error);
-    }
-  };
-
-  const handleUpdateDraftXXX = async () => {
-    try {
-      const draftToUpdate = {
-        ...draft,
-        price: draft.price, // Convertendo o preço para string
-      };
-
-      const success = await updateDraft(draftToUpdate);
-      if (success) {
-        toast.success("Produto atualizado com sucesso");
-        await getDrafts();
-
-        if (window.bootstrap && window.bootstrap.Modal) {
-          const modal = new window.bootstrap.Modal(
-            document.getElementById("modalProduct"),
-          );
-          modal.hide();
-        }
-      } else {
-        toast.error("Erro ao atualizar produto");
-      }
-    } catch (error) {
-      toast.error("Erro ao atualizar produto");
-      console.error("Erro ao atualizar produto:", error);
+      toast.error("Erro ao atualizar o rascunho do produto");
+      console.error("Erro ao atualizar o rascunho do produto:", error);
     }
   };
 
@@ -378,13 +408,15 @@ const Drafts = () => {
                     <Link href="/dashboard">Home</Link>
                   </li>
                   <li className="breadcrumb-item active" aria-current="page">
-                    Produtos
+                    Rasunho
                   </li>
                 </ol>
               </nav>
-              <h1 className="page-title mb-0 mt-2">Lista de produtos</h1>
+              <h1 className="page-title mb-0 mt-2">
+                Lista de rascunho de produtos
+              </h1>
               <p className="lead">
-                Visualizar produtos cadastrados no sistema.
+                Visualizar rascunho de produtos cadastrados no sistema.
               </p>
             </div>
           </div>
@@ -395,12 +427,12 @@ const Drafts = () => {
                 <div className="card-body">
                   <div className="mb-3">
                     <h2>
-                      Produtos - <small>Estoque de itens</small>
+                      Rasunho - <small>Estoque de itens</small>
                     </h2>
                     <p className="m-0">
                       Utilize as ferramentas de busca e filtro para encontrar
-                      produtos específicos e gerenciar os produtos de forma
-                      eficiente
+                      rascunho de produtos específicos e gerenciar os rascunho
+                      de produtos de forma eficiente
                     </p>
                   </div>
 

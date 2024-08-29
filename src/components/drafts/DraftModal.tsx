@@ -288,8 +288,8 @@ const ProductModal: React.FC<DraftModalProps> = ({
                                 Volumes
                               </label>
                               <input
-                                id="gtin"
-                                name="gtin"
+                                id="volumes"
+                                name="volumes"
                                 type="text"
                                 className="form-control"
                                 placeholder=""

@@ -233,9 +233,11 @@ const CollectProduct = () => {
                   </li>
                 </ol>
               </nav>
-              <h1 className="page-title mb-0 mt-2">Lista de produtos</h1>
+              <h1 className="page-title mb-0 mt-2">
+                Lista de produtos coletados na Web
+              </h1>
               <p className="lead">
-                Visualizar produtos cadastrados no sistema.
+                Visualizar produtos coletados na web e cadastrados no sistema.
               </p>
             </div>
           </div>
@@ -246,7 +248,7 @@ const CollectProduct = () => {
                 <div className="card-body">
                   <div className="mb-3">
                     <h2>
-                      Produtos - <small>Estoque de itens</small>
+                      Produtos - <small>Coleta de preços</small>
                     </h2>
                     <p className="m-0">
                       Utilize as ferramentas de busca e filtro para encontrar

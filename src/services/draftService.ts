@@ -124,6 +124,7 @@ export async function fetchDraftsBySearchID(id: string) {
 
 export const updateDraft = async (draft: {
   id: string;
+  codigo: string;
   image_url: string;
   description: string;
   source: string;
@@ -133,6 +134,13 @@ export const updateDraft = async (draft: {
   search_id: string;
 }) => {
   try {
+    const searchExists = await fetch(
+      `${baseURL}/get_search/${draft.search_id}`,
+    );
+
+    if (!searchExists.ok) {
+      throw new Error("O search_id fornecido não existe.");
+    }
     const response = await fetch(
       `${baseURL}/update_draft?draftID=${draft.id}`,
       {
@@ -144,14 +152,16 @@ export const updateDraft = async (draft: {
       },
     );
 
+    console.log("Resposta da requisição:", draft);
+
     if (!response.ok) {
-      console.error("Failed response:", await response.text());
-      throw new Error("Erro ao atualizar rascunho");
+      console.error("Falha na resposta da requisição", await response.text());
+      throw new Error("Erro ao atualizar o rascunho do produto");
     }
-    console.log("Draft updated successfully."); // Log de sucesso
+    console.log("Rascunho atualizado com sucesso"); // Log de sucesso
     return true;
   } catch (error) {
-    console.error("Erro ao atualizar rascunho:", error);
+    console.error("Erro ao atualizar o rascunho do produto", error);
     return false;
   }
 };

@@ -162,13 +162,15 @@ const Searches = () => {
                     <Link href="/dashboard">Home</Link>
                   </li>
                   <li className="breadcrumb-item active" aria-current="page">
-                    Produtos
+                    Coleta
                   </li>
                 </ol>
               </nav>
-              <h1 className="page-title mb-0 mt-2">Lista de produtos</h1>
+              <h1 className="page-title mb-0 mt-2">
+                Lista de produtos pesquisados na Web
+              </h1>
               <p className="lead">
-                Visualizar produtos cadastrados no sistema.
+                Visualizar produtos pesquisados na Web cadastrados no sistema.
               </p>
             </div>
           </div>
@@ -179,7 +181,7 @@ const Searches = () => {
                 <div className="card-body">
                   <div className="mb-3">
                     <h2>
-                      Produtos - <small>Estoque de itens</small>
+                      Produtos - <small>Coleta na Web</small>
                     </h2>
                     <p className="m-0">
                       Utilize as ferramentas de busca e filtro para encontrar
