@@ -24,7 +24,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
     setLocalTriage({ ...triage, preco: formatCurrency(triage.preco) });
   }, [triage]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let inputValue = event.target.value;
 
     // Substituir vírgula por ponto para normalizar o número
@@ -129,7 +129,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 value={localTriage.unitary_value}
-                                onChange={handleInputChange}
+                                onChange={handlePriceChange}
                                 placeholder="R$ 0,00"
                               />
                             </div>
