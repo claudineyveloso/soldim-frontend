@@ -161,7 +161,7 @@ export default function NavBar() {
                       Diária
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item d-none">
                     <Link
                       href="/dashboard"
                       className={`nav-link ${activeItem === "monthly" ? "active" : ""}`}
@@ -277,7 +277,7 @@ export default function NavBar() {
                       Pedidos de vendas
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item d-none">
                     <Link
                       href="sales_by_seller"
                       className={`nav-link ${activeItem === "sales-saller" ? "active" : ""}`}
@@ -288,7 +288,7 @@ export default function NavBar() {
                       Vendas vendedor
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item d-none">
                     <Link
                       href="sales_by_channel"
                       className={`nav-link ${activeItem === "sales-channel" ? "active" : ""}`}
@@ -299,7 +299,7 @@ export default function NavBar() {
                       Vendas por canal
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item d-none">
                     <Link
                       href="./dashboard-2.html"
                       className={`nav-link ${activeItem === "stock-forecast" ? "active" : ""}`}
