@@ -19,6 +19,7 @@ const mapUserType = (type: string | undefined) => {
 
 export default function NavBar() {
   const [activeItem, setActiveItem] = useState<string | null>(null);
+  const [activeExpand, setActiveExpand] = useState<string | null>(null);
   const [isNavExpanded, setIsNavExpanded] = useState<{
     [key: string]: boolean;
   }>({});
@@ -27,14 +28,37 @@ export default function NavBar() {
   useEffect(() => {
     // Recuperar o estado salvo no localStorage quando o componente for montado
     const savedActiveItem = localStorage.getItem("activeItem");
+    const savedExpandItem = localStorage.getItem("expandItem");
     if (savedActiveItem) {
       setActiveItem(savedActiveItem);
     }
+    if (savedExpandItem) {
+      setActiveExpand(savedExpandItem);
+    }
+
+    if (savedExpandItem) {
+      setIsNavExpanded((prev) => ({
+        ...prev,
+        [savedExpandItem]: true, // Expande o item salvo em expandItem
+      }));
+    }
+    console.log("Item Ativo: ", savedActiveItem);
+    console.log("Item Expandir: ", savedExpandItem);
   }, []);
 
-  const handleItemClick = (item: string) => {
+  const handleItemMenu = (item: string, expandItem: string) => {
     setActiveItem(item);
+    setActiveExpand(expandItem);
     localStorage.setItem("activeItem", item);
+    localStorage.setItem("expandItem", expandItem);
+  };
+
+  const handleItemClick = (item: string, expandItem: string) => {
+    setActiveItem(item);
+    setActiveExpand(expandItem);
+
+    localStorage.setItem("activeItem", item);
+    localStorage.setItem("expandItem", expandItem);
   };
 
   const toggleNav = (item: string) => {
@@ -142,7 +166,7 @@ export default function NavBar() {
                     <Link
                       href="/dashboard"
                       className={`nav-link ${activeItem === "diary" ? "active" : ""}`}
-                      onClick={() => handleItemClick("diary")}
+                      onClick={() => handleItemClick("diary", "dashboard")}
                     >
                       Diária
                     </Link>
@@ -151,7 +175,7 @@ export default function NavBar() {
                     <Link
                       href="/dashboard"
                       className={`nav-link ${activeItem === "monthly" ? "active" : ""}`}
-                      onClick={() => handleItemClick("monthly")}
+                      onClick={() => handleItemClick("monthly", "dashboard")}
                     >
                       Mensal
                     </Link>
@@ -192,7 +216,9 @@ export default function NavBar() {
                     <Link
                       href="/products"
                       className={`nav-link ${activeItem === "product-stock" ? "active" : ""}`}
-                      onClick={() => handleItemClick("product-stock")}
+                      onClick={() =>
+                        handleItemClick("product-stock", "products")
+                      }
                     >
                       Estoque de items
                     </Link>
@@ -201,7 +227,7 @@ export default function NavBar() {
                     <Link
                       href="/shopping_options"
                       className={`nav-link ${activeItem === "suggestion" ? "active" : ""}`}
-                      onClick={() => handleItemClick("suggestion")}
+                      onClick={() => handleItemClick("suggestion", "products")}
                     >
                       Sem estoque
                     </Link>
@@ -210,7 +236,7 @@ export default function NavBar() {
                     <Link
                       href="/no_movements"
                       className={`nav-link ${activeItem === "no-movement" ? "active" : ""}`}
-                      onClick={() => handleItemClick("no-movement")}
+                      onClick={() => handleItemClick("no-movement", "products")}
                     >
                       Sem movimento
                     </Link>
@@ -254,7 +280,9 @@ export default function NavBar() {
                     <Link
                       href="/sales_orders"
                       className={`nav-link ${activeItem === "sales-order" ? "active" : ""}`}
-                      onClick={() => handleItemClick("sales-order")}
+                      onClick={() =>
+                        handleItemClick("sales-order", "sales_orders")
+                      }
                     >
                       Pedidos de vendas
                     </Link>
@@ -263,7 +291,9 @@ export default function NavBar() {
                     <Link
                       href="sales_by_seller"
                       className={`nav-link ${activeItem === "sales-saller" ? "active" : ""}`}
-                      onClick={() => handleItemClick("sales-saller")}
+                      onClick={() =>
+                        handleItemClick("sales-saller", "sales_orders")
+                      }
                     >
                       Vendas vendedor
                     </Link>
@@ -272,7 +302,9 @@ export default function NavBar() {
                     <Link
                       href="sales_by_channel"
                       className={`nav-link ${activeItem === "sales-channel" ? "active" : ""}`}
-                      onClick={() => handleItemClick("sales-channel")}
+                      onClick={() =>
+                        handleItemClick("sales-channel", "sales_orders")
+                      }
                     >
                       Vendas por canal
                     </Link>
@@ -281,7 +313,9 @@ export default function NavBar() {
                     <Link
                       href="./dashboard-2.html"
                       className={`nav-link ${activeItem === "stock-forecast" ? "active" : ""}`}
-                      onClick={() => handleItemClick("stock-forecast")}
+                      onClick={() =>
+                        handleItemClick("stock-forecast", "sales_orders")
+                      }
                     >
                       Previsão de estoque
                     </Link>
@@ -320,7 +354,9 @@ export default function NavBar() {
                     <Link
                       href="/search"
                       className={`nav-link ${activeItem === "researches" ? "active" : ""}`}
-                      onClick={() => handleItemClick("researches")}
+                      onClick={() =>
+                        handleItemClick("researches", "storage_products")
+                      }
                     >
                       Pesquisas
                     </Link>
@@ -329,7 +365,9 @@ export default function NavBar() {
                     <Link
                       href="/collect_product"
                       className={`nav-link ${activeItem === "storage" ? "active" : ""}`}
-                      onClick={() => handleItemClick("storage")}
+                      onClick={() =>
+                        handleItemClick("storage", "storage_products")
+                      }
                     >
                       Coleta de preços
                     </Link>
@@ -369,7 +407,7 @@ export default function NavBar() {
                     <Link
                       href="/file_upload"
                       className={`nav-link ${activeItem === "batch" ? "active" : ""}`}
-                      onClick={() => handleItemClick("batch")}
+                      onClick={() => handleItemClick("batch", "batch_products")}
                     >
                       Importar
                     </Link>
@@ -378,7 +416,9 @@ export default function NavBar() {
                     <Link
                       href="/triage"
                       className={`nav-link ${activeItem === "triage" ? "active" : ""}`}
-                      onClick={() => handleItemClick("triage")}
+                      onClick={() =>
+                        handleItemClick("triage", "batch_products")
+                      }
                     >
                       Listagem
                     </Link>
