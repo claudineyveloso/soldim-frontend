@@ -37,7 +37,8 @@ export default function Header() {
             </div>
           </div>
           <div className="header__content-end">
-            <div className="dropdown">
+            {/* Item com d-none */}
+            <div className="dropdown d-none">
               <button
                 className="header__btn btn btn-icon btn-sm"
                 type="button"
@@ -48,6 +49,7 @@ export default function Header() {
               >
                 <i className="demo-psi-layout-grid" />
               </button>
+
               <div className="dropdown-menu dropdown-menu-end p-3 mega-dropdown">
                 <div className="row">
                   <div className="col-md-3">
@@ -273,6 +275,7 @@ export default function Header() {
                 </div>
               </div>
             </div>
+
             <div className="dropdown">
               <button
                 className="header__btn btn btn-icon btn-sm"

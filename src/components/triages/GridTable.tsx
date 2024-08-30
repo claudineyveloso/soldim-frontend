@@ -51,6 +51,11 @@ const GridTableTriages: React.FC<GridTableTriagesProps> = ({
           id: "preco",
           name: "Preço",
           width: "120px",
+          formatter: (cell: number) =>
+            new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(cell),
         },
         {
           id: "acoes",
@@ -109,7 +114,7 @@ const GridTableTriages: React.FC<GridTableTriagesProps> = ({
             data.map((triage, index) => [
               triage.description,
               triage.sku_wms,
-              triage.seller,
+              triage.unitary_value,
               index, // índice
             ]),
           );

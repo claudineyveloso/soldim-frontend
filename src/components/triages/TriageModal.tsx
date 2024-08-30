@@ -17,11 +17,24 @@ const TriageModal: React.FC<TriageModalProps> = ({
   onSave,
   modalRef,
 }) => {
-  const [localProduct, setLocalProduct] = useState({ ...triage, preco: "" });
+  const [localTriage, setLocalTriage] = useState({ ...triage, preco: "" });
+  const [value, setValue] = useState("");
 
   useEffect(() => {
-    setLocalProduct({ ...triage, preco: formatCurrency(triage.preco) });
+    setLocalTriage({ ...triage, preco: formatCurrency(triage.preco) });
   }, [triage]);
+
+  const handleInputChange = (event) => {
+    let inputValue = event.target.value;
+
+    // Substituir vírgula por ponto para normalizar o número
+    inputValue = inputValue.replace(/,/g, ".");
+
+    // Remover caracteres não numéricos exceto ponto
+    if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
+      setValue(inputValue);
+    }
+  };
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -30,8 +43,8 @@ const TriageModal: React.FC<TriageModalProps> = ({
     // Substitui vírgulas por pontos para converter para float
     const floatValue = Number.parseFloat(cleanValue.replace(",", "."));
     // Define o estado do produto com o valor formatado
-    setLocalProduct({
-      ...localProduct,
+    setLocalTriage({
+      ...localTriage,
       preco: Number.isNaN(floatValue) ? value : formatCurrency(floatValue),
     });
   };
@@ -81,7 +94,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                               type="text"
                               className="form-control"
                               placeholder=""
-                              value={localProduct.nome}
+                              value={localTriage.description}
                               onChange={onChange}
                             />
                           </div>
@@ -99,7 +112,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.codigo}
+                                value={localTriage.sku_sap}
                                 onChange={onChange}
                               />
                             </div>
@@ -111,13 +124,13 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 Preço venda
                               </label>
                               <input
-                                id="preco"
-                                name="preco"
+                                id="unitary_value"
+                                name="unitary_value"
                                 type="text"
                                 className="form-control"
-                                placeholder=""
-                                value={localProduct.preco}
-                                onChange={handlePriceChange}
+                                value={localTriage.unitary_value}
+                                onChange={handleInputChange}
+                                placeholder="R$ 0,00"
                               />
                             </div>
                             <div className="col-md-4">
@@ -128,12 +141,12 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 Unidade
                               </label>
                               <input
-                                id="preco"
+                                id="unidade"
                                 name="unidade"
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.unidade}
+                                value={localTriage.unidade}
                                 onChange={handlePriceChange}
                               />
                             </div>
@@ -150,7 +163,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 id="formato"
                                 name="formato"
                                 className="form-select"
-                                value={localProduct.formato}
+                                value={localTriage.formato}
                                 onChange={onChange}
                               >
                                 <option value="S">
@@ -170,7 +183,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 id="tipo"
                                 name="tipo"
                                 className="form-select"
-                                value={localProduct.tipo}
+                                value={localTriage.tipo}
                                 onChange={onChange}
                               >
                                 <option value="P">Produto</option>
@@ -188,7 +201,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 id="condicao"
                                 name="condicao"
                                 className="form-select"
-                                value={localProduct.condicao}
+                                value={localTriage.condicao}
                                 onChange={onChange}
                               >
                                 <option value="0">Não especificado</option>
@@ -212,7 +225,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.minimo}
+                                value={localTriage.minimo}
                                 onChange={onChange}
                               />
                             </div>
@@ -229,7 +242,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.minimo}
+                                value={localTriage.minimo}
                                 onChange={onChange}
                               />
                             </div>
@@ -246,7 +259,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.crossdocking}
+                                value={localTriage.crossdocking}
                                 onChange={onChange}
                               />
                             </div>
@@ -265,7 +278,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.localizacao}
+                                value={localTriage.localizacao}
                                 onChange={onChange}
                               />
                             </div>
@@ -282,7 +295,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.minimo}
+                                value={localTriage.minimo}
                                 onChange={onChange}
                               />
                             </div>
@@ -299,7 +312,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
-                                value={localProduct.crossdocking}
+                                value={localTriage.crossdocking}
                                 onChange={onChange}
                               />
                             </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
@@ -42,24 +42,15 @@ export default function NavBar() {
         [savedExpandItem]: true, // Expande o item salvo em expandItem
       }));
     }
-    console.log("Item Ativo: ", savedActiveItem);
-    console.log("Item Expandir: ", savedExpandItem);
   }, []);
 
-  const handleItemMenu = (item: string, expandItem: string) => {
-    setActiveItem(item);
-    setActiveExpand(expandItem);
-    localStorage.setItem("activeItem", item);
-    localStorage.setItem("expandItem", expandItem);
-  };
-
-  const handleItemClick = (item: string, expandItem: string) => {
+  const handleItemClick = useCallback((item: string, expandItem: string) => {
     setActiveItem(item);
     setActiveExpand(expandItem);
 
     localStorage.setItem("activeItem", item);
     localStorage.setItem("expandItem", expandItem);
-  };
+  }, []);
 
   const toggleNav = (item: string) => {
     setIsNavExpanded((prev) => ({
@@ -68,7 +59,6 @@ export default function NavBar() {
     }));
   };
 
-  // console.log("Valor de session", session);
   return (
     <nav id="mainnav-container" className="mainnav">
       <div className="mainnav__inner">

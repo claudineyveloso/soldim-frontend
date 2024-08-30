@@ -120,24 +120,6 @@ const ProductSalesOrders = () => {
                       vendas de forma eficiente
                     </p>
                   </div>
-
-                  <div className="d-flex flex-wrap align-items-end justify-content-end gap-2 mb-3 pb-3">
-                    <div className="d-md-flex flex-wrap align-items-center gap-2 mb-3 mb-sm-0">
-                      <div className="text-center mb-2 mb-md-0">
-                        Somente por Situação
-                      </div>
-                      <select
-                        className="form-select w-auto"
-                        aria-label="Categories"
-                      >
-                        <option value="A">Todos</option>
-                        <option value="A">Últimos incluídos</option>
-                        <option value="A">Ativos</option>
-                        <option value="I">Inativos</option>
-                        <option value="E">Excluídos</option>
-                      </select>
-                    </div>
-                  </div>
                   <div className="row">
                     <GridTableSalesOrders
                       data={salesOrders}
