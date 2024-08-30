@@ -55,7 +55,7 @@ interface DraftModalProps {
   modalRef: React.RefObject<HTMLDivElement>;
 }
 
-const ProductModal: React.FC<DraftModalProps> = ({
+const DraftModal: React.FC<DraftModalProps> = ({
   draft,
   onChange,
   onSave,
@@ -111,41 +111,6 @@ const ProductModal: React.FC<DraftModalProps> = ({
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
-  const handlePriceChangeTTT = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    const cleanValue = value.replace(/[^\d,]/g, ""); // Remove caracteres não numéricos
-    const floatValue = parseFloat(cleanValue.replace(",", "."));
-
-    const newValue = isNaN(floatValue) ? "0" : floatValue.toString(); // Converte o número para string
-
-    // Atualiza o estado local com o novo preço
-    setLocalDraft({
-      ...localDraft,
-      price: parseFloat(newValue),
-    });
-
-    // Atualiza o evento onChange com o valor formatado como string
-    onChange({
-      ...event,
-      target: {
-        ...event.target,
-        value: newValue,
-        name: "price",
-      },
-    } as React.ChangeEvent<HTMLInputElement>);
-  };
-
-  const handlePriceChangeAAA = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    const cleanValue = value.replace(/[^\d,]/g, ""); // Limpa o valor
-    const floatValue = parseFloat(cleanValue.replace(",", "."));
-
-    setLocalDraft({
-      ...localDraft,
-      price: isNaN(floatValue) ? 0 : floatValue,
-    });
-  };
-
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -161,8 +126,6 @@ const ProductModal: React.FC<DraftModalProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-
-    console.log(`Field: ${name}, Value: ${value}`);
 
     if (name.startsWith("estoque.")) {
       const nestedField = name.replace("estoque.", "") as keyof Estoque;
@@ -185,8 +148,6 @@ const ProductModal: React.FC<DraftModalProps> = ({
       });
     } else {
       setLocalDraft((prevProduct) => {
-        console.log(`Updated Field: ${name}, Value: ${value}`);
-
         return {
           ...prevProduct,
           [name]: value,
@@ -197,6 +158,11 @@ const ProductModal: React.FC<DraftModalProps> = ({
 
   const handleAmountChange = (value: number) => {
     setAmount(value);
+    setLocalDraft({
+      ...localDraft,
+      price: value,
+    });
+    draft.price = value;
   };
 
   return (
@@ -265,7 +231,7 @@ const ProductModal: React.FC<DraftModalProps> = ({
                                 Preço venda
                               </label>
                               <MoneyInput
-                                id="unitary_value"
+                                id="price"
                                 value={localDraft.price}
                                 className="form-control"
                                 onChange={handleAmountChange}
@@ -528,4 +494,4 @@ const ProductModal: React.FC<DraftModalProps> = ({
   );
 };
 
-export default ProductModal;
+export default DraftModal;

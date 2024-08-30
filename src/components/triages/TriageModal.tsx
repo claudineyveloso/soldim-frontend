@@ -21,7 +21,7 @@ const TriageModal: React.FC<TriageModalProps> = ({
   const [localTriage, setLocalTriage] = useState({ ...triage, preco: "" });
   const [amount, setAmount] = useState<number>(0);
   useEffect(() => {
-    setLocalTriage({ ...triage, preco: formatCurrency(triage.preco) });
+    setLocalTriage({ ...triage });
   }, [triage]);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,12 +30,16 @@ const TriageModal: React.FC<TriageModalProps> = ({
     const floatValue = Number.parseFloat(cleanValue.replace(",", "."));
     setLocalTriage({
       ...localTriage,
-      preco: Number.isNaN(floatValue) ? value : formatCurrency(floatValue),
     });
   };
 
   const handleAmountChange = (value: number) => {
     setAmount(value);
+    setLocalTriage({
+      ...localTriage,
+      unitary_value: value,
+    });
+    console.log(localTriage);
   };
 
   return (
