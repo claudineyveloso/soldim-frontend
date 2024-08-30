@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import formatCurrency from "../shared/formatCurrency";
+import MoneyInput from "../shared/MoneyInput";
 
 interface Draft {
   id: string;
@@ -71,6 +71,8 @@ const ProductModal: React.FC<DraftModalProps> = ({
       localizacao: "",
     },
   });
+
+  const [amount, setAmount] = useState<number>(0);
 
   useEffect(() => {
     setLocalDraft({
@@ -193,6 +195,10 @@ const ProductModal: React.FC<DraftModalProps> = ({
     }
   };
 
+  const handleAmountChange = (value: number) => {
+    setAmount(value);
+  };
+
   return (
     <div className="row">
       <div
@@ -258,18 +264,11 @@ const ProductModal: React.FC<DraftModalProps> = ({
                               <label htmlFor="price" className="form-label">
                                 Preço venda
                               </label>
-                              <input
-                                id="price"
-                                name="price"
-                                type="text"
+                              <MoneyInput
+                                id="unitary_value"
+                                value={localDraft.price}
                                 className="form-control"
-                                placeholder=""
-                                value={
-                                  localDraft.price !== undefined
-                                    ? localDraft.price.toString()
-                                    : ""
-                                }
-                                onChange={handlePriceChange}
+                                onChange={handleAmountChange}
                               />
                             </div>
                             <div className="col-md-4">

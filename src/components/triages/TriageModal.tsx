@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import formatCurrency from "../shared/formatCurrency";
+import MoneyInput from "../shared/MoneyInput";
 
 interface TriageModalProps {
   triage: any;
@@ -18,35 +19,23 @@ const TriageModal: React.FC<TriageModalProps> = ({
   modalRef,
 }) => {
   const [localTriage, setLocalTriage] = useState({ ...triage, preco: "" });
-  const [value, setValue] = useState("");
-
+  const [amount, setAmount] = useState<number>(0);
   useEffect(() => {
     setLocalTriage({ ...triage, preco: formatCurrency(triage.preco) });
   }, [triage]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = event.target.value;
-
-    // Substituir vírgula por ponto para normalizar o número
-    inputValue = inputValue.replace(/,/g, ".");
-
-    // Remover caracteres não numéricos exceto ponto
-    if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
-      setValue(inputValue);
-    }
-  };
-
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    // Remove tudo que não é número ou vírgula (para decimais)
     const cleanValue = value.replace(/[^\d,]/g, "");
-    // Substitui vírgulas por pontos para converter para float
     const floatValue = Number.parseFloat(cleanValue.replace(",", "."));
-    // Define o estado do produto com o valor formatado
     setLocalTriage({
       ...localTriage,
       preco: Number.isNaN(floatValue) ? value : formatCurrency(floatValue),
     });
+  };
+
+  const handleAmountChange = (value: number) => {
+    setAmount(value);
   };
 
   return (
@@ -123,14 +112,11 @@ const TriageModal: React.FC<TriageModalProps> = ({
                               >
                                 Preço venda
                               </label>
-                              <input
+                              <MoneyInput
                                 id="unitary_value"
-                                name="unitary_value"
-                                type="text"
-                                className="form-control"
                                 value={localTriage.unitary_value}
-                                onChange={handlePriceChange}
-                                placeholder="R$ 0,00"
+                                className="form-control"
+                                onChange={handleAmountChange}
                               />
                             </div>
                             <div className="col-md-4">

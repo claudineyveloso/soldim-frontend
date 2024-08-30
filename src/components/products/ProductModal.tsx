@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import formatCurrency from "../shared/formatCurrency";
+import MoneyInput from "../shared/MoneyInput";
 
 interface Product {
   nome: string;
@@ -61,6 +62,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
       localizacao: "",
     },
   });
+  const [amount, setAmount] = useState<number>(0);
 
   useEffect(() => {
     // Garantir que estoque seja sempre um objeto com valores definidos
@@ -128,6 +130,10 @@ const ProductModal: React.FC<ProductModalProps> = ({
         };
       });
     }
+  };
+
+  const handleAmountChange = (value: number) => {
+    setAmount(value);
   };
 
   return (
@@ -204,14 +210,11 @@ const ProductModal: React.FC<ProductModalProps> = ({
                               >
                                 Preço venda
                               </label>
-                              <input
-                                id="preco"
-                                name="preco"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
+                              <MoneyInput
+                                id="unitary_value"
                                 value={localProduct.preco}
-                                onChange={handlePriceChange}
+                                className="form-control"
+                                onChange={handleAmountChange}
                               />
                             </div>
                             <div className="col-md-4">
