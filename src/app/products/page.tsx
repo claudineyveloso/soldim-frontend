@@ -157,7 +157,7 @@ const Products = () => {
           situacao: product.situacao || "A",
           formato: product.format || "S",
           descricaoCurta: product.descricaoCurta || "",
-          // dataValidade: product.dataValidade || "",
+          dataValidade: product.dataValidade || null,
           unidade: product.unidade || "UN",
           pesoLiquido: product.pesoLiquido || 0,
           pesoBruto: product.pesoBruto || 0,
