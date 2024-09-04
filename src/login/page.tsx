@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { setCookie } from "nookies";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const LoginPage = () => {
     checkSession();
   }, [router]);
 
-  async function login(e: React.FormEvent<HTMLFormElement>) {
+  async function loginXXX(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {
@@ -30,6 +31,34 @@ const LoginPage = () => {
       ...data,
       callbackUrl: "/dashboard",
     });
+  }
+
+  async function login(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false, // Impede o redirecionamento automático
+    });
+
+    if (result?.ok && result?.url) {
+      // Armazena o token no cookie após a autenticação
+      const session = await getSession();
+      console.log("valor de result", session);
+      if (session?.user.token) {
+        setCookie(null, "soldim-token", session.user.token, {
+          maxAge: 60 * 60 * 8, // 8 horas
+          path: "/",
+          secure: process.env.NODE_ENV === "production", // para HTTPS em produção
+          sameSite: "lax",
+        });
+      }
+      router.push("/dashboard");
+    }
   }
 
   return (

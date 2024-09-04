@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import formatCurrency from "../shared/formatCurrency";
 import MoneyInput from "../shared/MoneyInput";
 
@@ -87,12 +87,12 @@ const ProductModal: React.FC<ProductModalProps> = ({
     // Remove caracteres não numéricos, mas mantém vírgulas e pontos
     const cleanValue = value.replace(/[^\d.,]/g, "");
     // Substitui vírgulas por pontos para conversão para número
-    const floatValue = parseFloat(cleanValue.replace(",", "."));
+    const floatValue = Number.parseFloat(cleanValue.replace(",", "."));
 
     // Atualiza o estado com o valor numérico
     setLocalProduct((prevProduct) => ({
       ...prevProduct,
-      preco: isNaN(floatValue) ? prevProduct.preco : floatValue,
+      preco: Number.isNaN(floatValue) ? prevProduct.preco : floatValue,
     }));
   };
 
@@ -107,7 +107,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
       setLocalProduct((prevProduct) => {
         const updatedEstoque = {
           ...prevProduct.estoque,
-          [nestedField]: isNaN(Number(value)) ? value : Number(value), // Convert to number if possible
+          [nestedField]: Number.isNaN(Number(value)) ? value : Number(value), // Convert to number if possible
         };
 
         product.estoque.minimo = updatedEstoque.minimo;

@@ -114,11 +114,14 @@ const Triages = () => {
     const { name, value } = e.target;
 
     // Verifica se o nome do campo é 'price' e converte o valor para número
-    const newValue = name === "price" ? parseFloat(value) : value;
 
-    console.log(`Field name: ${name}`);
-    console.log(`Field value: ${value}`);
-    console.log(`Converted value (if applicable): ${newValue}`);
+    const newValue =
+      name === "price" ||
+      name === "send_to_batch" ||
+      name === "send_to_bling" ||
+      name === "defect"
+        ? Number(value)
+        : value;
 
     // Atualiza o estado draft com o novo valor
     setTriage((prevTriage) => ({

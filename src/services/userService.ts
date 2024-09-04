@@ -1,5 +1,6 @@
 import axios from "axios";
 import baseURL from "../utils/config";
+import { getAuthToken } from "../utils/auth";
 
 interface FetchUsersResponse {
   users: any[];
@@ -8,9 +9,11 @@ interface FetchUsersResponse {
 // services/userService.ts
 export async function fetchUsers(): Promise<FetchUsersResponse> {
   try {
+    const token = getAuthToken();
     const response = await axios.get(`${baseURL}/get_users`, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -32,9 +35,15 @@ export async function fetchUsers(): Promise<FetchUsersResponse> {
 }
 
 export async function fetchUser(id: string) {
-  console.log("Fetching user with id:", id);
   try {
-    const response = await fetch(`${baseURL}/get_user/${id}`);
+    const token = getAuthToken();
+
+    const response = await fetch(`${baseURL}/get_user/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Erro ao buscar o usuário: ${response.statusText}`);

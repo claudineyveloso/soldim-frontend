@@ -211,6 +211,8 @@ export const createProduct = async (product: any) => {
 
 export const updateProduct = async (product: any) => {
   try {
+    console.log("Response:", product);
+
     const response = await fetch(
       `${baseURL}/update_product_bling?productID=${product.id}`,
       {
@@ -232,3 +234,65 @@ export const updateProduct = async (product: any) => {
     return false;
   }
 };
+
+export async function importCreatedProducts() {
+  try {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const formatDate = (date: Date) => date.toISOString().split("T")[0];
+
+    const dataInclusaoFinal = formatDate(today);
+    const dataInclusaoInicial = formatDate(yesterday);
+
+    const url = `${baseURL}/import_products?dataInclusaoInicial=${dataInclusaoInicial}&dataInclusaoFinal=${dataInclusaoFinal}`;
+
+    console.log("Importing products with URL:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro ao importar produtos: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data || null;
+  } catch (error) {
+    console.error("Erro ao importar produtos:", error);
+    return null;
+  }
+}
+
+export async function importUpdatedProducts() {
+  try {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const formatDate = (date: Date) => date.toISOString().split("T")[0];
+
+    const dataAlteracaoInicial = formatDate(today);
+    const dataAlteracaoFinal = formatDate(yesterday);
+
+    const url = `${baseURL}/import_products?dataAlteracaoInicial=${dataAlteracaoInicial}&dataAlteracaoFinal=${dataAlteracaoFinal}`;
+
+    console.log("Importing products with URL:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro ao importar produtos: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data || null;
+  } catch (error) {
+    console.error("Erro ao importar produtos:", error);
+    return null;
+  }
+}

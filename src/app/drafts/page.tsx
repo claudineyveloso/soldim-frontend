@@ -251,6 +251,7 @@ const Drafts = () => {
       try {
         const deleteDraftSuccess = await deleteDraft(id);
         if (deleteDraftSuccess) {
+          getDrafts();
           console.log("Draft deleted successfully");
         } else {
           console.error("Erro ao deletar o draft");

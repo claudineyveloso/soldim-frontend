@@ -307,6 +307,62 @@ const TriageModal: React.FC<TriageModalProps> = ({
                               />
                             </div>
                           </div>
+                          <div className="row mb-3">
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Enviar para lote
+                              </label>
+                              <select
+                                id="sent_to_batch"
+                                name="send_to_batch"
+                                className="form-select"
+                                value={localTriage.sent_to_batch}
+                                onChange={onChange}
+                              >
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
+                              </select>
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Enviar para Bling
+                              </label>
+                              <select
+                                id="sent_to_bling"
+                                name="send_to_bling"
+                                className="form-select"
+                                value={localTriage.sent_to_bling}
+                                onChange={onChange}
+                              >
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
+                              </select>
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Produto com defeito
+                              </label>
+                              <select
+                                id="defect"
+                                name="defect"
+                                className="form-select"
+                                value={localTriage.defect}
+                                onChange={onChange}
+                              >
+                                <option value="0">Não</option>
+                                <option value="1">Sim</option>
+                              </select>
+                            </div>
+                          </div>
                         </div>
                       </div>
 

@@ -7,6 +7,8 @@ import {
   deleteProduct,
   createProduct,
   updateProduct,
+  importCreatedProducts,
+  importUpdatedProducts,
 } from "@/services/productService";
 
 import { AuthWrapper } from "@/components/AuthWrapper";
@@ -321,7 +323,7 @@ const Products = () => {
       const success = await createProduct(product);
       if (success) {
         toast.success("Produto criado com sucesso");
-        await getProducts("", situation);
+        // await getProducts("", situation);
         if (window.bootstrap && window.bootstrap.Modal) {
           const modal = new window.bootstrap.Modal(
             document.getElementById("modalProduct"),
@@ -334,6 +336,10 @@ const Products = () => {
     } catch (error) {
       toast.error("Erro ao criar produto");
       console.error("Erro ao criar produto:", error);
+    } finally {
+      console.log("Chamando importProducts...");
+      await importCreatedProducts();
+      await getProducts("", situation);
     }
   };
 
@@ -342,7 +348,7 @@ const Products = () => {
       const success = await updateProduct(product);
       if (success) {
         toast.success("Produto atualizado com sucesso");
-        await getProducts("", situation);
+        //await getProducts("", situation);
         if (window.bootstrap && window.bootstrap.Modal) {
           const modal = new window.bootstrap.Modal(
             document.getElementById("modalProduct"),
@@ -355,6 +361,10 @@ const Products = () => {
     } catch (error) {
       toast.error("Erro ao atualizar produto");
       console.error("Erro ao atualizar produto:", error);
+    } finally {
+      console.log("Chamando importProducts...");
+      await importUpdatedProducts();
+      await getProducts("", situation);
     }
   };
 

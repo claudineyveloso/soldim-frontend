@@ -25,6 +25,12 @@ export default function NavBar() {
   }>({});
   const { data: session } = useSession();
 
+  const handleSignOut = () => {
+    signOut({
+      callbackUrl: "/login", // Redireciona para a página de login após o sign out
+    });
+  };
+
   useEffect(() => {
     // Recuperar o estado salvo no localStorage quando o componente for montado
     const savedActiveItem = localStorage.getItem("activeItem");
