@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Grid, h } from "gridjs";
 import "gridjs/dist/theme/mermaid.css";
 
@@ -23,7 +23,7 @@ const GridTableSalesOrders: React.FC<GridTableSalesOrdersProps> = ({
 
     const grid = new Grid({
       columns: [
-        { id: "nome", name: "Nome" },
+        { id: "descricao", name: "Descrição" },
         {
           id: "codigo",
           name: "Codigo",
