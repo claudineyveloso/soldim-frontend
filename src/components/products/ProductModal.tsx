@@ -45,7 +45,7 @@ interface Deposit {
 interface ProductModalProps {
   product: Product;
   deposits: Deposit[];
-  defaultDeposit: number;
+  defaultDeposit: number | undefined;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
