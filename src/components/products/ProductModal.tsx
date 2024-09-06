@@ -37,8 +37,15 @@ interface Estoque {
   localizacao: string;
 }
 
+interface Deposit {
+  id: string;
+  descricao: string;
+}
+
 interface ProductModalProps {
   product: Product;
+  deposits: Deposit[];
+  defaultDeposit: number;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
@@ -48,6 +55,8 @@ interface ProductModalProps {
 
 const ProductModal: React.FC<ProductModalProps> = ({
   product,
+  deposits,
+  defaultDeposit,
   onChange,
   onSave,
   modalRef,
@@ -186,7 +195,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                             />
                           </div>
                           <div className="row mb-3">
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                               <label
                                 htmlFor="_dm-inputAddress2"
                                 className="form-label"
@@ -203,7 +212,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 onChange={onChange}
                               />
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label
                                 htmlFor="_dm-inputAddress2"
                                 className="form-label"
@@ -217,7 +226,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 onChange={handleAmountChange}
                               />
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label
                                 htmlFor="_dm-inputAddress2"
                                 className="form-label"
@@ -234,8 +243,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 onChange={handlePriceChange}
                               />
                             </div>
-                          </div>
-                          <div className="row mb-3">
+
                             <div className="col-md-4">
                               <label
                                 htmlFor="inputState"
@@ -256,7 +264,9 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 <option value="E">Com composição</option>
                               </select>
                             </div>
-                            <div className="col-md-4">
+                          </div>
+                          <div className="row mb-3">
+                            <div className="col-md-3">
                               <label
                                 htmlFor="inputState"
                                 className="form-label"
@@ -274,7 +284,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 <option value="S">Serviço</option>
                               </select>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label
                                 htmlFor="inputState"
                                 className="form-label"
@@ -294,9 +304,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 <option value="3">Recondicionado</option>
                               </select>
                             </div>
-                          </div>
-                          <div className="row mb-3">
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                               <label
                                 htmlFor="inputState"
                                 className="form-label"
@@ -330,26 +338,9 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 onChange={onChange}
                               />
                             </div>
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Gtin Embalagem
-                              </label>
-                              <input
-                                id="gtinEmbalagem"
-                                name="gtinEmbalagem"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.gtinEmbalagem}
-                                onChange={onChange}
-                              />
-                            </div>
                           </div>
                           <div className="row mb-3">
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                               <label
                                 htmlFor="inputState"
                                 className="form-label"
@@ -366,7 +357,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 onChange={handleInputChange}
                               />
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                               <label
                                 htmlFor="inputState"
                                 className="form-label"
@@ -400,9 +391,26 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 onChange={handleInputChange}
                               />
                             </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Gtin Embalagem
+                              </label>
+                              <input
+                                id="gtinEmbalagem"
+                                name="gtinEmbalagem"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localProduct.gtinEmbalagem}
+                                onChange={onChange}
+                              />
+                            </div>
                           </div>
                           <div className="row mb-3">
-                            <div className="col-md-4">
+                            <div className="col-md-2">
                               <label
                                 htmlFor="inputState"
                                 className="form-label"
@@ -419,6 +427,23 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 onChange={handleInputChange}
                               />
                             </div>
+                            <div className="col-md-2">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Quantidade
+                              </label>
+                              <input
+                                id="preco_custo"
+                                name="preco_custo"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                onChange={onChange}
+                              />
+                            </div>
+
                             <div className="col-md-4">
                               <label
                                 htmlFor="inputState"
@@ -441,6 +466,65 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 className="form-label"
                               >
                                 Preço de venda
+                              </label>
+                              <input
+                                id="preco_venda"
+                                name="preco_venda"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                onChange={onChange}
+                              />
+                            </div>
+                          </div>
+                          <div className="row mb-3">
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Tipo
+                              </label>
+                              <select
+                                id="condicao"
+                                name="condicao"
+                                className="form-select"
+                                value={localProduct.estoque.localizacao}
+                                onChange={onChange}
+                              >
+                                <option value="0">Entrada</option>
+                                <option value="1">Saída</option>
+                                <option value="2">Balanço</option>
+                              </select>
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Depósito
+                              </label>
+
+                              <select
+                                id="deposit"
+                                name="deposit"
+                                value={defaultDeposit}
+                                className="form-select"
+                                onChange={onChange}
+                              >
+                                {deposits.map((deposit) => (
+                                  <option key={deposit.id} value={deposit.id}>
+                                    {deposit.descricao}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="col-md-4">
+                              <label
+                                htmlFor="inputState"
+                                className="form-label"
+                              >
+                                Observação
                               </label>
                               <input
                                 id="preco_venda"

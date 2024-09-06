@@ -11,6 +11,8 @@ import {
   importUpdatedProducts,
 } from "@/services/productService";
 
+import { fetchDeposits } from "@/services/depositService";
+
 import { AuthWrapper } from "@/components/AuthWrapper";
 
 import Swal from "sweetalert2";
@@ -21,6 +23,8 @@ import DetailModal from "@/components/products/DetailModal";
 
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
+  const [deposits, setDeposits] = useState<any[]>([]);
+  const [selectedDeposit, setSelectedDeposit] = useState(null);
   const [newProduct, setNewProduct] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const modalRef = useRef(null);
@@ -82,6 +86,29 @@ const Products = () => {
   useEffect(() => {
     getProducts("", situation);
   }, [getProducts, situation]);
+
+  const getDeposits = useCallback(async () => {
+    try {
+      const response = await fetchDeposits();
+      if (response && Array.isArray(response)) {
+        setDeposits(response); // Agora o response é o próprio array de depósitos
+        const defaultDeposit = response.find(
+          (deposit) => deposit.padrao === true,
+        );
+        if (defaultDeposit) {
+          setSelectedDeposit(defaultDeposit.id); // Define o id do depósito padrão como selecionado
+        }
+      } else {
+        setDeposits([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch deposits:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getDeposits();
+  }, [getDeposits]);
 
   const handleCriterioChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -451,6 +478,8 @@ const Products = () => {
         </section>
         <ProductModal
           product={product}
+          deposits={deposits}
+          defaultDeposit={selectedDeposit}
           onChange={handleChange}
           onSave={handleSaveProduct}
           modalRef={modalRef}
