@@ -45,7 +45,7 @@ interface Deposit {
 interface ProductModalProps {
   product: Product;
   deposits: Deposit[];
-  defaultDeposit: number | undefined;
+  defaultDeposit: number | null;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
@@ -508,7 +508,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                               <select
                                 id="deposit"
                                 name="deposit"
-                                value={defaultDeposit}
+                                value={defaultDeposit ?? ""}
                                 className="form-select"
                                 onChange={onChange}
                               >
