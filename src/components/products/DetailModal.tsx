@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import formatCurrency from "../shared/formatCurrency";
 
 interface DetailModalProps {

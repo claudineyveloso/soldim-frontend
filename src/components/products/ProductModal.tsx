@@ -7,6 +7,8 @@ interface Product {
   nome: string;
   codigo: string;
   preco: number;
+  precoCusto: number;
+  precoCompra: number;
   tipo: string;
   situacao: string;
   formato: string;
@@ -28,6 +30,10 @@ interface Product {
   observacoes: string;
   descricaoEmbalagemDiscreta: string;
   estoque: Estoque;
+  saldoFisicoTotal: number;
+  saldoVirtualTotal: number;
+  saldoFisico: number;
+  saldoVirtual: number;
 }
 
 interface Estoque {
@@ -457,6 +463,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
+                                value={localProduct.precoCompra}
                                 onChange={onChange}
                               />
                             </div>
@@ -473,7 +480,80 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 type="text"
                                 className="form-control"
                                 placeholder=""
+                                value={localProduct.precoCusto}
                                 onChange={onChange}
+                              />
+                            </div>
+                          </div>
+                          <div className="row mb-3">
+                            <div className="col-md-3">
+                              <label
+                                htmlFor="_dm-inputAddress2"
+                                className="form-label"
+                              >
+                                Saldo físico total
+                              </label>
+                              <input
+                                id="saldo_fisico_total"
+                                name="saldo_fisico_total"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localProduct.saldoFisicoTotal}
+                                onChange={handlePriceChange}
+                              />
+                            </div>
+
+                            <div className="col-md-3">
+                              <label
+                                htmlFor="_dm-inputAddress2"
+                                className="form-label"
+                              >
+                                Saldo virtual total
+                              </label>
+                              <input
+                                id="saldo_virtual_total"
+                                name="saldo_virtual_total"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localProduct.saldoVirtualTotal}
+                                onChange={handlePriceChange}
+                              />
+                            </div>
+
+                            <div className="col-md-3">
+                              <label
+                                htmlFor="_dm-inputAddress2"
+                                className="form-label"
+                              >
+                                Saldo físico
+                              </label>
+                              <input
+                                id="saldo_fisico"
+                                name="saldo_fisico"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localProduct.saldoFisico}
+                                onChange={handlePriceChange}
+                              />
+                            </div>
+                            <div className="col-md-3">
+                              <label
+                                htmlFor="_dm-inputAddress2"
+                                className="form-label"
+                              >
+                                Saldo virtual
+                              </label>
+                              <input
+                                id="saldo_virtual"
+                                name="saldo_virtual"
+                                type="text"
+                                className="form-control"
+                                placeholder=""
+                                value={localProduct.saldoVirtual}
+                                onChange={handlePriceChange}
                               />
                             </div>
                           </div>

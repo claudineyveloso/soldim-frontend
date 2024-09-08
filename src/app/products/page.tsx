@@ -38,6 +38,8 @@ const Products = () => {
     nome: "",
     codigo: "",
     preco: 0,
+    precoCusto: 0,
+    precoCompra: 0,
     tipo: "P",
     situacao: "A",
     formato: "S",
@@ -58,6 +60,10 @@ const Products = () => {
     linkExterno: "",
     observacoes: "",
     descricaoEmbalagemDiscreta: "",
+    saldoFisicoTotal: 0,
+    saldoVirtualTotal: 0,
+    saldoFisico: 0,
+    saldoVirtual: 0,
     estoque: {
       minimo: 0,
       maximo: 0,
@@ -73,6 +79,7 @@ const Products = () => {
         const response = await fetchProducts(nome, situacao);
         if (response && response.products) {
           setProducts(response.products);
+          console.log("Products fetched:");
         } else {
           setProducts([]);
         }
@@ -147,11 +154,15 @@ const Products = () => {
     try {
       const product = await fetchProduct(id);
 
+      console.log("Esse é o valor Product fetched:", product);
+
       setProduct({
         id: product.id || 0,
         nome: product.nome || "",
         codigo: product.codigo || "",
         preco: product.preco || 0,
+        precoCusto: product.precoCusto || 0,
+        precoCompra: product.preco_compra || 0,
         tipo: product.tipo || "P",
         situacao: product.situacao || "A",
         formato: product.format || "S",
@@ -172,6 +183,10 @@ const Products = () => {
         linkExterno: product.linkExtorno || "",
         observacoes: product.observacoes || "",
         descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
+        saldoFisicoTotal: product.saldo_fisico_total || 0,
+        saldoVirtualTotal: product.saldo_virtual_total || 0,
+        saldoFisico: product.saldo_fisico || 0,
+        saldoVirtual: product.saldo_virtual || 0,
         estoque: {
           minimo: product.estoque?.minimo || 0,
           maximo: product.estoque?.maximo || 0,
@@ -197,12 +212,15 @@ const Products = () => {
       setNewProduct(false);
       const product = await fetchProduct(id);
       console.log("Value of Product:", product);
+      console.log("Value of Product:", product.saldo_fisico_total);
       if (product) {
         setProduct({
           id: product.id,
           nome: product.nome || "",
           codigo: product.codigo || "",
           preco: product.preco || 0,
+          precoCusto: product.precoCusto || 0,
+          precoCompra: product.preco_compra || 0,
           tipo: product.tipo || "P",
           situacao: product.situacao || "A",
           formato: product.format || "S",
@@ -223,6 +241,10 @@ const Products = () => {
           linkExterno: product.linkExtorno || "",
           observacoes: product.observacoes || "",
           descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
+          saldoFisicoTotal: product.saldo_fisico_total || 0,
+          saldoVirtualTotal: product.saldo_virtual_total || 0,
+          saldoFisico: product.saldo_fisico || 0,
+          saldoVirtual: product.saldo_virtual || 0,
           estoque: {
             minimo: product.estoque?.minimo || 0,
             maximo: product.estoque?.maximo || 0,
@@ -299,6 +321,8 @@ const Products = () => {
       nome: "",
       codigo: "",
       preco: 0,
+      precoCusto: 0,
+      precoCompra: 0,
       tipo: "P",
       situacao: "A",
       formato: "S",
@@ -319,6 +343,10 @@ const Products = () => {
       linkExterno: "",
       observacoes: "",
       descricaoEmbalagemDiscreta: "",
+      saldoFisicoTotal: 0,
+      saldoVirtualTotal: 0,
+      saldoFisico: 0,
+      saldoVirtual: 0,
       estoque: {
         minimo: 0,
         maximo: 0,
