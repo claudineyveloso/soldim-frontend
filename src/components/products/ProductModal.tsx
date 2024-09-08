@@ -449,7 +449,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 htmlFor="inputState"
                                 className="form-label"
                               >
-                                Preço de custo
+                                Preço de compra
                               </label>
                               <input
                                 id="preco_custo"
@@ -465,7 +465,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                 htmlFor="inputState"
                                 className="form-label"
                               >
-                                Preço de venda
+                                Preço de custo
                               </label>
                               <input
                                 id="preco_venda"

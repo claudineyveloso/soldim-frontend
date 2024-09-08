@@ -12,6 +12,7 @@ import {
 } from "@/services/productService";
 
 import { fetchDeposits } from "@/services/depositService";
+import { fetchDepositProductByProduct } from "@/services/depositProductService";
 
 import { AuthWrapper } from "@/components/AuthWrapper";
 
@@ -24,6 +25,7 @@ import DetailModal from "@/components/products/DetailModal";
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [deposits, setDeposits] = useState<any[]>([]);
+  const [depositProducts, setDepositProducts] = useState<any[]>([]);
   const [selectedDeposit, setSelectedDeposit] = useState(null);
   const [newProduct, setNewProduct] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -109,6 +111,25 @@ const Products = () => {
   useEffect(() => {
     getDeposits();
   }, [getDeposits]);
+
+  const getDepositProductByProduct = useCallback(async (productId: number) => {
+    try {
+      const response = await fetchDepositProductByProduct(productId);
+      if (response && Array.isArray(response.depositProducts)) {
+        setDepositProducts(response.depositProducts);
+      } else {
+        setDepositProducts([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch deposit products:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (product.id) {
+      getDepositProductByProduct(product.id);
+    }
+  }, [product.id, getDepositProductByProduct]); // Passa a função como dependência
 
   const handleCriterioChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -464,12 +485,16 @@ const Products = () => {
                     </button>
                   </div>
                   <div className="row">
-                    <GridTableProducts
-                      data={products}
-                      onEdit={handleEdit}
-                      onDelete={confirmDelete}
-                      onDetails={handleDetails}
-                    />
+                    {loading ? (
+                      <p>Carregando produtos...</p>
+                    ) : (
+                      <GridTableProducts
+                        data={products}
+                        onEdit={handleEdit}
+                        onDelete={confirmDelete}
+                        onDetails={handleDetails}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -484,7 +509,11 @@ const Products = () => {
           onSave={handleSaveProduct}
           modalRef={modalRef}
         />
-        <DetailModal product={product} modalRef={modalRef} />
+        <DetailModal
+          product={product}
+          depositProduct={depositProducts}
+          modalRef={modalRef}
+        />
       </AuthWrapper>
     </>
   );

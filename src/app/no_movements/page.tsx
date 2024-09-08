@@ -276,12 +276,16 @@ const Products = () => {
                     </div>
                   </div>
                   <div className="row">
-                    <GridTableProductsNoMovement
-                      data={products}
-                      onEdit={handleEdit}
-                      onDelete={confirmDelete}
-                      onDetails={handleDetails}
-                    />
+                    {loading ? (
+                      <p>Carregando produtos...</p>
+                    ) : (
+                      <GridTableProductsNoMovement
+                        data={products}
+                        onEdit={handleEdit}
+                        onDelete={confirmDelete}
+                        onDetails={handleDetails}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

@@ -321,12 +321,16 @@ const CollectProduct = () => {
                     </div>
                   )}
                   <div className="row">
-                    <GridTableCollectProducts
-                      data={collects}
-                      onNewSearch={newSearch}
-                      onDraftProduct={draftProduct}
-                      onDelete={confirmDelete}
-                    />
+                    {loading ? (
+                      <p>Carregando produtos...</p>
+                    ) : (
+                      <GridTableCollectProducts
+                        data={collects}
+                        onNewSearch={newSearch}
+                        onDraftProduct={draftProduct}
+                        onDelete={confirmDelete}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

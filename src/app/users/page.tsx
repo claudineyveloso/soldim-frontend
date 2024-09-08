@@ -228,13 +228,17 @@ const Users = () => {
             </div>
           </div>
         </section>
-        <UserModal
-          user={user}
-          onChange={handleChange}
-          onSave={handleSaveUser}
-          modalRef={modalRef}
-          onFocus={handleFocus}
-        />
+        {loading ? (
+          <p>Carregando produtos...</p>
+        ) : (
+          <UserModal
+            user={user}
+            onChange={handleChange}
+            onSave={handleSaveUser}
+            modalRef={modalRef}
+            onFocus={handleFocus}
+          />
+        )}
       </AuthWrapper>
     </>
   );

@@ -121,10 +121,14 @@ const ProductSalesOrders = () => {
                     </p>
                   </div>
                   <div className="row">
-                    <GridTableSalesOrders
-                      data={salesOrders}
-                      onDetails={handleDetails}
-                    />
+                    {loading ? (
+                      <p>Carregando pedidos de vendas...</p>
+                    ) : (
+                      <GridTableSalesOrders
+                        data={salesOrders}
+                        onDetails={handleDetails}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

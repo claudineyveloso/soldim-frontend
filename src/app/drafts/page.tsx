@@ -446,12 +446,16 @@ const Drafts = () => {
                   </div>
 
                   <div className="row">
-                    <GridTableDrafts
-                      data={drafts}
-                      onEdit={handleEdit}
-                      onDelete={confirmDelete}
-                      onSendToBling={confirmSendToBling}
-                    />
+                    {loading ? (
+                      <p>Carregando produtos...</p>
+                    ) : (
+                      <GridTableDrafts
+                        data={drafts}
+                        onEdit={handleEdit}
+                        onDelete={confirmDelete}
+                        onSendToBling={confirmSendToBling}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

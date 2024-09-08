@@ -222,12 +222,16 @@ const Triages = () => {
                     </p>
                   </div>
                   <div className="row">
-                    <GridTableTriages
-                      data={triages}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                      onDetails={handleEdit}
-                    />
+                    {loading ? (
+                      <p>Carregando produtos...</p>
+                    ) : (
+                      <GridTableTriages
+                        data={triages}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                        onDetails={handleEdit}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
