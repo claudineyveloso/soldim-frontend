@@ -106,11 +106,19 @@ const DetailModal: React.FC<DetailModalProps> = ({
                             </p>
                           </div>
                         </div>
-                        <div className="col-12 mb-3">
-                          <p className="mb-0">
-                            <span className="d-inline h6">Nome: </span>
-                            {localProduct.nome}
-                          </p>
+                        <div className="row mb-3">
+                          <div className="col-md-6">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Nome: </span>
+                              {localProduct.nome}
+                            </p>
+                          </div>
+                          <div className="col-md-6">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Fornecedor: </span>
+                              {"Não informado"}
+                            </p>
+                          </div>
                         </div>
 
                         <div className="row mb-3">
@@ -210,13 +218,13 @@ const DetailModal: React.FC<DetailModalProps> = ({
                               <span className="d-inline h6">
                                 Preço compra:{" "}
                               </span>
-                              {localProduct.precocompra || "R$ 0,00"}
+                              {localProduct.precoCompra || "R$ 0,00"}
                             </p>
                           </div>
                           <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">Preço custo: </span>
-                              {localProduct.precocusto || "R$ 0,00"}
+                              {localProduct.precoCusto || "R$ 0,00"}
                             </p>
                           </div>
                           <div className="col-md-2">
