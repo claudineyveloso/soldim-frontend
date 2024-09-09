@@ -175,6 +175,103 @@ const ProductModal: React.FC<ProductModalProps> = ({
               />
             </div>
             <div className="modal-body">
+              <div className="content__boxed">
+                <div className="row mb-5">
+                  <div className="tab-base">
+                    <ul className="nav nav-tabs" role="tablist">
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className="nav-link active"
+                          data-bs-toggle="tab"
+                          data-bs-target="#_dm-tabsHome"
+                          type="button"
+                          role="tab"
+                          aria-controls="home"
+                          aria-selected="true"
+                        >
+                          Caracteristica
+                        </button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className="nav-link"
+                          data-bs-toggle="tab"
+                          data-bs-target="#_dm-tabsProfile"
+                          type="button"
+                          role="tab"
+                          aria-controls="profile"
+                          aria-selected="false"
+                        >
+                          Estoque
+                        </button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className="nav-link"
+                          data-bs-toggle="tab"
+                          data-bs-target="#_dm-tabsContact"
+                          type="button"
+                          role="tab"
+                          aria-controls="contact"
+                          aria-selected="false"
+                        >
+                          Controle de Estoque
+                        </button>
+                      </li>
+                    </ul>
+
+                    <div className="tab-content">
+                      <div
+                        id="_dm-tabsHome"
+                        className="tab-pane fade show active"
+                        role="tabpanel"
+                        aria-labelledby="home-tab"
+                      >
+                        <h5>Home tab</h5>
+                        <p className="mb-0">
+                          One morning, when Gregor Samsa woke from troubled
+                          dreams, he found himself transformed in his bed into a
+                          horrible vermin. He lay on his armour-like back, and
+                          if he lifted his head a little he could see his brown
+                          belly, slightly domed and divided by arches into stiff
+                          sections.
+                        </p>
+                      </div>
+                      <div
+                        id="_dm-tabsProfile"
+                        className="tab-pane fade"
+                        role="tabpanel"
+                        aria-labelledby="profile-tab"
+                      >
+                        <h5>Profile tab</h5>
+                        <p className="mb-0">
+                          Far far away, behind the word mountains, far from the
+                          countries Vokalia and Consonantia, there live the
+                          blind texts. Separated they live in Bookmarksgrove
+                          right at the coast of the Semantics, a large language
+                          ocean. A small river named Duden flows by their place
+                          and supplies it with the necessary.
+                        </p>
+                      </div>
+                      <div
+                        id="_dm-tabsContact"
+                        className="tab-pane fade"
+                        role="tabpanel"
+                        aria-labelledby="contact-tab"
+                      >
+                        <h5>Contact tab</h5>
+                        <p className="mb-0">
+                          The quick, brown fox jumps over a lazy dog. DJs flock
+                          by when MTV ax quiz prog. Junk MTV quiz graced by fox
+                          whelps. Bawds jog, flick quartz, vex nymphs. Waltz,
+                          bad nymph, for quick jigs vex! Fox nymphs grab
+                          quick-jived waltz. Brick quiz whangs jumpy veldt fox.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="col-md-12 mb-3">
                 <div className="card h-100 card-none-box-shadow">
                   <div className="card-body">
