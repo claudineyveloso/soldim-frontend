@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import formatCurrency from "../shared/formatCurrency";
 import MoneyInput from "../shared/MoneyInput";
 
 interface Product {
@@ -43,6 +42,14 @@ interface Estoque {
   localizacao: string;
 }
 
+interface stockControl {
+  tipo: string;
+  quantidade: number;
+  preco_custo: number;
+  preco_venda: number;
+  observacao: string;
+}
+
 interface Deposit {
   id: string;
   descricao: string;
@@ -53,7 +60,9 @@ interface ProductModalProps {
   deposits: Deposit[];
   defaultDeposit: number | null;
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => void;
   onSave: () => void;
   modalRef: React.RefObject<HTMLDivElement>;
@@ -162,7 +171,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
         ref={modalRef}
       >
         <div className="modal-dialog modal-lg">
-          <div className="modal-content">
+          <div className="modal-content bg-modal">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Cadastrar novo produto
@@ -176,7 +185,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </div>
             <div className="modal-body">
               <div className="content__boxed">
-                <div className="row mb-5">
+                <div className="row">
                   <div className="tab-base">
                     <ul className="nav nav-tabs" role="tablist">
                       <li className="nav-item" role="presentation">
@@ -219,518 +228,431 @@ const ProductModal: React.FC<ProductModalProps> = ({
                         </button>
                       </li>
                     </ul>
-
-                    <div className="tab-content">
-                      <div
-                        id="_dm-tabsHome"
-                        className="tab-pane fade show active"
-                        role="tabpanel"
-                        aria-labelledby="home-tab"
-                      >
-                        <h5>Home tab</h5>
-                        <p className="mb-0">
-                          One morning, when Gregor Samsa woke from troubled
-                          dreams, he found himself transformed in his bed into a
-                          horrible vermin. He lay on his armour-like back, and
-                          if he lifted his head a little he could see his brown
-                          belly, slightly domed and divided by arches into stiff
-                          sections.
-                        </p>
-                      </div>
-                      <div
-                        id="_dm-tabsProfile"
-                        className="tab-pane fade"
-                        role="tabpanel"
-                        aria-labelledby="profile-tab"
-                      >
-                        <h5>Profile tab</h5>
-                        <p className="mb-0">
-                          Far far away, behind the word mountains, far from the
-                          countries Vokalia and Consonantia, there live the
-                          blind texts. Separated they live in Bookmarksgrove
-                          right at the coast of the Semantics, a large language
-                          ocean. A small river named Duden flows by their place
-                          and supplies it with the necessary.
-                        </p>
-                      </div>
-                      <div
-                        id="_dm-tabsContact"
-                        className="tab-pane fade"
-                        role="tabpanel"
-                        aria-labelledby="contact-tab"
-                      >
-                        <h5>Contact tab</h5>
-                        <p className="mb-0">
-                          The quick, brown fox jumps over a lazy dog. DJs flock
-                          by when MTV ax quiz prog. Junk MTV quiz graced by fox
-                          whelps. Bawds jog, flick quartz, vex nymphs. Waltz,
-                          bad nymph, for quick jigs vex! Fox nymphs grab
-                          quick-jived waltz. Brick quiz whangs jumpy veldt fox.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-12 mb-3">
-                <div className="card h-100 card-none-box-shadow">
-                  <div className="card-body">
-                    <h5 className="card-title">Dados básicos</h5>
-
-                    <form className="row g-3">
-                      <div className="tab-base">
-                        <div className="tab-content">
-                          <div className="col-12 mb-3">
-                            <label
-                              htmlFor="_dm-inputAddress"
-                              className="form-label"
-                            >
-                              Nome
-                            </label>
-                            <input
-                              id="nome"
-                              name="nome"
-                              type="text"
-                              className="form-control"
-                              placeholder=""
-                              value={localProduct.nome}
-                              onChange={onChange}
-                            />
-                          </div>
-                          <div className="row mb-3">
-                            <div className="col-md-2">
-                              <label
-                                htmlFor="_dm-inputAddress2"
-                                className="form-label"
-                              >
-                                Código (SKU)
-                              </label>
-                              <input
-                                id="codigo"
-                                name="codigo"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.codigo}
-                                onChange={onChange}
-                              />
-                            </div>
-                            <div className="col-md-3">
-                              <label
-                                htmlFor="_dm-inputAddress2"
-                                className="form-label"
-                              >
-                                Preço venda
-                              </label>
-                              <MoneyInput
-                                id="unitary_value"
-                                value={localProduct.preco}
-                                className="form-control"
-                                onChange={handleAmountChange}
-                              />
-                            </div>
-                            <div className="col-md-3">
-                              <label
-                                htmlFor="_dm-inputAddress2"
-                                className="form-label"
-                              >
-                                Unidade
-                              </label>
-                              <input
-                                id="unidade"
-                                name="unidade"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.unidade}
-                                onChange={handlePriceChange}
-                              />
-                            </div>
-
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Formato
-                              </label>
-                              <select
-                                id="formato"
-                                name="formato"
-                                className="form-select"
-                                value={localProduct.formato}
-                                onChange={onChange}
-                              >
-                                <option value="S">
-                                  Simples ou com variação
-                                </option>
-                                <option value="E">Com composição</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="row mb-3">
-                            <div className="col-md-3">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Tipo
-                              </label>
-                              <select
-                                id="tipo"
-                                name="tipo"
-                                className="form-select"
-                                value={localProduct.tipo}
-                                onChange={onChange}
-                              >
-                                <option value="P">Produto</option>
-                                <option value="S">Serviço</option>
-                              </select>
-                            </div>
-                            <div className="col-md-3">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Condição
-                              </label>
-                              <select
-                                id="condicao"
-                                name="condicao"
-                                className="form-select"
-                                value={localProduct.condicao}
-                                onChange={onChange}
-                              >
-                                <option value="0">Não especificado</option>
-                                <option value="1">Novo</option>
-                                <option value="2">Usado</option>
-                                <option value="3">Recondicionado</option>
-                              </select>
-                            </div>
-                            <div className="col-md-2">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Volumes
-                              </label>
-                              <input
-                                id="volumes"
-                                name="volumes"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.volumes}
-                                onChange={handleInputChange}
-                              />
-                            </div>
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Gtin
-                              </label>
-                              <input
-                                id="gtin"
-                                name="gtin"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.gtin}
-                                onChange={onChange}
-                              />
-                            </div>
-                          </div>
-                          <div className="row mb-3">
-                            <div className="col-md-2">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Mínimo
-                              </label>
-                              <input
-                                id="estoque.minimo"
-                                name="estoque.minimo"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.estoque.minimo}
-                                onChange={handleInputChange}
-                              />
-                            </div>
-                            <div className="col-md-2">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Máximo
-                              </label>
-                              <input
-                                id="estoque.maximo"
-                                name="estoque.maximo"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.estoque.maximo}
-                                onChange={handleInputChange}
-                              />
-                            </div>
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Crossdocking
-                              </label>
-                              <input
-                                id="estoque.crossdocking"
-                                name="estoque.crossdocking"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.estoque.crossdocking}
-                                onChange={handleInputChange}
-                              />
-                            </div>
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Gtin Embalagem
-                              </label>
-                              <input
-                                id="gtinEmbalagem"
-                                name="gtinEmbalagem"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.gtinEmbalagem}
-                                onChange={onChange}
-                              />
-                            </div>
-                          </div>
-                          <div className="row mb-3">
-                            <div className="col-md-2">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Localização
-                              </label>
-                              <input
-                                id="estoque.localizacao"
-                                name="estoque.localizacao"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.estoque.localizacao}
-                                onChange={handleInputChange}
-                              />
-                            </div>
-                            <div className="col-md-2">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Quantidade
-                              </label>
-                              <input
-                                id="preco_custo"
-                                name="preco_custo"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                onChange={onChange}
-                              />
-                            </div>
-
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Preço de compra
-                              </label>
-                              <input
-                                id="preco_custo"
-                                name="preco_custo"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.precoCompra}
-                                onChange={onChange}
-                              />
-                            </div>
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Preço de custo
-                              </label>
-                              <input
-                                id="preco_venda"
-                                name="preco_venda"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.precoCusto}
-                                onChange={onChange}
-                              />
-                            </div>
-                          </div>
-                          <div className="row mb-3">
-                            <div className="col-md-3">
-                              <label
-                                htmlFor="_dm-inputAddress2"
-                                className="form-label"
-                              >
-                                Saldo físico total
-                              </label>
-                              <input
-                                id="saldo_fisico_total"
-                                name="saldo_fisico_total"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.saldoFisicoTotal}
-                                onChange={handlePriceChange}
-                              />
-                            </div>
-
-                            <div className="col-md-3">
-                              <label
-                                htmlFor="_dm-inputAddress2"
-                                className="form-label"
-                              >
-                                Saldo virtual total
-                              </label>
-                              <input
-                                id="saldo_virtual_total"
-                                name="saldo_virtual_total"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.saldoVirtualTotal}
-                                onChange={handlePriceChange}
-                              />
-                            </div>
-
-                            <div className="col-md-3">
-                              <label
-                                htmlFor="_dm-inputAddress2"
-                                className="form-label"
-                              >
-                                Saldo físico
-                              </label>
-                              <input
-                                id="saldo_fisico"
-                                name="saldo_fisico"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.saldoFisico}
-                                onChange={handlePriceChange}
-                              />
-                            </div>
-                            <div className="col-md-3">
-                              <label
-                                htmlFor="_dm-inputAddress2"
-                                className="form-label"
-                              >
-                                Saldo virtual
-                              </label>
-                              <input
-                                id="saldo_virtual"
-                                name="saldo_virtual"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                value={localProduct.saldoVirtual}
-                                onChange={handlePriceChange}
-                              />
-                            </div>
-                          </div>
-                          <div className="row mb-3">
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Tipo
-                              </label>
-                              <select
-                                id="condicao"
-                                name="condicao"
-                                className="form-select"
-                                value={localProduct.estoque.localizacao}
-                                onChange={onChange}
-                              >
-                                <option value="0">Entrada</option>
-                                <option value="1">Saída</option>
-                                <option value="2">Balanço</option>
-                              </select>
-                            </div>
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Depósito
-                              </label>
-
-                              <select
-                                id="deposit"
-                                name="deposit"
-                                value={defaultDeposit ?? ""}
-                                className="form-select"
-                                onChange={onChange}
-                              >
-                                {deposits.map((deposit) => (
-                                  <option key={deposit.id} value={deposit.id}>
-                                    {deposit.descricao}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                            <div className="col-md-4">
-                              <label
-                                htmlFor="inputState"
-                                className="form-label"
-                              >
-                                Observação
-                              </label>
-                              <input
-                                id="preco_venda"
-                                name="preco_venda"
-                                type="text"
-                                className="form-control"
-                                placeholder=""
-                                onChange={onChange}
-                              />
+                    <form className="row1 g-322">
+                      <div className="tab-content">
+                        <div
+                          id="_dm-tabsHome"
+                          className="tab-pane fade show active"
+                          role="tabpanel"
+                          aria-labelledby="home-tab"
+                        >
+                          <div className="tab-base">
+                            <div className="tab-content">
+                              <div className="col-12 mb-3">
+                                <label
+                                  htmlFor="_dm-inputAddress"
+                                  className="form-label"
+                                >
+                                  Nome
+                                </label>
+                                <input
+                                  id="nome"
+                                  className="form-control"
+                                  placeholder=""
+                                  type="text"
+                                  value={localProduct.nome}
+                                  name="nome"
+                                />
+                              </div>
+                              <div className="row mb-3">
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="_dm-inputAddress2"
+                                    className="form-label"
+                                  >
+                                    Código (SKU)
+                                  </label>
+                                  <input
+                                    id="codigo"
+                                    className="form-control"
+                                    placeholder=""
+                                    type="text"
+                                    value={localProduct.codigo}
+                                    name="codigo"
+                                  />
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="_dm-inputAddress2"
+                                    className="form-label"
+                                  >
+                                    Preço venda
+                                  </label>
+                                  <MoneyInput
+                                    id="preco"
+                                    value={localProduct.preco}
+                                    className="form-control"
+                                    onChange={handleAmountChange}
+                                  />
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="_dm-inputAddress2"
+                                    className="form-label"
+                                  >
+                                    Preço custo
+                                  </label>
+                                  <MoneyInput
+                                    id="precoCusto"
+                                    value={localProduct.precoCusto}
+                                    className="form-control"
+                                    onChange={handleAmountChange}
+                                  />
+                                </div>
+                              </div>
+                              <div className="row mb-3">
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="_dm-inputAddress2"
+                                    className="form-label"
+                                  >
+                                    Unidade
+                                  </label>
+                                  <input
+                                    id="unidade"
+                                    className="form-control"
+                                    placeholder=""
+                                    type="text"
+                                    value={localProduct.unidade}
+                                    name="unidade"
+                                  />
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Formato
+                                  </label>
+                                  <select
+                                    id="formato"
+                                    name="formato"
+                                    className="form-select"
+                                  >
+                                    <option value="S">
+                                      Simples ou com variação
+                                    </option>
+                                    <option value="E">Com composição</option>
+                                  </select>
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Tipo
+                                  </label>
+                                  <select
+                                    id="tipo"
+                                    name="tipo"
+                                    className="form-select"
+                                    value={localProduct.tipo}
+                                    onChange={onChange}
+                                  >
+                                    <option value="P">Produto</option>
+                                    <option value="S">Serviço</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="row mb-3">
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Condição
+                                  </label>
+                                  <select
+                                    id="condicao"
+                                    name="condicao"
+                                    className="form-select"
+                                    value={localProduct.condicao}
+                                    onChange={onChange}
+                                  >
+                                    <option value="0">Não especificado</option>
+                                    <option value="1">Novo</option>
+                                    <option value="2">Usado</option>
+                                    <option value="3">Recondicionado</option>
+                                  </select>
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Volumes
+                                  </label>
+                                  <input
+                                    id="volumes"
+                                    name="volumes"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                    value={localProduct.volumes}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Gtin
+                                  </label>
+                                  <input
+                                    id="gtin"
+                                    name="gtin"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                    value={localProduct.gtin}
+                                    onChange={onChange}
+                                  />
+                                </div>
+                              </div>
+                              <div className="row mb-3">
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Gtin embalagem
+                                  </label>
+                                  <input
+                                    id="gtin"
+                                    name="gtin"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                    value={localProduct.gtinEmbalagem}
+                                    onChange={onChange}
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
+                        <div
+                          id="_dm-tabsProfile"
+                          className="tab-pane fade"
+                          role="tabpanel"
+                          aria-labelledby="profile-tab"
+                        >
+                          <div className="tab-base">
+                            <div className="tab-content">
+                              <div className="row mb-3">
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Mínimo
+                                  </label>
+                                  <input
+                                    id="estoque.minimo"
+                                    name="estoque.minimo"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                    value={localProduct.estoque.minimo}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Máximo
+                                  </label>
+                                  <input
+                                    id="estoque.maximo"
+                                    name="estoque.maximo"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                    value={localProduct.estoque.maximo}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Crossdocking
+                                  </label>
+                                  <input
+                                    id="estoque.crossdocking"
+                                    name="estoque.crossdocking"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                    value={localProduct.estoque.crossdocking}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                              </div>
+                              <div className="row mb-3">
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Localização
+                                  </label>
+                                  <input
+                                    id="estoque.localizacao"
+                                    name="estoque.localizacao"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                    value={localProduct.estoque.localizacao}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          id="_dm-tabsContact"
+                          className="tab-pane fade"
+                          role="tabpanel"
+                          aria-labelledby="contact-tab"
+                        >
+                          <div className="tab-base">
+                            <div className="tab-content">
+                              <div className="row mb-3">
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Tipo
+                                  </label>
+                                  <select
+                                    id="tipo"
+                                    name="tipo"
+                                    className="form-select"
+                                    value={localProduct.tipo}
+                                    onChange={onChange}
+                                  >
+                                    <option value="P">Produto</option>
+                                    <option value="S">Serviço</option>
+                                  </select>
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Quantidade
+                                  </label>
+                                  <input
+                                    id="preco_custo"
+                                    name="preco_custo"
+                                    type="text"
+                                    className="form-control"
+                                    placeholder=""
+                                    onChange={onChange}
+                                  />
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Preço de compra
+                                  </label>
+                                  <MoneyInput
+                                    id="precoCompra"
+                                    value={localProduct.precoCompra}
+                                    className="form-control"
+                                    onChange={handleAmountChange}
+                                  />
+                                </div>
+                              </div>
+                              <div className="row mb-3">
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Preço de custo
+                                  </label>
+                                  <MoneyInput
+                                    id="precoVenda"
+                                    value={localProduct.precoCusto}
+                                    className="form-control"
+                                    onChange={handleAmountChange}
+                                  />
+                                </div>
+                                <div className="col-md-4">
+                                  <label
+                                    htmlFor="inputState"
+                                    className="form-label"
+                                  >
+                                    Depósito
+                                  </label>
 
-                      <div className="modal-footer">
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          Fechar
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={onSave}
-                        >
-                          Salvar
-                        </button>
+                                  <select
+                                    id="deposit"
+                                    name="deposit"
+                                    value={defaultDeposit ?? ""}
+                                    className="form-select"
+                                    onChange={onChange}
+                                  >
+                                    {deposits.map((deposit) => (
+                                      <option
+                                        key={deposit.id}
+                                        value={deposit.id}
+                                      >
+                                        {deposit.descricao}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="row mb-3">
+                                <div className="col-md-12">
+                                  <label
+                                    htmlFor="_dm-inputAddress2"
+                                    className="form-label"
+                                  >
+                                    Observação
+                                  </label>
+                                  <textarea
+                                    id="obervacoes"
+                                    name="observacoes"
+                                    className="form-control"
+                                    rows={4}
+                                    cols={50}
+                                    value={localProduct.observacoes}
+                                    onChange={onChange}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="modal-footer">
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                          >
+                            Fechar
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={onSave}
+                          >
+                            Salvar
+                          </button>
+                        </div>
                       </div>
                     </form>
                   </div>

@@ -233,15 +233,6 @@ const DetailModal: React.FC<DetailModalProps> = ({
                               {localProduct.volumes || "0"}
                             </p>
                           </div>
-
-                          <div className="col-md-4">
-                            <p className="mb-0">
-                              <span className="d-inline h6">
-                                Gtin Embalagem:{" "}
-                              </span>
-                              {localProduct.gtinEmbalagem}
-                            </p>
-                          </div>
                         </div>
                         <hr />
                         <div className="row mb-3">
