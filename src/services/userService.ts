@@ -9,25 +9,23 @@ interface FetchUsersResponse {
 // services/userService.ts
 export async function fetchUsers(): Promise<FetchUsersResponse> {
   try {
-    const token = getAuthToken();
+    //const token = getAuthToken();
     const response = await axios.get(`${baseURL}/get_users`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        //Authorization: `Bearer ${token}`,
       },
     });
-
     if (response.status !== 200) {
       throw new Error(
         `Erro ao buscar usuários no Service: ${response.statusText}`,
       );
     }
-
     return {
       users: response.data,
     };
   } catch (error) {
-    console.error("Erro ao buscar produtos no Services:", error);
+    console.error("Erro ao buscar usuários no Services:", error);
     return {
       users: [],
     };

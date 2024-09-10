@@ -382,32 +382,36 @@ const Products = () => {
   };
 
   const handleCreateProduct = async () => {
-    try {
-      console.log(
-        "Creating product with data:",
-        JSON.stringify(product, null, 2),
-      );
-      const success = await createProduct(product);
-      if (success) {
-        toast.success("Produto criado com sucesso");
-        // await getProducts("", situation);
-        if (window.bootstrap && window.bootstrap.Modal) {
-          const modal = new window.bootstrap.Modal(
-            document.getElementById("modalProduct"),
-          );
-          modal.hide();
-        }
-      } else {
-        toast.error("Erro ao criar produto");
-      }
-    } catch (error) {
-      toast.error("Erro ao criar produto");
-      console.error("Erro ao criar produto:", error);
-    } finally {
-      console.log("Chamando importProducts...");
-      await importCreatedProducts();
-      await getProducts("", situation);
-    }
+    console.log(
+      "Creating product with data:",
+      JSON.stringify(product, null, 2),
+    );
+    // try {
+    //   console.log(
+    //     "Creating product with data:",
+    //     JSON.stringify(product, null, 2),
+    //   );
+    //   const success = await createProduct(product);
+    //   if (success) {
+    //     toast.success("Produto criado com sucesso");
+    //     // await getProducts("", situation);
+    //     if (window.bootstrap && window.bootstrap.Modal) {
+    //       const modal = new window.bootstrap.Modal(
+    //         document.getElementById("modalProduct"),
+    //       );
+    //       modal.hide();
+    //     }
+    //   } else {
+    //     toast.error("Erro ao criar produto");
+    //   }
+    // } catch (error) {
+    //   toast.error("Erro ao criar produto");
+    //   console.error("Erro ao criar produto:", error);
+    // } finally {
+    //   console.log("Chamando importProducts...");
+    //   await importCreatedProducts();
+    //   await getProducts("", situation);
+    // }
   };
 
   const handleUpdateProduct = async () => {
@@ -531,7 +535,7 @@ const Products = () => {
           deposits={deposits}
           defaultDeposit={selectedDeposit}
           onChange={handleChange}
-          onSave={handleSaveProduct}
+          onSave={handleCreateProduct}
           modalRef={modalRef}
         />
         <DetailModal

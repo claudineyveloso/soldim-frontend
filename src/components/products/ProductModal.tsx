@@ -252,6 +252,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                   type="text"
                                   value={localProduct.nome}
                                   name="nome"
+                                  onChange={onChange}
                                 />
                               </div>
                               <div className="row mb-3">
@@ -269,6 +270,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                     type="text"
                                     value={localProduct.codigo}
                                     name="codigo"
+                                    onChange={onChange}
                                   />
                                 </div>
                                 <div className="col-md-4">
@@ -419,8 +421,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                     Gtin embalagem
                                   </label>
                                   <input
-                                    id="gtin"
-                                    name="gtin"
+                                    id="gtinEmbalagem"
+                                    name="gtinEmbalagem"
                                     type="text"
                                     className="form-control"
                                     placeholder=""

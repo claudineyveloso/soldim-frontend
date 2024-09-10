@@ -15,6 +15,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
     "gridjs": "^6.2.0",
+    "jwt-decode": "^4.0.0",
     "next": "14.2.4",
     "next-auth": "^4.24.7",
     "nookies": "^2.5.2",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
     "@types/cookie": "^0.6.0",
+    "@types/jwt-decode": "^3.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
