@@ -6,6 +6,8 @@ import {
   fetchProductsEmptyStock,
   fetchProduct,
   deleteProduct,
+  updateProduct,
+  importUpdatedProducts,
 } from "@/services/productService";
 
 import { fetchDeposits } from "@/services/depositService";
@@ -319,11 +321,31 @@ const Products = () => {
     });
   };
 
-  const handleSaveProduct = () => {
-    console.log("Salvar produto:", product);
-    // Adicione a lógica para salvar o produto
-    // Depois de salvar, feche o modal e atualize a lista de produtos
+  const handleUpdateProduct = async () => {
+    try {
+      const success = await updateProduct(product);
+      if (success) {
+        toast.success("Produto atualizado com sucesso");
+        //await getProducts("", situation);
+        if (window.bootstrap && window.bootstrap.Modal) {
+          const modal = new window.bootstrap.Modal(
+            document.getElementById("modalProduct"),
+          );
+          modal.hide();
+        }
+      } else {
+        toast.error("Erro ao atualizar produto");
+      }
+    } catch (error) {
+      toast.error("Erro ao atualizar produto");
+      console.error("Erro ao atualizar produto:", error);
+    } finally {
+      console.log("Chamando importProducts...");
+      await importUpdatedProducts();
+      await getProducts("", situation);
+    }
   };
+
   return (
     <>
       <AuthWrapper>
@@ -405,7 +427,7 @@ const Products = () => {
           onChange={handleChange}
           deposits={deposits}
           defaultDeposit={selectedDeposit}
-          onSave={handleSaveProduct}
+          onSave={handleUpdateProduct}
           modalRef={modalRef}
         />
         <DetailModal

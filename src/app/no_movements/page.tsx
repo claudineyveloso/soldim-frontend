@@ -6,6 +6,8 @@ import {
   fetchProductsNoMovements,
   fetchProduct,
   deleteProduct,
+  updateProduct,
+  importUpdatedProducts,
 } from "@/services/productService";
 import { fetchDeposits } from "@/services/depositService";
 import { fetchDepositProductByProduct } from "@/services/depositProductService";
@@ -63,24 +65,27 @@ const Products = () => {
     },
   });
 
-  const getProducts = useCallback(async (situacao: string) => {
-    try {
-      setLoading(true);
-      const response = await fetchProductsNoMovements("", situacao);
-      if (response && response.products) {
-        setProducts(response.products);
-      } else {
-        setProducts([]);
+  const getProducts = useCallback(
+    async (nome: string = "", situacao: string) => {
+      try {
+        setLoading(true);
+        const response = await fetchProductsNoMovements("", situacao);
+        if (response && response.products) {
+          setProducts(response.products);
+        } else {
+          setProducts([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [],
+  );
 
   useEffect(() => {
-    getProducts(situation);
+    getProducts("", situation);
   }, [getProducts, situation]);
 
   const getDeposits = useCallback(async () => {
@@ -209,7 +214,7 @@ const Products = () => {
       const success = await deleteProduct(id);
       if (success) {
         toast.success("Item do Resultado da Busca deletado com sucesso");
-        await getProducts(situation);
+        await getProducts("", situation);
       } else {
         toast.error("Erro ao deletar resultado");
       }
@@ -302,10 +307,29 @@ const Products = () => {
     });
   };
 
-  const handleSaveProduct = () => {
-    console.log("Salvar produto:", product);
-    // Adicione a lógica para salvar o produto
-    // Depois de salvar, feche o modal e atualize a lista de produtos
+  const handleUpdateProduct = async () => {
+    try {
+      const success = await updateProduct(product);
+      if (success) {
+        toast.success("Produto atualizado com sucesso");
+        //await getProducts("", situation);
+        if (window.bootstrap && window.bootstrap.Modal) {
+          const modal = new window.bootstrap.Modal(
+            document.getElementById("modalProduct"),
+          );
+          modal.hide();
+        }
+      } else {
+        toast.error("Erro ao atualizar produto");
+      }
+    } catch (error) {
+      toast.error("Erro ao atualizar produto");
+      console.error("Erro ao atualizar produto:", error);
+    } finally {
+      console.log("Chamando importProducts...");
+      await importUpdatedProducts();
+      await getProducts("", situation);
+    }
   };
 
   return (
@@ -389,7 +413,7 @@ const Products = () => {
           deposits={deposits}
           defaultDeposit={selectedDeposit}
           onChange={handleChange}
-          onSave={handleSaveProduct}
+          onSave={handleUpdateProduct}
           modalRef={modalRef}
         />
         <DetailModal

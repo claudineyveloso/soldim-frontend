@@ -28,6 +28,7 @@ const Products = () => {
   const [depositProducts, setDepositProducts] = useState<any[]>([]);
   const [selectedDeposit, setSelectedDeposit] = useState(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [newProduct, setNewProduct] = useState<boolean>(false);
   const modalRef = useRef(null);
   // const [editProductId, setEditProductId] = useState<number | null>(null);
   const [situation, setSituation] = useState<string>("");
@@ -207,6 +208,7 @@ const Products = () => {
 
   const handleEdit = async (id: number) => {
     console.log("Edit clicked for product:", id);
+    setNewProduct(false);
     try {
       const product = await fetchProduct(id);
       console.log("Value of Product:", product);
@@ -313,6 +315,7 @@ const Products = () => {
   };
 
   const handleNewProduct = () => {
+    setNewProduct(true);
     setProduct({
       id: 0,
       nome: "",
@@ -441,8 +444,11 @@ const Products = () => {
 
   const handleSaveProduct = () => {
     console.log("Salvar produto:", product);
-    // Adicione a lógica para salvar o produto
-    // Depois de salvar, feche o modal e atualize a lista de produtos
+    if (newProduct) {
+      handleCreateProduct();
+    } else {
+      handleUpdateProduct();
+    }
   };
 
   return (
@@ -535,7 +541,7 @@ const Products = () => {
           deposits={deposits}
           defaultDeposit={selectedDeposit}
           onChange={handleChange}
-          onSave={handleCreateProduct}
+          onSave={handleSaveProduct}
           modalRef={modalRef}
         />
         <DetailModal
