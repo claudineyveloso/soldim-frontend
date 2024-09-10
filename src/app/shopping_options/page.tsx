@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { AuthWrapper } from "@/components/AuthWrapper";
 import {
@@ -7,6 +7,10 @@ import {
   fetchProduct,
   deleteProduct,
 } from "@/services/productService";
+
+import { fetchDeposits } from "@/services/depositService";
+import { fetchDepositProductByProduct } from "@/services/depositProductService";
+
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import GridTableProductsEmptyStock from "@/components/products_empty_stock/GridTable";
@@ -16,6 +20,9 @@ import DetailModal from "@/components/products_empty_stock/DetailModal";
 const Products = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [deposits, setDeposits] = useState<any[]>([]);
+  const [depositProducts, setDepositProducts] = useState<any[]>([]);
+  const [selectedDeposit, setSelectedDeposit] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const modalRef = useRef(null);
   const [editProductId, setEditProductId] = useState<number | null>(null);
@@ -68,6 +75,48 @@ const Products = () => {
   useEffect(() => {
     getProducts("", situation);
   }, [getProducts, situation]);
+
+  const getDeposits = useCallback(async () => {
+    try {
+      const response = await fetchDeposits();
+      if (response && Array.isArray(response)) {
+        setDeposits(response); // Agora o response é o próprio array de depósitos
+        const defaultDeposit = response.find(
+          (deposit) => deposit.padrao === true,
+        );
+        if (defaultDeposit) {
+          setSelectedDeposit(defaultDeposit.id); // Define o id do depósito padrão como selecionado
+        }
+      } else {
+        setDeposits([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch deposits:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getDeposits();
+  }, [getDeposits]);
+
+  const getDepositProductByProduct = useCallback(async (productId: number) => {
+    try {
+      const response = await fetchDepositProductByProduct(productId);
+      if (response && Array.isArray(response.depositProducts)) {
+        setDepositProducts(response.depositProducts);
+      } else {
+        setDepositProducts([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch deposit products:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (product.id) {
+      getDepositProductByProduct(product.id);
+    }
+  }, [product.id, getDepositProductByProduct]); // Passa a função como dependência
 
   const handleCriterioChange = async (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -310,6 +359,8 @@ const Products = () => {
         <ProductModal
           product={product}
           onChange={handleChange}
+          deposits={deposits}
+          defaultDeposit={selectedDeposit}
           onSave={handleSaveProduct}
           modalRef={modalRef}
         />

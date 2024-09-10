@@ -27,7 +27,6 @@ const Products = () => {
   const [deposits, setDeposits] = useState<any[]>([]);
   const [depositProducts, setDepositProducts] = useState<any[]>([]);
   const [selectedDeposit, setSelectedDeposit] = useState(null);
-  const [newProduct, setNewProduct] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const modalRef = useRef(null);
   // const [editProductId, setEditProductId] = useState<number | null>(null);
