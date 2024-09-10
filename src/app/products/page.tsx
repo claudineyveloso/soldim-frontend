@@ -208,7 +208,6 @@ const Products = () => {
   const handleEdit = async (id: number) => {
     console.log("Edit clicked for product:", id);
     try {
-      setNewProduct(false);
       const product = await fetchProduct(id);
       console.log("Value of Product:", product);
       console.log("Value of Product:", product.saldo_fisico_total);
@@ -314,7 +313,6 @@ const Products = () => {
   };
 
   const handleNewProduct = () => {
-    setNewProduct(true);
     setProduct({
       id: 0,
       nome: "",
@@ -356,7 +354,9 @@ const Products = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
 
@@ -378,14 +378,6 @@ const Products = () => {
         [name]:
           name === "preco" || name === "condicao" ? parseFloat(value) : value,
       }));
-    }
-  };
-
-  const handleSaveProduct = () => {
-    if (newProduct) {
-      handleCreateProduct();
-    } else {
-      handleUpdateProduct();
     }
   };
 
@@ -441,6 +433,12 @@ const Products = () => {
       await importUpdatedProducts();
       await getProducts("", situation);
     }
+  };
+
+  const handleSaveProduct = () => {
+    console.log("Salvar produto:", product);
+    // Adicione a lógica para salvar o produto
+    // Depois de salvar, feche o modal e atualize a lista de produtos
   };
 
   return (

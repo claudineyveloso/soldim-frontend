@@ -26,27 +26,41 @@ const Products = () => {
   const [situation, setSituation] = useState<string>("A"); // Situação inicial definida
   const [product, setProduct] = useState({
     id: 0,
-    codigo: "",
     nome: "",
+    codigo: "",
     preco: 0,
-    unidade: "",
+    precoCusto: 0,
+    precoCompra: 0,
     tipo: "P",
     situacao: "A",
-    condicao: 0,
     formato: "S",
+    descricaoCurta: "",
+    dataValidade: "",
+    unidade: "UN",
+    pesoLiquido: 0,
+    pesoBruto: 0,
+    volumes: 0,
+    itensPorCaixa: 0,
     gtin: "",
-    gtin_embalagem: "",
-    saldo_fisico_total: 0,
-    saldo_virtual_total: 0,
-    saldo_fisico: 0,
-    saldo_virtual: 0,
-    minimo: 0,
-    maximo: 0,
-    crossdocking: 0,
-    localizacao: "",
-    preco_custo: 0,
-    preco_venda: 0,
+    gtinEmbalagem: "",
+    tipoProducao: "P",
+    condicao: 0,
+    freteGratis: false,
     marca: "",
+    descricaoComplementar: "",
+    linkExterno: "",
+    observacoes: "",
+    descricaoEmbalagemDiscreta: "",
+    saldoFisicoTotal: 0,
+    saldoVirtualTotal: 0,
+    saldoFisico: 0,
+    saldoVirtual: 0,
+    estoque: {
+      minimo: 0,
+      maximo: 0,
+      crossdocking: 0,
+      localizacao: "",
+    },
   });
 
   const getProducts = useCallback(async (situacao: string) => {
@@ -124,27 +138,41 @@ const Products = () => {
       const product = await fetchProduct(id);
       setProduct({
         id: product.id || 0,
-        codigo: product.codigo || "",
         nome: product.nome || "",
-        preco: product.preco ? product.preco.toString() : "",
-        unidade: product.unidade || "",
+        codigo: product.codigo || "",
+        preco: product.preco || 0,
+        precoCusto: product.precoCusto || 0,
+        precoCompra: product.preco_compra || 0,
         tipo: product.tipo || "P",
         situacao: product.situacao || "A",
-        condicao: product.condicao || "0",
-        formato: product.formato || "S",
+        formato: product.format || "S",
+        descricaoCurta: product.descricaoCurta || "",
+        dataValidade: product.dataValidade || "",
+        unidade: product.unidade || "UN",
+        pesoLiquido: product.pesoLiquido || 0,
+        pesoBruto: product.pesoBruto || 0,
+        volumes: product.volumes || 0,
+        itensPorCaixa: product.itensPorCaixa || 0,
         gtin: product.gtin || "",
-        gtin_embalagem: product.gtin_embalagem || "",
-        saldo_fisico_total: product.saldo_fisico_total || 0,
-        saldo_virtual_total: product.saldo_virtual_total || 0,
-        saldo_fisico: product.saldo_fisico || 0,
-        saldo_virtual: product.saldo_virtual || 0,
-        minimo: product.minimo || 0,
-        maximo: product.maximo || 0,
-        crossdocking: product.crossdocking || 0,
-        localizacao: product.localizacao || "",
-        preco_custo: product.preco_custo || 0,
-        preco_venda: product.preco_venda || 0,
+        gtinEmbalagem: product.gtinEmbalagem || "",
+        tipoProducao: product.tipoProducao || "P",
+        condicao: product.condicao || 0,
+        freteGratis: product.freteGratis || false,
         marca: product.marca || "",
+        descricaoComplementar: product.descricaoComplementar || "",
+        linkExterno: product.linkExtorno || "",
+        observacoes: product.observacoes || "",
+        descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
+        saldoFisicoTotal: product.saldo_fisico_total || 0,
+        saldoVirtualTotal: product.saldo_virtual_total || 0,
+        saldoFisico: product.saldo_fisico || 0,
+        saldoVirtual: product.saldo_virtual || 0,
+        estoque: {
+          minimo: product.estoque?.minimo || 0,
+          maximo: product.estoque?.maximo || 0,
+          crossdocking: product.estoque?.crossdocking || 0,
+          localizacao: product.estoque?.localizacao || "",
+        },
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -200,27 +228,41 @@ const Products = () => {
 
       setProduct({
         id: product.id || 0,
-        codigo: product.codigo || "",
         nome: product.nome || "",
+        codigo: product.codigo || "",
         preco: product.preco || 0,
-        unidade: product.unidade || "",
+        precoCusto: product.precoCusto || 0,
+        precoCompra: product.preco_compra || 0,
         tipo: product.tipo || "P",
         situacao: product.situacao || "A",
-        condicao: product.condicao || 0,
-        formato: product.formato || "S",
+        formato: product.format || "S",
+        descricaoCurta: product.descricaoCurta || "",
+        dataValidade: product.dataValidade || "",
+        unidade: product.unidade || "UN",
+        pesoLiquido: product.pesoLiquido || 0,
+        pesoBruto: product.pesoBruto || 0,
+        volumes: product.volumes || 0,
+        itensPorCaixa: product.itensPorCaixa || 0,
         gtin: product.gtin || "",
-        gtin_embalagem: product.gtin_embalagem || "",
-        saldo_fisico_total: product.saldo_fisico_total || 0,
-        saldo_virtual_total: product.saldo_virtual_total || 0,
-        saldo_fisico: product.saldo_fisico || 0,
-        saldo_virtual: product.saldo_virtual || 0,
-        minimo: product.minimo || 0,
-        maximo: product.maximo || 0,
-        crossdocking: product.crossdocking || 0,
-        localizacao: product.localizacao || "",
-        preco_custo: product.preco_custo || 0,
-        preco_venda: product.preco_venda || 0,
+        gtinEmbalagem: product.gtinEmbalagem || "",
+        tipoProducao: product.tipoProducao || "P",
+        condicao: product.condicao || 0,
+        freteGratis: product.freteGratis || false,
         marca: product.marca || "",
+        descricaoComplementar: product.descricaoComplementar || "",
+        linkExterno: product.linkExtorno || "",
+        observacoes: product.observacoes || "",
+        descricaoEmbalagemDiscreta: product.descricaoEmbalagemDiscreta || "",
+        saldoFisicoTotal: product.saldo_fisico_total || 0,
+        saldoVirtualTotal: product.saldo_virtual_total || 0,
+        saldoFisico: product.saldo_fisico || 0,
+        saldoVirtual: product.saldo_virtual || 0,
+        estoque: {
+          minimo: product.estoque?.minimo || 0,
+          maximo: product.estoque?.maximo || 0,
+          crossdocking: product.estoque?.crossdocking || 0,
+          localizacao: product.estoque?.localizacao || "",
+        },
       });
 
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -248,7 +290,9 @@ const Products = () => {
   // };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
     console.log(`Field changed: ${name}, Value: ${value}`); // Log de depuração
@@ -348,7 +392,11 @@ const Products = () => {
           onSave={handleSaveProduct}
           modalRef={modalRef}
         />
-        <DetailModal product={product} modalRef={modalRef} />
+        <DetailModal
+          product={product}
+          depositProduct={depositProducts}
+          modalRef={modalRef}
+        />
       </AuthWrapper>
     </>
   );

@@ -1,9 +1,9 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import formatCurrency from "../shared/formatCurrency";
 
 interface DetailModalProps {
   product: any;
+  depositProduct: any;
   modalRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -11,11 +11,25 @@ interface Condition {
   condicao: 0 | 1 | 2 | 3;
 }
 
-const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
-  const [localProduct, setLocalProduct] = useState({ ...product, preco: "" });
+const DetailModal: React.FC<DetailModalProps> = ({
+  product,
+  depositProduct,
+  modalRef,
+}) => {
+  const [localProduct, setLocalProduct] = useState({
+    ...product,
+    preco: "",
+    preco_venda: "",
+    preco_custo: "",
+  });
 
   useEffect(() => {
-    setLocalProduct({ ...product, preco: formatCurrency(product.preco) });
+    setLocalProduct({
+      ...product,
+      preco: formatCurrency(product.preco),
+      preco_venda: formatCurrency(product.preco_venda),
+      preco_custo: formatCurrency(product.preco_custo),
+    });
   }, [product]);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,19 +100,29 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
                           <div className="col-md-8">
                             <p className="mb-0">
                               <span className="d-inline h6">Situação: </span>
-                              {localProduct.situacao}
+                              {localProduct.situacao === "A"
+                                ? " Ativo"
+                                : " Desativado"}
                             </p>
                           </div>
                         </div>
-                        <div className="col-12 mb-3">
-                          <p className="mb-0">
-                            <span className="d-inline h6">Nome: </span>
-                            {localProduct.nome}
-                          </p>
+                        <div className="row mb-3">
+                          <div className="col-md-6">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Nome: </span>
+                              {localProduct.nome}
+                            </p>
+                          </div>
+                          <div className="col-md-6">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Fornecedor: </span>
+                              {"Não informado"}
+                            </p>
+                          </div>
                         </div>
 
                         <div className="row mb-3">
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">
                                 Código (SKU):{" "}
@@ -106,43 +130,43 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
                               {localProduct.codigo}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">Preço: </span>
                               {localProduct.preco}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-2">
                             <p className="mb-0">
                               <span className="d-inline h6">Unidade: </span>
                               {localProduct.unidade}
                             </p>
                           </div>
-                        </div>
-                        <div className="row mb-3">
                           <div className="col-md-4">
                             <p className="mb-0">
                               <span className="d-inline h6">Formato: </span>
-                              {localProduct.formato}
+                              {localProduct.formato === "S" && "Simples"}
+                              {localProduct.formato === "V" && "Com variações"}
+                              {localProduct.formato === "E" && "Com composição"}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                        </div>
+                        <div className="row mb-3">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">Tipo: </span>
                               {localProduct.tipo === "P"
-                                ? " - Produto"
-                                : " - Serviço"}
+                                ? " Produto"
+                                : " Serviço"}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">Condição: </span>
                               {condicaoLabel}
                             </p>
                           </div>
-                        </div>
-                        <div className="row mb-3">
-                          <div className="col-md-4">
+                          <div className="col-md-2">
                             <p className="mb-0">
                               <span className="d-inline h6">
                                 Frete grátis:{" "}
@@ -156,87 +180,122 @@ const DetailModal: React.FC<DetailModalProps> = ({ product, modalRef }) => {
                               {localProduct.gtin}
                             </p>
                           </div>
-                          <div className="col-md-4">
-                            <p className="mb-0">
-                              <span className="d-inline h6">
-                                Gtin Embalagem:{" "}
-                              </span>
-                              {localProduct.gtin_embalagem}
-                            </p>
-                          </div>
                         </div>
                         <div className="row mb-3">
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">Marca: </span>
                               {localProduct.marca}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">Peso bruto: </span>
-                              {localProduct.peso_bruto}
+                              {localProduct.pesobruto || "0"}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-2">
                             <p className="mb-0">
                               <span className="d-inline h6">
                                 Peso líquido:{" "}
                               </span>
-                              {localProduct.peso_liquido}
+                              {localProduct.pesoliquido || "0"}
+                            </p>
+                          </div>
+
+                          <div className="col-md-4">
+                            <p className="mb-0">
+                              <span className="d-inline h6">
+                                Gtin Embalagem:{" "}
+                              </span>
+                              {localProduct.gtinEmbalagem}
                             </p>
                           </div>
                         </div>
                         <div className="row mb-3">
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">
                                 Preço compra:{" "}
                               </span>
-                              {localProduct.preco_compra}
+                              {localProduct.precoCompra || "R$ 0,00"}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">Preço custo: </span>
-                              {localProduct.preco_custo}
+                              {localProduct.precoCusto || "R$ 0,00"}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-2">
                             <p className="mb-0">
-                              <span className="d-inline h6">
-                                Saldo físico:{" "}
-                              </span>
-                              {localProduct.saldo_fisico}
+                              <span className="d-inline h6">Volumes: </span>
+                              {localProduct.volumes || "0"}
                             </p>
                           </div>
                         </div>
+                        <hr />
                         <div className="row mb-3">
-                          <div className="col-md-4">
+                          <h5>Estoque</h5>
+                          <div className="col-md-3">
                             <p className="mb-0">
-                              <span className="d-inline h6">
-                                Saldo físico total:{" "}
-                              </span>
-                              {localProduct.saldo_fisico_total}
+                              <span className="d-inline h6">Mínimo: </span>
+                              {localProduct.estoque.minimo}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
-                              <span className="d-inline h6">
-                                Saldo virtual:{" "}
-                              </span>
-                              {localProduct.saldo_virtual}
+                              <span className="d-inline h6">Máximo: </span>
+                              {localProduct.estoque.maximo}
                             </p>
                           </div>
-                          <div className="col-md-4">
+                          <div className="col-md-3">
                             <p className="mb-0">
                               <span className="d-inline h6">
-                                Saldo virtual total:{" "}
+                                Crossdocking:{" "}
                               </span>
-                              {localProduct.saldo_virtual_total}
+                              {localProduct.estoque.crossdocking}
+                            </p>
+                          </div>
+                          <div className="col-md-3">
+                            <p className="mb-0">
+                              <span className="d-inline h6">Localização: </span>
+                              {localProduct.estoque.localizacao}
                             </p>
                           </div>
                         </div>
+                      </div>
+
+                      <hr />
+                      <div className="row mb-3">
+                        <h5>Depósitos</h5>
+                        {depositProduct.map((product: any, index: number) => (
+                          <div className="row mb-3" key={index}>
+                            <div className="col-md-4">
+                              <p className="mb-0">
+                                <span className="d-inline h6">
+                                  {product.deposit_name}
+                                </span>
+                              </p>
+                            </div>
+                            <div className="col-md-4">
+                              <p className="mb-0">
+                                <span className="d-inline h6">
+                                  Saldo físico:{" "}
+                                </span>
+                                {product.saldo_fisico}
+                              </p>
+                            </div>
+                            <div className="col-md-4">
+                              <p className="mb-0">
+                                <span className="d-inline h6">
+                                  Saldo virtual:{" "}
+                                </span>
+                                {product.saldo_virtual}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                     <div className="modal-footer">
