@@ -5,7 +5,7 @@ import MoneyInput from "../shared/MoneyInput";
 interface Draft {
   description: string;
   codigo: string;
-  price: number;
+  price: string;
   precoCusto: number;
   precoCompra: number;
   tipo: string;
@@ -58,6 +58,7 @@ interface Deposit {
 interface DraftModalProps {
   draft: Draft;
   deposits: Deposit[];
+
   defaultDeposit: number | null;
   onChange: (
     e: React.ChangeEvent<
@@ -78,7 +79,7 @@ const ProductModal: React.FC<DraftModalProps> = ({
 }) => {
   const [localDraft, setLocalDraft] = useState<Draft>({
     ...draft,
-    price: 0,
+    price: "",
     estoque: draft.estoque || {
       minimo: 0,
       maximo: 0,
@@ -105,20 +106,6 @@ const ProductModal: React.FC<DraftModalProps> = ({
       estoque: updatedEstoque,
     }));
   }, [draft]);
-
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    // Remove caracteres não numéricos, mas mantém vírgulas e pontos
-    const cleanValue = value.replace(/[^\d.,]/g, "");
-    // Substitui vírgulas por pontos para conversão para número
-    const floatValue = Number.parseFloat(cleanValue.replace(",", "."));
-
-    // Atualiza o estado com o valor numérico
-    setLocalDraft((prevProduct) => ({
-      ...prevProduct,
-      price: Number.isNaN(floatValue) ? prevProduct.price : floatValue,
-    }));
-  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -156,9 +143,9 @@ const ProductModal: React.FC<DraftModalProps> = ({
     }
   };
 
-  const handleAmountChange = (value: number) => {
-    setAmount(value);
-  };
+  useEffect(() => {
+    console.log(`Updated Amount: ${localDraft.price}`);
+  }, [localDraft.price]);
 
   return (
     <div className="row">
@@ -280,11 +267,14 @@ const ProductModal: React.FC<DraftModalProps> = ({
                                   >
                                     Preço venda
                                   </label>
-                                  <MoneyInput
+                                  <input
                                     id="price"
-                                    value={localDraft.price}
                                     className="form-control"
-                                    onChange={handleAmountChange}
+                                    placeholder=""
+                                    type="text"
+                                    value={localDraft.price}
+                                    name="price"
+                                    onChange={onChange}
                                   />
                                 </div>
                                 <div className="col-md-4">
@@ -294,11 +284,14 @@ const ProductModal: React.FC<DraftModalProps> = ({
                                   >
                                     Preço custo
                                   </label>
-                                  <MoneyInput
+                                  <input
                                     id="precoCusto"
-                                    value={localDraft.precoCusto}
                                     className="form-control"
-                                    onChange={handleAmountChange}
+                                    placeholder=""
+                                    type="text"
+                                    value={localDraft.precoCusto}
+                                    name="precoCusto"
+                                    onChange={onChange}
                                   />
                                 </div>
                               </div>
@@ -568,11 +561,14 @@ const ProductModal: React.FC<DraftModalProps> = ({
                                   >
                                     Preço de compra
                                   </label>
-                                  <MoneyInput
+                                  <input
                                     id="precoCompra"
-                                    value={localDraft.precoCompra}
                                     className="form-control"
-                                    onChange={handleAmountChange}
+                                    placeholder=""
+                                    type="text"
+                                    value={localDraft.precoCompra}
+                                    name="price"
+                                    onChange={onChange}
                                   />
                                 </div>
                               </div>
@@ -584,11 +580,14 @@ const ProductModal: React.FC<DraftModalProps> = ({
                                   >
                                     Preço de custo
                                   </label>
-                                  <MoneyInput
-                                    id="precoVenda"
-                                    value={localDraft.precoCusto}
+                                  <input
+                                    id="precoCusto"
                                     className="form-control"
-                                    onChange={handleAmountChange}
+                                    placeholder=""
+                                    type="text"
+                                    value={localDraft.precoCusto}
+                                    name="price"
+                                    onChange={onChange}
                                   />
                                 </div>
                                 <div className="col-md-4">

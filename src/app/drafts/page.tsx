@@ -45,7 +45,7 @@ interface Draft {
   observacoes: string;
   descricaoEmbalagemDiscreta: string;
   source: string;
-  price: number;
+  price: string;
   precoCusto: number;
   precoCompra: number;
   promotion: boolean;
@@ -98,7 +98,7 @@ const Drafts = () => {
     observacoes: "",
     descricaoEmbalagemDiscreta: "",
     source: "",
-    price: 0,
+    price: "",
     precoCusto: 0,
     precoCompra: 0,
     promotion: false,
@@ -242,7 +242,7 @@ const Drafts = () => {
         observacoes: draft.observacoes || "",
         descricaoEmbalagemDiscreta: draft.descricaoEmbalagemDiscreta || "",
         source: draft.source || "",
-        price: draft.price || 0,
+        price: draft.price || "",
         precoCusto: draft.precoCusto || 0,
         precoCompra: draft.precoCompra || 0,
         promotion: draft.promotion || false,
@@ -278,7 +278,7 @@ const Drafts = () => {
       const product = {
         nome: draft.description,
         codigo: draft.codigo || "",
-        preco: draft.price || 0,
+        preco: draft.price || "",
         precoCusto: draft.precoCusto || 0,
         tipo: draft.tipo || "P",
         situacao: draft.situacao || "A",
@@ -389,9 +389,37 @@ const Drafts = () => {
   ) => {
     const { name, value } = e.target;
 
-    // Verifica se o nome do campo é 'price' e converte o valor para número
-    const newValue = name === "price" ? parseFloat(value) : value;
+    let newValue: string = value;
 
+    if (name === "price") {
+      // Substitui vírgulas por pontos para garantir que o ponto decimal seja aceito
+      newValue = value.replace(",", ".");
+    }
+
+    console.log(`Field name: ${name}`);
+    console.log(`Field value: ${value}`);
+    console.log(`Normalized value: ${newValue}`);
+
+    // Atualiza o estado draft com o novo valor
+    setDraft((prevDraft) => ({
+      ...prevDraft,
+      [name]: newValue,
+    }));
+  };
+  const handleChangeXXX = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
+    const { name, value } = e.target;
+
+    // Verifica se o nome do campo é 'price' e converte o valor para número
+    //let newValue = name === "price" ? parseFloat(value) : value;
+    let newValue: string | number = value;
+    const isNumber = /^[0-9]*[.,]?[0-9]*$/;
+    if (name === "price") {
+      newValue = value ? parseFloat(value.replace(",", ".")) : 0; // Converte para número e lida com valores vazios
+    }
     console.log(`Field name: ${name}`);
     console.log(`Field value: ${value}`);
     console.log(`Converted value (if applicable): ${newValue}`);
@@ -436,7 +464,7 @@ const Drafts = () => {
         observacoes: draft.observacoes,
         descricaoEmbalagemDiscreta: draft.descricaoEmbalagemDiscreta,
         source: draft.source,
-        price: draft.price,
+        price: parseFloat(draft.price),
         precoCusto: draft.precoCusto,
         precoCompra: draft.precoCompra,
         promotion: draft.promotion,
@@ -458,7 +486,7 @@ const Drafts = () => {
 
       if (success) {
         console.log("Draft atualizado com sucesso");
-        toast.success("Produto atualizado com sucesso");
+        toast.success("Rascunho do produto atualizado com sucesso");
         await getDrafts(); // Atualiza a lista de drafts
         const modalElement = document.getElementById("modalDraft");
         if (modalElement && window.bootstrap && window.bootstrap.Modal) {

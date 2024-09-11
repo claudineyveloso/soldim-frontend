@@ -6,6 +6,7 @@ interface MoneyInputProps {
   onChange: (value: number) => void;
   className?: string;
   id?: string;
+  name?: string;
 }
 
 const MoneyInput: React.FC<MoneyInputProps> = ({
@@ -13,6 +14,7 @@ const MoneyInput: React.FC<MoneyInputProps> = ({
   onChange,
   className,
   id,
+  name,
 }) => {
   // Função para lidar com mudanças de valor
   const handleValueChange = (values: NumberFormatValues) => {
@@ -36,6 +38,8 @@ const MoneyInput: React.FC<MoneyInputProps> = ({
       // customInput={YourCustomInputComponent}
       className={className}
       id={id}
+      name={name}
+      inputMode="numeric"
     />
   );
 };
