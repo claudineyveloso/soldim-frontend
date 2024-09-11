@@ -207,10 +207,10 @@ const Drafts = () => {
   }, []);
 
   useEffect(() => {
-    if (product.id) {
-      getDepositProductByProduct(product.id);
+    if (draft.id) {
+      getDepositProductByProduct(Number(draft.id));
     }
-  }, [product.id, getDepositProductByProduct]); // Passa a função como dependência
+  }, [draft.id, getDepositProductByProduct]); // Passa a função como dependência
 
   const handleEdit = async (id: string) => {
     console.log("Edit clicked for product:", id);
@@ -417,6 +417,7 @@ const Drafts = () => {
         tipo: draft.tipo,
         situacao: draft.situacao,
         formato: draft.formato,
+        descricaoCurta: draft.descricaoCurta,
         image_url: draft.image_url,
         description: draft.description,
         dataValidade: draft.dataValidade,
@@ -436,6 +437,8 @@ const Drafts = () => {
         descricaoEmbalagemDiscreta: draft.descricaoEmbalagemDiscreta,
         source: draft.source,
         price: draft.price,
+        precoCusto: draft.precoCusto,
+        precoCompra: draft.precoCompra,
         promotion: draft.promotion,
         link: draft.link,
         search_id: draft.search_id,
