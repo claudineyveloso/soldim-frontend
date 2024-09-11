@@ -9,6 +9,9 @@ import {
 } from "@/services/draftService";
 import { createProduct } from "@/services/productService";
 
+import { fetchDeposits } from "@/services/depositService";
+import { fetchDepositProductByProduct } from "@/services/depositProductService";
+
 import { AuthWrapper } from "@/components/AuthWrapper";
 
 import Swal from "sweetalert2";
@@ -22,6 +25,7 @@ interface Draft {
   tipo: string;
   situacao: string;
   formato: string;
+  descricaoCurta: string;
   image_url: string;
   description: string;
   dataValidade: string;
@@ -42,9 +46,15 @@ interface Draft {
   descricaoEmbalagemDiscreta: string;
   source: string;
   price: number;
+  precoCusto: number;
+  precoCompra: number;
   promotion: boolean;
   link: string;
   search_id: string;
+  saldoFisicoTotal: number;
+  saldoVirtualTotal: number;
+  saldoFisico: number;
+  saldoVirtual: number;
   estoque: {
     minimo: number;
     maximo: number;
@@ -56,6 +66,9 @@ interface Draft {
 const Drafts = () => {
   const [drafts, setDrafts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [deposits, setDeposits] = useState<any[]>([]);
+  const [depositProducts, setDepositProducts] = useState<any[]>([]);
+  const [selectedDeposit, setSelectedDeposit] = useState(null);
   const modalRef = useRef(null);
   const [situation, setSituation] = useState<string>("");
 
@@ -65,6 +78,7 @@ const Drafts = () => {
     tipo: "P",
     situacao: "A",
     formato: "S",
+    descricaoCurta: "",
     image_url: "",
     description: "",
     dataValidade: "",
@@ -85,9 +99,15 @@ const Drafts = () => {
     descricaoEmbalagemDiscreta: "",
     source: "",
     price: 0,
+    precoCusto: 0,
+    precoCompra: 0,
     promotion: false,
     link: "",
     search_id: "",
+    saldoFisicoTotal: 0,
+    saldoVirtualTotal: 0,
+    saldoFisico: 0,
+    saldoVirtual: 0,
     estoque: {
       minimo: 0,
       maximo: 0,
@@ -150,6 +170,48 @@ const Drafts = () => {
     getDrafts();
   }, [getDrafts]);
 
+  const getDeposits = useCallback(async () => {
+    try {
+      const response = await fetchDeposits();
+      if (response && Array.isArray(response)) {
+        setDeposits(response); // Agora o response é o próprio array de depósitos
+        const defaultDeposit = response.find(
+          (deposit) => deposit.padrao === true,
+        );
+        if (defaultDeposit) {
+          setSelectedDeposit(defaultDeposit.id); // Define o id do depósito padrão como selecionado
+        }
+      } else {
+        setDeposits([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch deposits:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getDeposits();
+  }, [getDeposits]);
+
+  const getDepositProductByProduct = useCallback(async (productId: number) => {
+    try {
+      const response = await fetchDepositProductByProduct(productId);
+      if (response && Array.isArray(response.depositProducts)) {
+        setDepositProducts(response.depositProducts);
+      } else {
+        setDepositProducts([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch deposit products:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (product.id) {
+      getDepositProductByProduct(product.id);
+    }
+  }, [product.id, getDepositProductByProduct]); // Passa a função como dependência
+
   const handleEdit = async (id: string) => {
     console.log("Edit clicked for product:", id);
     try {
@@ -160,6 +222,7 @@ const Drafts = () => {
         tipo: draft.tipo || "P",
         situacao: draft.situacao || "A",
         formato: draft.formato || "S",
+        descricaoCurta: draft.descricaoCurta || "",
         image_url: draft.image_url || "",
         description: draft.description || "",
         dataValidade: draft.dataValidade || null,
@@ -180,9 +243,15 @@ const Drafts = () => {
         descricaoEmbalagemDiscreta: draft.descricaoEmbalagemDiscreta || "",
         source: draft.source || "",
         price: draft.price || 0,
+        precoCusto: draft.precoCusto || 0,
+        precoCompra: draft.precoCompra || 0,
         promotion: draft.promotion || false,
         link: draft.link || "",
         search_id: draft.search_id || "",
+        saldoFisicoTotal: draft.saldoFisicoTotal || 0,
+        saldoVirtualTotal: draft.saldoVirtualTotal || 0,
+        saldoFisico: draft.saldoFisico || 0,
+        saldoVirtual: draft.saldoVirtual || 0,
         estoque: {
           minimo: draft.estoque?.minimo || 0,
           maximo: draft.estoque?.maximo || 0,
@@ -210,11 +279,12 @@ const Drafts = () => {
         nome: draft.description,
         codigo: draft.codigo || "",
         preco: draft.price || 0,
+        precoCusto: draft.precoCusto || 0,
         tipo: draft.tipo || "P",
         situacao: draft.situacao || "A",
         formato: draft.formato || "S",
-        image_url: draft.image_url || "",
         descricaoCurta: draft.descriptionCurta || "",
+        image_url: draft.image_url || "",
         dataValidade: draft.Validade || "",
         unidade: draft.unidade || "UN",
         pesoLiquido: draft.pesoLiquido || 0,
@@ -313,7 +383,9 @@ const Drafts = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
 
@@ -464,6 +536,8 @@ const Drafts = () => {
         </section>
         <DraftModal
           draft={draft}
+          deposits={deposits}
+          defaultDeposit={selectedDeposit}
           onChange={handleChange}
           onSave={handleSaveDraft}
           modalRef={modalRef}
