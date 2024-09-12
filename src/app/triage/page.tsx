@@ -13,9 +13,15 @@ import { ToastContainer, toast } from "react-toastify";
 import GridTableTriages from "@/components/triages/GridTable";
 import TriageModal from "@/components/triages/TriageModal";
 
+import { fetchDeposits } from "@/services/depositService";
+import { fetchDepositProductByProduct } from "@/services/depositProductService";
+
 const Triages = () => {
   const [triages, setTriages] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [deposits, setDeposits] = useState<any[]>([]);
+  const [depositProducts, setDepositProducts] = useState<any[]>([]);
+  const [selectedDeposit, setSelectedDeposit] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const modalRef = useRef(null);
   const [editTriageId, setEditTriageId] = useState<number | null>(null);
@@ -38,6 +44,38 @@ const Triages = () => {
     sent_to_batch: false,
     sent_to_bling: false,
     defect: false,
+    precoCusto: 0,
+    precoCompra: 0,
+    tipo: "",
+    situacao: "",
+    formato: "",
+    descricaoCurta: "",
+    dataValidade: "",
+    unidade: "",
+    pesoLiquido: 0,
+    pesoBruto: 0,
+    volumes: 0,
+    itensPorCaixa: 0,
+    gtin: "",
+    gtinEmbalagem: "",
+    tipoProducao: "",
+    condicao: 0,
+    freteGratis: false,
+    marca: "",
+    descricaoComplementar: "",
+    linkExterno: "",
+    observacoes: "",
+    descricaoEmbalagemDiscreta: "",
+    saldoFisicoTotal: 0,
+    saldoVirtualTotal: 0,
+    saldoFisico: 0,
+    saldoVirtual: 0,
+    estoque: {
+      minimo: 0,
+      maximo: 0,
+      crossdocking: 0,
+      localizacao: "",
+    },
   });
   const [situation, setSituation] = useState("A");
 
@@ -56,6 +94,48 @@ const Triages = () => {
   useEffect(() => {
     getTriages();
   }, [getTriages]);
+
+  const getDeposits = useCallback(async () => {
+    try {
+      const response = await fetchDeposits();
+      if (response && Array.isArray(response)) {
+        setDeposits(response); // Agora o response é o próprio array de depósitos
+        const defaultDeposit = response.find(
+          (deposit) => deposit.padrao === true,
+        );
+        if (defaultDeposit) {
+          setSelectedDeposit(defaultDeposit.id); // Define o id do depósito padrão como selecionado
+        }
+      } else {
+        setDeposits([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch deposits:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getDeposits();
+  }, [getDeposits]);
+
+  const getDepositProductByProduct = useCallback(async (productId: number) => {
+    try {
+      const response = await fetchDepositProductByProduct(productId);
+      if (response && Array.isArray(response.depositProducts)) {
+        setDepositProducts(response.depositProducts);
+      } else {
+        setDepositProducts([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch deposit products:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (triage.id) {
+      getDepositProductByProduct(triage.id);
+    }
+  }, [triage.id, getDepositProductByProduct]); // Passa a função como dependência
 
   const handleEdit = async (id: string) => {
     console.log("Edit clicked for triage:", id);
@@ -83,6 +163,38 @@ const Triages = () => {
         sent_to_batch: triage.sent_to_batch,
         sent_to_bling: triage.sent_to_bling,
         defect: triage.defect,
+        precoCusto: triage.precoCusto,
+        precoCompra: triage.precoCompra,
+        tipo: triage.tipo,
+        situacao: triage.situacao,
+        formato: triage.formato,
+        descricaoCurta: triage.descricaoCurta,
+        dataValidade: triage.dataValidade,
+        unidade: triage.unidade,
+        pesoLiquido: triage.pesoLiquido,
+        pesoBruto: triage.pesoBruto,
+        volumes: triage.volumes,
+        itensPorCaixa: triage.itensPorCaixa,
+        gtin: triage.gtin,
+        gtinEmbalagem: triage.gtinEmbalagem,
+        tipoProducao: triage.tipoProducao,
+        condicao: triage.condicao,
+        freteGratis: triage.freteGratis,
+        marca: triage.marca,
+        descricaoComplementar: triage.descricaoComplementar,
+        linkExterno: triage.linkExterno,
+        observacoes: triage.observacoes,
+        descricaoEmbalagemDiscreta: triage.descricaoEmbalagemDiscreta,
+        saldoFisicoTotal: triage.saldoFisicoTotal,
+        saldoVirtualTotal: triage.saldoVirtualTotal,
+        saldoFisico: triage.saldoFisico,
+        saldoVirtual: triage.saldoVirtual,
+        estoque: {
+          minimo: triage.estoque?.minimo || 0,
+          maximo: triage.estoque?.maximo || 0,
+          crossdocking: triage.estoque?.crossdocking || 0,
+          localizacao: triage.estoque?.localizacao || "",
+        },
       });
       //
       if (window.bootstrap && window.bootstrap.Modal) {
@@ -109,7 +221,9 @@ const Triages = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
 
@@ -240,6 +354,8 @@ const Triages = () => {
         </section>
         <TriageModal
           triage={triage}
+          deposits={deposits}
+          defaultDeposit={selectedDeposit}
           onChange={handleChange}
           onSave={handleSaveDraft}
           modalRef={modalRef}
