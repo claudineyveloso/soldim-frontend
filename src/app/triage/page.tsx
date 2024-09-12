@@ -133,7 +133,8 @@ const Triages = () => {
 
   useEffect(() => {
     if (triage.id) {
-      getDepositProductByProduct(triage.id);
+      //getDepositProductByProduct(triage.id);
+      getDepositProductByProduct(0);
     }
   }, [triage.id, getDepositProductByProduct]); // Passa a função como dependência
 
