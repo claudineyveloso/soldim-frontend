@@ -6,9 +6,9 @@ import {
   fetchProduct,
   deleteProduct,
   createProduct,
-  updateProduct,
+  updateProductBling,
   importCreatedProducts,
-  importUpdatedProducts,
+  updateProduct,
 } from "@/services/productService";
 
 import { fetchDeposits } from "@/services/depositService";
@@ -362,6 +362,43 @@ const Products = () => {
     >,
   ) => {
     const { name, value } = e.target;
+    let newValue: string = value;
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: newValue,
+    }));
+
+    console.log("nome", name);
+    console.log("value", value);
+  };
+
+  const handleChangeAA = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
+    const { name, value } = e.target;
+
+    let newValue: string = value;
+
+    if (name === "price") {
+      // Substitui vírgulas por pontos para garantir que o ponto decimal seja aceito
+      newValue = value.replace(",", ".");
+    }
+
+    // Atualiza o estado draft com o novo valor
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: newValue,
+    }));
+  };
+
+  const handleChangexxx = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
+    const { name, value } = e.target;
 
     if (name.startsWith("estoque.")) {
       const field = name.split(".")[1];
@@ -386,19 +423,19 @@ const Products = () => {
 
   const handleCreateProduct = async () => {
     try {
-      console.log(
-        "Creating product with data:",
-        JSON.stringify(product, null, 2),
-      );
       const success = await createProduct(product);
       if (success) {
         toast.success("Produto criado com sucesso");
-        // await getProducts("", situation);
-        if (window.bootstrap && window.bootstrap.Modal) {
-          const modal = new window.bootstrap.Modal(
-            document.getElementById("modalProduct"),
-          );
-          modal.hide();
+
+        // Adicione log para depuração
+        const modalElement = document.getElementById("modalProduct");
+        console.log("Modal Element:", modalElement); // Verifique se o elemento está correto
+        if (modalElement) {
+          const modalInstance =
+            window.bootstrap.Modal.getInstance(modalElement);
+          if (modalInstance) {
+            modalInstance.hide(); // Tenta esconder o modal
+          }
         }
       } else {
         toast.error("Erro ao criar produto");
@@ -414,31 +451,53 @@ const Products = () => {
   };
 
   const handleUpdateProduct = async () => {
+    console.log("esse valor pra alterar", product);
     try {
-      const success = await updateProduct(product);
+      const success = await updateProductBling(product);
+      const updateData = await updateProduct(product);
       if (success) {
         toast.success("Produto atualizado com sucesso");
-        //await getProducts("", situation);
-        if (window.bootstrap && window.bootstrap.Modal) {
-          const modal = new window.bootstrap.Modal(
-            document.getElementById("modalProduct"),
-          );
-          modal.hide();
+        const modalElement = document.getElementById("modalProduct");
+        if (modalElement) {
+          const modalInstance =
+            window.bootstrap.Modal.getInstance(modalElement);
+          if (modalInstance) {
+            modalInstance.hide(); // Tenta esconder o modal
+          }
         }
       } else {
         toast.error("Erro ao atualizar produto");
+      }
+      if (updateData) {
+        console.log("Atualizado");
       }
     } catch (error) {
       toast.error("Erro ao atualizar produto");
       console.error("Erro ao atualizar produto:", error);
     } finally {
       console.log("Chamando importProducts...");
-      await importUpdatedProducts();
+      //await updatedProduct(product.id);
       await getProducts("", situation);
     }
   };
 
   const handleSaveProduct = () => {
+    product.preco = Number(product.preco);
+    product.precoCusto = Number(product.precoCusto);
+    product.precoCompra = Number(product.precoCompra);
+    product.pesoLiquido = Number(product.pesoLiquido);
+    product.pesoBruto = Number(product.pesoBruto);
+    product.volumes = Number(product.volumes);
+    product.itensPorCaixa = Number(product.itensPorCaixa);
+    product.condicao = Number(product.condicao);
+    product.saldoFisicoTotal = Number(product.saldoFisicoTotal);
+    product.saldoVirtualTotal = Number(product.saldoVirtualTotal);
+    product.saldoFisico = Number(product.saldoFisico);
+    product.saldoVirtual = Number(product.saldoVirtual);
+    product.estoque.minimo = Number(product.estoque.minimo);
+    product.estoque.maximo = Number(product.estoque.maximo);
+    product.estoque.crossdocking = Number(product.estoque.crossdocking);
+
     console.log("Salvar produto:", product);
     if (newProduct) {
       handleCreateProduct();

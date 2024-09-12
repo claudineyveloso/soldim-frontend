@@ -272,7 +272,7 @@ const ProductModal: React.FC<DraftModalProps> = ({
                                     className="form-control"
                                     placeholder=""
                                     type="text"
-                                    value={localDraft.price}
+                                    value={Number(localDraft.price)}
                                     name="price"
                                     onChange={onChange}
                                   />

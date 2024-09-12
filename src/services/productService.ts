@@ -214,6 +214,32 @@ export const updateProduct = async (product: any) => {
     console.log("Response:", product);
 
     const response = await fetch(
+      `${baseURL}/update_product?productID=${product.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Erro ao atualizar o produto");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Erro ao atualizar o produto:", error);
+    return false;
+  }
+};
+
+export const updateProductBling = async (product: any) => {
+  try {
+    console.log("Response:", product);
+
+    const response = await fetch(
       `${baseURL}/update_product_bling?productID=${product.id}`,
       {
         method: "PUT",
@@ -244,7 +270,7 @@ export async function importCreatedProducts() {
     const formatDate = (date: Date) => date.toISOString().split("T")[0];
 
     const dataInclusaoFinal = formatDate(today);
-    const dataInclusaoInicial = formatDate(yesterday);
+    const dataInclusaoInicial = formatDate(today);
 
     const url = `${baseURL}/import_products?dataInclusaoInicial=${dataInclusaoInicial}&dataInclusaoFinal=${dataInclusaoFinal}`;
 
@@ -275,7 +301,7 @@ export async function importUpdatedProducts() {
     const formatDate = (date: Date) => date.toISOString().split("T")[0];
 
     const dataAlteracaoInicial = formatDate(today);
-    const dataAlteracaoFinal = formatDate(yesterday);
+    const dataAlteracaoFinal = formatDate(today);
 
     const url = `${baseURL}/import_products?dataAlteracaoInicial=${dataAlteracaoInicial}&dataAlteracaoFinal=${dataAlteracaoFinal}`;
 

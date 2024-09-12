@@ -155,7 +155,6 @@ const Drafts = () => {
       const response = await fetchDrafts();
       if (response && response.drafts) {
         setDrafts(response.drafts);
-        console.log("Drafts fetched:", response.drafts);
       } else {
         setDrafts([]);
       }
@@ -213,7 +212,6 @@ const Drafts = () => {
   }, [draft.id, getDepositProductByProduct]); // Passa a função como dependência
 
   const handleEdit = async (id: string) => {
-    console.log("Edit clicked for product:", id);
     try {
       const draft = await fetchDraft(id);
       setDraft({
@@ -272,7 +270,6 @@ const Drafts = () => {
   };
 
   const handleSendToBling = async (id: string) => {
-    console.log("Send clicked for product:", id);
     try {
       const draft = await fetchDraft(id);
       const product = {
@@ -309,7 +306,6 @@ const Drafts = () => {
         },
       };
       const success = await createProduct(product);
-      console.log("Product sent to bling:", product);
       if (success) {
         toast.success("Produto enviado para o Bling com sucesso");
       } else {
@@ -322,7 +318,6 @@ const Drafts = () => {
         const deleteDraftSuccess = await deleteDraft(id);
         if (deleteDraftSuccess) {
           getDrafts();
-          console.log("Draft deleted successfully");
         } else {
           console.error("Erro ao deletar o draft");
         }
@@ -367,7 +362,6 @@ const Drafts = () => {
   };
 
   const handleDeleteProduct = async (id: string) => {
-    console.log("Delete result with ID:", id);
     try {
       const success = await deleteDraft(id);
       if (success) {
@@ -378,7 +372,6 @@ const Drafts = () => {
       }
     } catch (error) {
       toast.error("Erro ao deletar o rascunho do produto");
-      console.error("Erro ao deletar o rascunho do produto:", error);
     }
   };
 
@@ -396,34 +389,6 @@ const Drafts = () => {
       newValue = value.replace(",", ".");
     }
 
-    console.log(`Field name: ${name}`);
-    console.log(`Field value: ${value}`);
-    console.log(`Normalized value: ${newValue}`);
-
-    // Atualiza o estado draft com o novo valor
-    setDraft((prevDraft) => ({
-      ...prevDraft,
-      [name]: newValue,
-    }));
-  };
-  const handleChangeXXX = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-  ) => {
-    const { name, value } = e.target;
-
-    // Verifica se o nome do campo é 'price' e converte o valor para número
-    //let newValue = name === "price" ? parseFloat(value) : value;
-    let newValue: string | number = value;
-    const isNumber = /^[0-9]*[.,]?[0-9]*$/;
-    if (name === "price") {
-      newValue = value ? parseFloat(value.replace(",", ".")) : 0; // Converte para número e lida com valores vazios
-    }
-    console.log(`Field name: ${name}`);
-    console.log(`Field value: ${value}`);
-    console.log(`Converted value (if applicable): ${newValue}`);
-
     // Atualiza o estado draft com o novo valor
     setDraft((prevDraft) => ({
       ...prevDraft,
@@ -438,7 +403,6 @@ const Drafts = () => {
   const handleUpdateDraft = async () => {
     try {
       // Certifique-se de que 'draft' contém todos os campos necessários
-      console.log("Draft to update:", draft); // Adicione este log
       const draftToUpdate = {
         id: draft.id,
         codigo: draft.codigo,
@@ -478,14 +442,9 @@ const Drafts = () => {
         },
       };
 
-      console.log("Draft to update (formatted):", draftToUpdate); // Adicione este log
-
       // Passa o draftToUpdate completo para a função updateDraft
       const success = await updateDraft(draftToUpdate);
-      console.log("Update success:", success); // Verifica o resultado da atualização
-
       if (success) {
-        console.log("Draft atualizado com sucesso");
         toast.success("Rascunho do produto atualizado com sucesso");
         await getDrafts(); // Atualiza a lista de drafts
         const modalElement = document.getElementById("modalDraft");

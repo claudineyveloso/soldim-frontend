@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import MoneyInput from "../shared/MoneyInput";
 
 interface Product {
   nome: string;
@@ -105,20 +104,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
       estoque: updatedEstoque,
     }));
   }, [product]);
-
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    // Remove caracteres não numéricos, mas mantém vírgulas e pontos
-    const cleanValue = value.replace(/[^\d.,]/g, "");
-    // Substitui vírgulas por pontos para conversão para número
-    const floatValue = Number.parseFloat(cleanValue.replace(",", "."));
-
-    // Atualiza o estado com o valor numérico
-    setLocalProduct((prevProduct) => ({
-      ...prevProduct,
-      preco: Number.isNaN(floatValue) ? prevProduct.preco : floatValue,
-    }));
-  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -280,11 +265,14 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                   >
                                     Preço venda
                                   </label>
-                                  <MoneyInput
+                                  <input
                                     id="preco"
-                                    value={localProduct.preco}
                                     className="form-control"
-                                    onChange={handleAmountChange}
+                                    placeholder=""
+                                    type="text"
+                                    value={localProduct.preco}
+                                    name="preco"
+                                    onChange={onChange}
                                   />
                                 </div>
                                 <div className="col-md-4">
@@ -294,11 +282,14 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                   >
                                     Preço custo
                                   </label>
-                                  <MoneyInput
+                                  <input
                                     id="precoCusto"
-                                    value={localProduct.precoCusto}
                                     className="form-control"
-                                    onChange={handleAmountChange}
+                                    placeholder=""
+                                    type="text"
+                                    value={localProduct.precoCusto}
+                                    name="precoCusto"
+                                    onChange={onChange}
                                   />
                                 </div>
                               </div>
@@ -391,7 +382,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                     className="form-control"
                                     placeholder=""
                                     value={localProduct.volumes}
-                                    onChange={handleInputChange}
+                                    onChange={onChange}
                                   />
                                 </div>
                                 <div className="col-md-4">
@@ -567,11 +558,14 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                   >
                                     Preço de compra
                                   </label>
-                                  <MoneyInput
+                                  <input
                                     id="precoCompra"
-                                    value={localProduct.precoCompra}
                                     className="form-control"
-                                    onChange={handleAmountChange}
+                                    placeholder=""
+                                    type="text"
+                                    value={localProduct.precoCompra}
+                                    name="precoCompra"
+                                    onChange={onChange}
                                   />
                                 </div>
                               </div>
@@ -583,11 +577,14 @@ const ProductModal: React.FC<ProductModalProps> = ({
                                   >
                                     Preço de custo
                                   </label>
-                                  <MoneyInput
-                                    id="precoVenda"
-                                    value={localProduct.precoCusto}
+                                  <input
+                                    id="precoCusto"
                                     className="form-control"
-                                    onChange={handleAmountChange}
+                                    placeholder=""
+                                    type="text"
+                                    value={localProduct.precoCusto}
+                                    name="precoCusto"
+                                    onChange={onChange}
                                   />
                                 </div>
                                 <div className="col-md-4">

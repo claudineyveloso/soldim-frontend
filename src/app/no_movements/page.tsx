@@ -6,8 +6,8 @@ import {
   fetchProductsNoMovements,
   fetchProduct,
   deleteProduct,
+  updateProductBling,
   updateProduct,
-  importUpdatedProducts,
 } from "@/services/productService";
 import { fetchDeposits } from "@/services/depositService";
 import { fetchDepositProductByProduct } from "@/services/depositProductService";
@@ -309,7 +309,9 @@ const Products = () => {
 
   const handleUpdateProduct = async () => {
     try {
-      const success = await updateProduct(product);
+      const success = await updateProductBling(product);
+      const updateData = await updateProduct(product);
+
       if (success) {
         toast.success("Produto atualizado com sucesso");
         //await getProducts("", situation);
@@ -327,7 +329,6 @@ const Products = () => {
       console.error("Erro ao atualizar produto:", error);
     } finally {
       console.log("Chamando importProducts...");
-      await importUpdatedProducts();
       await getProducts("", situation);
     }
   };
