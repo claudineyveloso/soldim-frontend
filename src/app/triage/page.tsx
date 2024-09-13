@@ -7,6 +7,9 @@ import {
   fetchTriage,
   updateTriage,
 } from "@/services/triageService";
+
+import { createProduct } from "@/services/productService";
+
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -294,6 +297,60 @@ const Triages = () => {
     } catch (error) {
       toast.error("Erro ao atualizar produto");
       console.error("Erro ao atualizar produto:", error);
+    }
+  };
+
+  const handleSendToBling = async (id: string) => {
+    try {
+      const triage = await fetchTriage(id);
+      const product = {
+        nome: triage.description,
+        codigo: triage.sku_sap || "",
+        preco: triage.unitary_value || "",
+        precoCusto: triage.precoCusto || 0,
+        tipo: triage.tipo || "P",
+        situacao: triage.situacao || "A",
+        formato: triage.formato || "S",
+        descricaoCurta: triage.descriptionCurta || "",
+        image_url: triage.image_url || "",
+        dataValidade: triage.Validade || "",
+        unidade: triage.unidade || "UN",
+        pesoLiquido: triage.pesoLiquido || 0,
+        pesoBruto: triage.pesoBruto || 0,
+        volumes: triage.volumes || 0,
+        itensPorCaixa: triage.itensPorCaixa || 0,
+        gtin: triage.gtin || "",
+        gtinEmbalagem: triage.gtinEmbalagem || "",
+        tipoProducao: triage.tipoProducao || "P",
+        condicao: triage.condicao || 0,
+        freteGratis: triage.freteGratis || false,
+        marca: triage.marca || "",
+        descricaoComplementar: triage.descricaoComplementar || "",
+        linkExterno: triage.linkExterno || "",
+        observacoes: triage.observacoes || "",
+        descricaoEmbalagemDiscreta: triage.descricaoEmbalagemDiscreta || "",
+        estoque: {
+          minimo: triage.estoque?.minimo || 0,
+          maximo: triage.estoque?.maximo || 0,
+          crossdocking: triage.estoque?.crossdocking || 0,
+          localizacao: triage.estoque?.localizacao || "",
+        },
+      };
+      const success = await createProduct(product);
+      if (success) {
+        toast.success("Produto enviado para o Bling com sucesso");
+      } else {
+        toast.error("Erro ao enviar produto para o Bling");
+      }
+    } catch (error) {
+      console.error("Erro ao enviar produto para o Bling:", error);
+    } finally {
+      try {
+        getTriages();
+        console.error("Triagens atualizadas com sucesso");
+      } catch (deleteError) {
+        console.error("Erro ao atualizar uma triagem:", deleteError);
+      }
     }
   };
 
