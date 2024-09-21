@@ -1,6 +1,6 @@
-import axios from "axios";
-import baseURL from "../utils/config";
-import { getAuthToken } from "../utils/auth";
+import axios from 'axios';
+import baseURL from '../utils/config';
+import { getAuthToken } from '../utils/auth';
 
 interface FetchUsersResponse {
   users: any[];
@@ -12,8 +12,7 @@ export async function fetchUsers(): Promise<FetchUsersResponse> {
     //const token = getAuthToken();
     const response = await axios.get(`${baseURL}/get_users`, {
       headers: {
-        "Content-Type": "application/json",
-        //Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
     });
     if (response.status !== 200) {
@@ -25,7 +24,7 @@ export async function fetchUsers(): Promise<FetchUsersResponse> {
       users: response.data,
     };
   } catch (error) {
-    console.error("Erro ao buscar usuários no Services:", error);
+    console.error('Erro ao buscar usuários no Services:', error);
     return {
       users: [],
     };
@@ -38,8 +37,7 @@ export async function fetchUser(id: string) {
 
     const response = await fetch(`${baseURL}/get_user/${id}`, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
     });
 
@@ -50,7 +48,7 @@ export async function fetchUser(id: string) {
     const data = await response.json();
     return data || null;
   } catch (error) {
-    console.error("Erro ao buscar produto no Services:", error);
+    console.error('Erro ao buscar produto no Services:', error);
     return null; // Retornar null em caso de erro
   }
 }
@@ -59,14 +57,14 @@ export async function createUser(user: {
   email: string;
   password: string;
   is_active: boolean;
-  user_type: "S" | "A" | "C";
+  user_type: 'S' | 'A' | 'C';
 }) {
-  console.log("Creating user:", user);
+  console.log('Creating user:', user);
   try {
     const response = await fetch(`${baseURL}/create_user`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(user),
     });
@@ -80,7 +78,7 @@ export async function createUser(user: {
     return data;
   } catch (error) {
     console.error(
-      "Erro ao criar usuário no Services:",
+      'Erro ao criar usuário no Services:',
       (error as Error).message,
     );
     return null; // Retornar null em caso de erro
@@ -91,7 +89,7 @@ export async function DisableUser(): Promise<FetchUsersResponse> {
   try {
     const response = await axios.get(`${baseURL}/disabled_user`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -105,7 +103,7 @@ export async function DisableUser(): Promise<FetchUsersResponse> {
       users: response.data.users,
     };
   } catch (error) {
-    console.error("Erro ao desabilitar o usuário no Services:", error);
+    console.error('Erro ao desabilitar o usuário no Services:', error);
     return {
       users: [],
     };
