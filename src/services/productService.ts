@@ -1,24 +1,24 @@
-// services/productService.ts
-import axios from "axios";
-import baseURL from "@/utils/config";
+// Services/productService.ts
+import axios from 'axios';
+import baseURL from '@/utils/config';
 
 interface FetchProductsResponse {
   products: any[];
 }
 
 export async function fetchProducts(
-  nome: string = "",
-  situacao: string = "",
+  nome: string = '',
+  situacao: string = '',
 ): Promise<FetchProductsResponse> {
-  console.log("Fetching products with nome:", nome, "situacao:", situacao);
+  console.log('Fetching products with nome:', nome, 'situacao:', situacao);
   try {
-    const response = await axios.get(`${baseURL}/get_products`, {
+    const response = await axios.get(`${baseURL}/go/get_products`, {
       params: {
-        nome: nome,
-        situacao: situacao,
+        nome,
+        situacao,
       },
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -32,7 +32,7 @@ export async function fetchProducts(
       products: response.data.products,
     };
   } catch (error) {
-    console.error("Erro ao buscar produtos no Services:", error);
+    console.error('Erro ao buscar produtos no Services:', error);
     return {
       products: [],
     };
@@ -40,7 +40,7 @@ export async function fetchProducts(
 }
 
 export async function fetchProduct(id: number) {
-  console.log("Fetching product with id:", id);
+  console.log('Fetching product with id:', id);
   try {
     const response = await fetch(`${baseURL}/get_product/${id}`);
     if (!response.ok) {
@@ -50,17 +50,17 @@ export async function fetchProduct(id: number) {
     const data = await response.json();
     return data || null;
   } catch (error) {
-    console.error("Erro ao buscar produto no Services:", error);
+    console.error('Erro ao buscar produto no Services:', error);
     return null; // Retornar null em caso de erro
   }
 }
 
 export async function fetchProductsByPage(
-  nome: string = "",
-  situacao: string = "",
+  nome: string = '',
+  situacao: string = '',
 ) {
   console.log(
-    "Fetching products with page fetchProductsByPage:",
+    'Fetching products with page fetchProductsByPage:',
     nome,
     situacao,
   );
@@ -69,33 +69,33 @@ export async function fetchProductsByPage(
       `${baseURL}/get_products?nome=${nome}&situacao=${situacao}`,
     );
     if (!response.ok) {
-      throw new Error("Erro ao buscar os produtos");
+      throw new Error('Erro ao buscar os produtos');
     }
     const data = await response.json();
     return data.products;
   } catch (error) {
-    console.error("Erro ao buscar produtos:", error);
+    console.error('Erro ao buscar produtos:', error);
     return [];
   }
 }
 
 export const fetchProductsNoMovements = async (
-  nome: string = "",
-  situacao: string = "",
+  nome: string = '',
+  situacao: string = '',
 ): Promise<FetchProductsResponse> => {
   console.log(
-    "Fetching products with fetchProductsNoMovements:",
+    'Fetching products with fetchProductsNoMovements:',
     nome,
     situacao,
   );
   try {
     const response = await axios.get(`${baseURL}/get_products_no_movements`, {
       params: {
-        nome: nome,
-        situacao: situacao,
+        nome,
+        situacao,
       },
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -109,7 +109,7 @@ export const fetchProductsNoMovements = async (
       products: response.data.products,
     };
   } catch (error) {
-    console.error("Erro ao buscar produtos sem movimento:", error);
+    console.error('Erro ao buscar produtos sem movimento:', error);
     return {
       products: [],
     };
@@ -117,22 +117,22 @@ export const fetchProductsNoMovements = async (
 };
 
 export async function fetchProductsEmptyStock(
-  nome: string = "",
-  situacao: string = "",
+  nome: string = '',
+  situacao: string = '',
 ): Promise<FetchProductsResponse> {
   console.log(
-    "Fetching products with page fetchProductsEmptyStockPage:",
+    'Fetching products with page fetchProductsEmptyStockPage:',
     nome,
     situacao,
   );
   try {
     const response = await axios.get(`${baseURL}/get_products_empty_stock`, {
       params: {
-        nome: nome,
-        situacao: situacao,
+        nome,
+        situacao,
       },
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -146,7 +146,7 @@ export async function fetchProductsEmptyStock(
       products: response.data.products,
     };
   } catch (error) {
-    console.error("Erro ao buscar produtos com estoque vazio:", error);
+    console.error('Erro ao buscar produtos com estoque vazio:', error);
     return {
       products: [],
     };
@@ -156,16 +156,16 @@ export async function fetchProductsEmptyStock(
 export const deleteProduct = async (id: number) => {
   try {
     const response = await fetch(`${baseURL}/delete_product/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
 
     if (!response.ok) {
-      throw new Error("Erro ao deletar o produto");
+      throw new Error('Erro ao deletar o produto');
     }
 
     return true;
   } catch (error) {
-    console.error("Erro ao deletar o produto:", error);
+    console.error('Erro ao deletar o produto:', error);
     return false;
   }
 };
@@ -173,111 +173,109 @@ export const deleteProduct = async (id: number) => {
 export const createProduct = async (product: any) => {
   try {
     const response = await fetch(`${baseURL}/create_product_bling`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(product),
     });
 
     if (!response.ok) {
-      let errorMessage = "Erro ao criar o produto";
+      let errorMessage = 'Erro ao criar o produto';
 
-      const contentType = response.headers.get("Content-Type");
+      const contentType = response.headers.get('Content-Type');
 
-      if (contentType && contentType.includes("application/json")) {
+      if (contentType && contentType.includes('application/json')) {
         try {
           const errorResponse = await response.json();
           errorMessage = errorResponse.message || errorMessage;
         } catch (jsonError) {
-          console.error("Erro ao decodificar JSON:", jsonError);
-          errorMessage = "Resposta da API não é um JSON válido.";
+          console.error('Erro ao decodificar JSON:', jsonError);
+          errorMessage = 'Resposta da API não é um JSON válido.';
         }
       } else {
         const errorText = await response.text();
         errorMessage = errorText || errorMessage;
       }
 
-      console.error("Erro ao criar o produto:", errorMessage);
+      console.error('Erro ao criar o produto:', errorMessage);
       throw new Error(errorMessage);
     }
 
     return true;
   } catch (error) {
-    console.error("Erro ao criar o produto:", error);
+    console.error('Erro ao criar o produto:', error);
     return false;
   }
 };
 
 export const updateProduct = async (product: any) => {
   try {
-    console.log("Response:", product);
+    console.log('Response:', product);
 
     const response = await fetch(
       `${baseURL}/update_product?productID=${product.id}`,
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(product),
       },
     );
 
     if (!response.ok) {
-      throw new Error("Erro ao atualizar o produto");
+      throw new Error('Erro ao atualizar o produto');
     }
 
     return true;
   } catch (error) {
-    console.error("Erro ao atualizar o produto:", error);
+    console.error('Erro ao atualizar o produto:', error);
     return false;
   }
 };
 
 export const updateProductBling = async (product: any) => {
   try {
-    console.log("Response:", product);
+    console.log('Response:', product);
 
     const response = await fetch(
       `${baseURL}/update_product_bling?productID=${product.id}`,
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(product),
       },
     );
 
     if (!response.ok) {
-      throw new Error("Erro ao atualizar o produto");
+      throw new Error('Erro ao atualizar o produto');
     }
 
     return true;
   } catch (error) {
-    console.error("Erro ao atualizar o produto:", error);
+    console.error('Erro ao atualizar o produto:', error);
     return false;
   }
 };
 
 export async function importCreatedProducts() {
   try {
-    const today = new Date();
-    const yesterday = new Date(today);
+    const today = new Date(),
+      yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
 
-    const formatDate = (date: Date) => date.toISOString().split("T")[0];
+    const formatDate = (date: Date) => date.toISOString().split('T')[0],
+      dataInclusaoFinal = formatDate(today),
+      dataInclusaoInicial = formatDate(today),
+      url = `${baseURL}/import_products?dataInclusaoInicial=${dataInclusaoInicial}&dataInclusaoFinal=${dataInclusaoFinal}`;
 
-    const dataInclusaoFinal = formatDate(today);
-    const dataInclusaoInicial = formatDate(today);
-
-    const url = `${baseURL}/import_products?dataInclusaoInicial=${dataInclusaoInicial}&dataInclusaoFinal=${dataInclusaoFinal}`;
-
-    console.log("Importing products with URL:", url);
+    console.log('Importing products with URL:', url);
 
     const response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
     });
 
     if (!response.ok) {
@@ -287,28 +285,26 @@ export async function importCreatedProducts() {
     const data = await response.json();
     return data || null;
   } catch (error) {
-    console.error("Erro ao importar produtos:", error);
+    console.error('Erro ao importar produtos:', error);
     return null;
   }
 }
 
 export async function importUpdatedProducts() {
   try {
-    const today = new Date();
-    const yesterday = new Date(today);
+    const today = new Date(),
+      yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
 
-    const formatDate = (date: Date) => date.toISOString().split("T")[0];
+    const formatDate = (date: Date) => date.toISOString().split('T')[0],
+      dataAlteracaoInicial = formatDate(today),
+      dataAlteracaoFinal = formatDate(today),
+      url = `${baseURL}/import_products?dataAlteracaoInicial=${dataAlteracaoInicial}&dataAlteracaoFinal=${dataAlteracaoFinal}`;
 
-    const dataAlteracaoInicial = formatDate(today);
-    const dataAlteracaoFinal = formatDate(today);
-
-    const url = `${baseURL}/import_products?dataAlteracaoInicial=${dataAlteracaoInicial}&dataAlteracaoFinal=${dataAlteracaoFinal}`;
-
-    console.log("Importing products with URL:", url);
+    console.log('Importing products with URL:', url);
 
     const response = await fetch(url, {
-      method: "GET",
+      method: 'GET',
     });
 
     if (!response.ok) {
@@ -318,7 +314,7 @@ export async function importUpdatedProducts() {
     const data = await response.json();
     return data || null;
   } catch (error) {
-    console.error("Erro ao importar produtos:", error);
+    console.error('Erro ao importar produtos:', error);
     return null;
   }
 }
