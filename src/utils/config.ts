@@ -1,6 +1,6 @@
 const baseURL =
   process.env.NODE_ENV === 'production'
-    ? 'http://18.208.175.110:8888'
+    ? 'soldim-api.uaicloud.com.br'
     : 'http://localhost:8080';
 
 export default baseURL;
