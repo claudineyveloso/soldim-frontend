@@ -3,8 +3,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/go/:path*', // Somente rotas que começam com /api
-        destination: 'http://18.208.175.110:8888/:path*', // Proxy para sua API HTTP
+        source: '/:path*', // Somente rotas que começam com /api
+        destination: 'https://soldim-api.uaicloud.com.br/:path*', // Proxy para sua API HTTP
       },
     ];
   },
