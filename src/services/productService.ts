@@ -12,7 +12,7 @@ export async function fetchProducts(
 ): Promise<FetchProductsResponse> {
   console.log('Fetching products with nome:', nome, 'situacao:', situacao);
   try {
-    const response = await axios.get(`${baseURL}/go/get_products`, {
+    const response = await axios.get(`${baseURL}/get_products`, {
       params: {
         nome,
         situacao,
